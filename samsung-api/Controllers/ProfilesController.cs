@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using samsung.api.DataSource;
+using samsung.api.Models;
 using samsung.api.Models.Requests;
+using samsung.api.Models.Response;
+using samsung.api.Services.Profiles;
+using samsung_api.Models.Interfaces;
 
 namespace samsung_api.Controllers
 {
@@ -14,16 +19,23 @@ namespace samsung_api.Controllers
     public class ProfilesController : ControllerBase
     {
         private readonly DatabaseContext _databaseContext;
-        public ProfilesController(DatabaseContext context)
+        private readonly IMapper _mapper;
+        private readonly IProfilesService _profilesService;
+
+        public ProfilesController(DatabaseContext context, IMapper mapper, IProfilesService profilesService)
         {
             _databaseContext = context;
+            _mapper = mapper;
+            _profilesService = profilesService;
         }
 
         // GET: api/Profiles
         [HttpGet]
-        public IEnumerable<string> Get()
+        public string Get()
         {
-            return new string[] { "value1", "value2" };
+            var wtf = "fu";
+
+            return wtf;
         }
 
         // GET: api/Profiles/5
@@ -35,9 +47,20 @@ namespace samsung_api.Controllers
 
         // POST: api/Profiles
         [HttpPost]
-        public void Post([FromBody] IProfile profile)
+        public JsonResponse Post([FromBody] ProfileCreateRequest profileCreateRequest)
         {
-            _databaseContext.Profiles.Add
+            try
+            {
+                var profile = _mapper.Map<ProfileCreateRequest, IProfile>(profileCreateRequest);
+                var result = _profilesService.CreateProfile(profile);
+                var response = new ProfileCreateResponse(result);
+
+                return new JsonResponse(response, System.Net.HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
+            }
         }
 
         // PUT: api/Profiles/5

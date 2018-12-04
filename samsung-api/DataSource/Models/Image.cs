@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 
 namespace samsung.api.DataSource.Models
 {
-    public class Profiles
+
+    public class Image
     {
         public int Id { get; set; }
-
-        public string Firstname { get; set; }
-
-        public int ImagesId { get; set; }
     }
 }

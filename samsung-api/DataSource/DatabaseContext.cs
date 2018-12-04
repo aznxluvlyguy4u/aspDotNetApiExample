@@ -21,9 +21,9 @@ namespace samsung.api.DataSource
             _config = config;
         }
 
-        public virtual DbSet<Profiles> Profiles { get; set; }
+        public virtual DbSet<Profile> Profiles { get; set; }
 
-        public virtual DbSet<Images> Images { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace samsung.api.Models.Requests
 {
-    public class ProfileCreateRequest : IProfile
+    public class ProfileCreateRequest
     {
         [JsonRequired]
         public string Email { get; set; }

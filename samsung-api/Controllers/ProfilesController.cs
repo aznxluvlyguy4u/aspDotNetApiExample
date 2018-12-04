@@ -11,22 +11,25 @@ using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
 using samsung.api.Services.Profiles;
 using samsung_api.Models.Interfaces;
+using samsung_api.Services.Logger;
 
 namespace samsung_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ProfilesController : ControllerBase
     {
         private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
         private readonly IProfilesService _profilesService;
+        private readonly ILogger _logger;
 
-        public ProfilesController(DatabaseContext context, IMapper mapper, IProfilesService profilesService)
+        public ProfilesController(DatabaseContext context, IMapper mapper, IProfilesService profilesService, ILogger logger)
         {
             _databaseContext = context;
             _mapper = mapper;
             _profilesService = profilesService;
+            _logger = logger;
         }
 
         // GET: api/Profiles
@@ -59,6 +62,8 @@ namespace samsung_api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogErrorAsync(ex.Message, ex).GetAwaiter().GetResult();
+           
                 return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
             }
         }

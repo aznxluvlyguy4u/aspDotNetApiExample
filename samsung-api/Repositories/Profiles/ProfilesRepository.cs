@@ -27,8 +27,9 @@ namespace samsung.api.Repositories.Profiles
             {
                 var entity = _mapper.Map<IProfile, Profile>(profile);
                 _dbContext.Profiles.Add(entity);
+                _dbContext.SaveChanges();
 
-                return profile;
+                return entity;
             }
         }
     }

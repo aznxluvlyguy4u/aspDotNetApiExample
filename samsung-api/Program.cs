@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace samsung_api
 {
@@ -17,8 +10,16 @@ namespace samsung_api
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
+                .UseKestrel(c => c.AddServerHeader = false) // Remove Server header,
+#if DEBUG
+                .UseUrls("http://*:5002", "https://*:5003")
+#else
+                .UseUrls("http://*:5000", "https://*:5001")
+#endif
                 .UseStartup<Startup>();
+        }
     }
 }

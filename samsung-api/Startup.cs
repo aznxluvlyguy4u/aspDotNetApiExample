@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using samsung.api.DataSource;
+using samsung.api.Middleware;
 using samsung.api.Models.Requests;
 using samsung.api.Repositories.Profiles;
 using samsung.api.Services.Profiles;
 using samsung_api.Models.Interfaces;
+using samsung_api.Services.Logger;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace samsung_api
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -35,12 +31,16 @@ namespace samsung_api
 
             // Dependencies
             services
-                .AddSingleton<DatabaseContext>()
+                .AddSingleton(_configuration)
                 .AddSingleton(CreateMapper())
+                .AddSingleton<DatabaseContext>()
+                .AddSingleton<ILogger, ConsoleLogger>()
                 // Services
                 .AddTransient<IProfilesService, ProfilesService>()
                 // Repositories
                 .AddTransient<IProfilesRepository, ProfilesRepository>();
+
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "Samsung School Link", Version = "v1" }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,8 +55,22 @@ namespace samsung_api
                 app.UseHsts();
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(x => x.SwaggerEndpoint("/swagger/v1/swagger.json", "Samsung School Link V1"));
+
             app.UseHttpsRedirection();
-            app.UseMvc();
+
+            // TODO: make this more specific
+            app.UseCors(x =>
+                x
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+            );
+
+            app.UseHttpsRedirection()
+                .UseMiddleware<ExceptionHandlingMiddleware>()
+                .UseMvc();
         }
 
         private IMapper CreateMapper()

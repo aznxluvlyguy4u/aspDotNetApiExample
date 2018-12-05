@@ -10,6 +10,7 @@ using samsung.api.Models;
 using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
 using samsung.api.Services.GeneralUsers;
+using samsung_api.Extensions;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 
@@ -36,7 +37,7 @@ namespace samsung_api.Controllers
         [HttpGet]
         public string Get()
         {
-            var wtf = "fu";
+            var wtf = "fu".ToJson();
 
             return wtf;
         }

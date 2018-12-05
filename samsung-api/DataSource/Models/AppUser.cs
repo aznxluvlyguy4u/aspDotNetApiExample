@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using samsung_api.DataSource.Models;
 using samsung_api.Models.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace samsung.api.DataSource.Models
 {
@@ -26,5 +24,8 @@ namespace samsung.api.DataSource.Models
         public int? ImageId { get; set; }
 
         public Image Image { get; set; }
+
+        public IEnumerable<Buddies> RequestingBuddy { get; set; } = new HashSet<Buddies>();
+        public IEnumerable<Buddies> ReceivingBuddy { get; set; } = new HashSet<Buddies>();
     }
 }

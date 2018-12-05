@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using samsung.api.DataSource.Models;
+using samsung_api.DataSource.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace samsung.api.DataSource
         {
             _config = config;
         }
+
+        public virtual DbSet<Buddies> Buddies { get; set; }
 
         public virtual DbSet<Profile> Profiles { get; set; }
 

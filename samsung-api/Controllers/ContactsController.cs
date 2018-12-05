@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using samsung.api.Extensions;
 using samsung.api.Models;
+using samsung.api.Models.Response;
 using samsung_api.Models.Interfaces;
 using samsung_api.Models.Requests;
 using samsung_api.Services.Logger;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace samsung.api.Controllers
 {
-    public enum ContactRequestState
+    public enum BuddyRequestState
     {
         None,
         Pending,
@@ -23,32 +24,27 @@ namespace samsung.api.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class ContactsController : ControllerBase
+    public class BuddyController : ControllerBase
     {
         private const string StateParameter = "state";
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        private readonly IContactsService _contactsService;
+        private readonly IBuddyService _contactsService;
 
-        public ContactsController(ILogger logger, IMapper mapper, IContactsService contactsService)
+        public BuddyController(ILogger logger, IMapper mapper, IBuddyService contactsService)
         {
             _logger = logger;
             _mapper = mapper;
             _contactsService = contactsService;
         }
 
-        /// <summary>
-        /// Send request to user
-        /// </summary>
-        /// <param name="userContactRequest"></param>
-        /// <returns></returns>
         [HttpPost]
-        public async Task<JsonResponse> RequestContactAsync(UserContactRequest userContactRequest)
+        public async Task<JsonResponse> SendBuddyRequestAsync(BuddyRequest buddyRequest)
         {
             try
             {
-
-                return new JsonResponse(null, HttpStatusCode.Created);
+                await _contactsService.SendBuddyRequestAsync(base.User, buddyRequest.UserId);
+                return new JsonResponse(null, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -58,17 +54,12 @@ namespace samsung.api.Controllers
             }
         }
 
-        /// <summary>
-        /// Send request to user
-        /// </summary>
-        /// <param name="userContactRequest"></param>
-        /// <returns></returns>
-        [HttpPut]
-        public async Task<JsonResponse> RequestContactAsync(Guid RequestId, UserContactRequest userContactRequest)
+        [HttpPut("{requestingBuddy}/{hasAccepted}")]
+        public async Task<JsonResponse> RegisterBuddyResponseAsync(int requestingBuddy, bool hasAccepted)
         {
             try
             {
-
+                await _contactsService.RegisterBuddyResponseAsync(base.User, requestingBuddy, hasAccepted);
                 return new JsonResponse(null, HttpStatusCode.Created);
             }
             catch (Exception ex)
@@ -90,8 +81,13 @@ namespace samsung.api.Controllers
         {
             try
             {
-                base.HttpContext.TryGetEnumQueryValue(StateParameter, out ContactRequestState state);
-                List<IContact> contacts = await _contactsService.GetContactsAsync(base.User, state);
+                base.HttpContext.TryGetEnumQueryValue(StateParameter, out BuddyRequestState state);
+                List<IBuddy> contacts = await _contactsService.GetContactsAsync(base.User, state);
+
+                var response = new GetBuddiesResponse
+                {
+
+                };
 
                 return new JsonResponse(null, HttpStatusCode.OK);
             }

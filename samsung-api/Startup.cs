@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,7 @@ namespace samsung_api
 
             // Dependencies
             services
+                .AddSingleton<UserManager<Profile>>()
                 .AddSingleton(_configuration)
                 .AddSingleton(CreateMapper())
                 .AddSingleton<DatabaseContext>()

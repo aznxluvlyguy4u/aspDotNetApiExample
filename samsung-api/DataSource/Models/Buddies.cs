@@ -9,7 +9,7 @@ namespace samsung_api.DataSource.Models
         public int RequestingGeneralUserId { get; set; }
         public int ReceivingGeneralUserId { get; set; }
 
-        public ContactRequestState RequestState { get; set; }
+        public BuddyRequestState RequestState { get; set; }
 
         public GeneralUser ReceivingGeneralUser { get; set; }
 

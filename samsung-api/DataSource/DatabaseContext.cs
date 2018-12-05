@@ -46,20 +46,22 @@ namespace samsung.api.DataSource
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
+            base.OnModelCreating(mb);
+
             mb.Entity<Buddies>(entity =>
             {
                 entity
-                    .HasKey(key => new { key.ReceivingProfileId, key.RequestingProfileId});
+                    .HasKey(key => new { key.ReceivingGeneralUserId, key.RequestingGeneralUserId});
 
                 entity
-                    .HasOne(source => source.ReceivingProfile)
+                    .HasOne(source => source.ReceivingGeneralUser)
                     .WithMany(prop => prop.ReceivingBuddy)
-                    .HasForeignKey(b => b.ReceivingProfileId)
+                    .HasForeignKey(b => b.ReceivingGeneralUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
                 entity
-                    .HasOne(source => source.RequestingProfile)
+                    .HasOne(source => source.RequestingGeneralUser)
                     .WithMany(prop=>prop.RequestingBuddy)
-                    .HasForeignKey(b => b.RequestingProfileId)
+                    .HasForeignKey(b => b.RequestingGeneralUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
         }

@@ -24,8 +24,5 @@ namespace samsung.api.DataSource.Models
         public int? ImageId { get; set; }
 
         public Image Image { get; set; }
-
-        public IEnumerable<Buddies> RequestingBuddy { get; set; } = new HashSet<Buddies>();
-        public IEnumerable<Buddies> ReceivingBuddy { get; set; } = new HashSet<Buddies>();
     }
 }

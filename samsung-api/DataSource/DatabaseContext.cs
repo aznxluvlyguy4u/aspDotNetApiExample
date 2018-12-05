@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using samsung.api.DataSource.Models;
 using System;
@@ -8,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace samsung.api.DataSource
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext : IdentityDbContext<AppUser>
+
     {
         private readonly IConfiguration _config;
 
@@ -21,7 +23,7 @@ namespace samsung.api.DataSource
             _config = config;
         }
 
-        public virtual DbSet<Profile> Profiles { get; set; }
+        public DbSet<GeneralUser> GeneralUsers { get; set; }
 
         public virtual DbSet<Image> Images { get; set; }
 

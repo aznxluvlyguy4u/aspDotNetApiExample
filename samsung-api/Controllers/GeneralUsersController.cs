@@ -9,7 +9,7 @@ using samsung.api.DataSource;
 using samsung.api.Models;
 using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
-using samsung.api.Services.Profiles;
+using samsung.api.Services.GeneralUsers;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 
@@ -17,22 +17,22 @@ namespace samsung_api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ProfilesController : ControllerBase
+    public class GeneralUsersController : ControllerBase
     {
         private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
-        private readonly IProfilesService _profilesService;
+        private readonly IGeneralUsersService _usersService;
         private readonly ILogger _logger;
 
-        public ProfilesController(DatabaseContext context, IMapper mapper, IProfilesService profilesService, ILogger logger)
+        public GeneralUsersController(DatabaseContext context, IMapper mapper, IGeneralUsersService usersService, ILogger logger)
         {
             _databaseContext = context;
             _mapper = mapper;
-            _profilesService = profilesService;
+            _usersService = usersService;
             _logger = logger;
         }
 
-        // GET: api/Profiles
+        // GET: api/Users
         [HttpGet]
         public string Get()
         {
@@ -41,22 +41,22 @@ namespace samsung_api.Controllers
             return wtf;
         }
 
-        // GET: api/Profiles/5
+        // GET: api/Users/5
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST: api/Profiles
+        // POST: api/Users
         [HttpPost]
-        public JsonResponse Post([FromBody] ProfileCreateRequest profileCreateRequest)
+        public JsonResponse Post([FromBody] GeneralUserCreateRequest userCreateRequest)
         {
             try
             {
-                var profile = _mapper.Map<ProfileCreateRequest, IProfile>(profileCreateRequest);
-                var result = _profilesService.CreateProfile(profile);
-                var response = new ProfileCreateResponse(result);
+                var user = _mapper.Map<GeneralUserCreateRequest, IGeneralUser>(userCreateRequest);
+                var result = _usersService.CreateGeneralUser(user);
+                var response = new GeneralUserCreateResponse(result);
 
                 return new JsonResponse(response, System.Net.HttpStatusCode.Created);
             }
@@ -68,7 +68,7 @@ namespace samsung_api.Controllers
             }
         }
 
-        // PUT: api/Profiles/5
+        // PUT: api/Users/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {

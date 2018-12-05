@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using samsung.api.DataSource;
+using samsung.api.DataSource.Models;
 using samsung.api.Middleware;
 using samsung.api.Models.Requests;
-using samsung.api.Repositories.Profiles;
-using samsung.api.Services.Profiles;
+using samsung.api.Repositories.GeneralUsers;
+using samsung.api.Services.GeneralUsers;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
-using Profile = samsung.api.DataSource.Models.Profile;
 
 namespace samsung_api
 {
@@ -38,9 +38,9 @@ namespace samsung_api
                 .AddSingleton<DatabaseContext>()
                 .AddSingleton<ILogger, ConsoleLogger>()
                 // Services
-                .AddTransient<IProfilesService, ProfilesService>()
+                .AddTransient<IGeneralUsersService, GeneralUsersService>()
                 // Repositories
-                .AddTransient<IProfilesRepository, ProfilesRepository>();
+                .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>();
 
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "Samsung School Link", Version = "v1" }));
         }
@@ -79,8 +79,8 @@ namespace samsung_api
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<ProfileCreateRequest, IProfile>(MemberList.None).ReverseMap();
-                cfg.CreateMap<IProfile, Profile>(MemberList.None).ReverseMap();
+                cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
+                cfg.CreateMap<IGeneralUser, GeneralUser>(MemberList.None).ReverseMap();
             }).CreateMapper();
         }
     }

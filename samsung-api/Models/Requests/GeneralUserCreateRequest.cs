@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace samsung.api.Models.Requests
 {
-    public class ProfileCreateRequest
+    public class GeneralUserCreateRequest
     {
         [JsonRequired]
         public string FirstName { get; set; }

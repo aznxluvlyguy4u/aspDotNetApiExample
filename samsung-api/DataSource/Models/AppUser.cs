@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace samsung.api.DataSource.Models
 {
-    public class Profile : IdentityUser, IProfile
+    public class AppUser : IdentityUser
     {
-        public int Id { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-
-        public string EmailAddress { get; set; }
 
         public string City { get; set; }
 

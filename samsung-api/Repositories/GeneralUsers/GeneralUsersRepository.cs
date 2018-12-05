@@ -5,31 +5,30 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
-using Profile = samsung.api.DataSource.Models.Profile;
 using samsung_api.Models.Interfaces;
+using samsung.api.DataSource.Models;
 
-namespace samsung.api.Repositories.Profiles
+namespace samsung.api.Repositories.GeneralUsers
 {
-    public class ProfilesRepository : IProfilesRepository
+    public class GeneralUsersRepository : IGeneralUsersRepository
     {
         private readonly DatabaseContext _dbContext;
         private readonly IMapper _mapper;
 
-        public ProfilesRepository(DatabaseContext dbContext, IMapper mapper)
+        public GeneralUsersRepository(DatabaseContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
 
-        public IProfile CreateProfile(IProfile profile)
+        public IGeneralUser CreateGeneralUser(IGeneralUser generalUser)
         {
             using (_dbContext)
             {
-                var entity = _mapper.Map<IProfile, Profile>(profile);
-                _dbContext.Profiles.Add(entity);
+                var entity = _mapper.Map<IGeneralUser, GeneralUser>(generalUser);
+                _dbContext.GeneralUsers.Add(entity);
                 _dbContext.SaveChanges();
-
-                return entity;
+                return _mapper.Map<GeneralUser, IGeneralUser>(entity);
             }
         }
     }

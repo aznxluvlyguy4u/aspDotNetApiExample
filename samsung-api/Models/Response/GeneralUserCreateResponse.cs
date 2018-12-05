@@ -6,24 +6,25 @@ using System.Threading.Tasks;
 
 namespace samsung.api.Models.Response
 {
-    public class ProfileCreateResponse
+    public class GeneralUserCreateResponse
     {
-        public ProfileCreateResponse()
+        public GeneralUserCreateResponse()
         {
         }
 
-        public ProfileCreateResponse(IProfile profile)
+        public GeneralUserCreateResponse(IGeneralUser generalUser)
         {
-            if (profile == null)
+            if (generalUser == null)
             {
                 return;
             }
-            Id = profile.Id;
-            FirstName = profile.FirstName;
-            LastName = profile.LastName;
+            Id = generalUser.Id;
+            FirstName = generalUser.FirstName;
+            LastName = generalUser.LastName;
         }
 
         public int Id { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

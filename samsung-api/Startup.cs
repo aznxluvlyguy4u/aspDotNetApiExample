@@ -12,6 +12,8 @@ using samsung.api.Services.Profiles;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using Profile = samsung.api.DataSource.Models.Profile;
 
 namespace samsung_api
 {

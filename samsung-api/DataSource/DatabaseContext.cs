@@ -41,5 +41,25 @@ namespace samsung.api.DataSource
                     options => options.EnableRetryOnFailure());
             }
         }
+
+        protected override void OnModelCreating(ModelBuilder mb)
+        {
+            mb.Entity<Buddies>(entity =>
+            {
+                entity
+                    .HasKey(key => new { key.ReceivingProfileId, key.RequestingProfileId});
+
+                entity
+                    .HasOne(source => source.ReceivingProfile)
+                    .WithMany(prop => prop.ReceivingBuddy)
+                    .HasForeignKey(b => b.ReceivingProfileId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+                entity
+                    .HasOne(source => source.RequestingProfile)
+                    .WithMany(prop=>prop.RequestingBuddy)
+                    .HasForeignKey(b => b.RequestingProfileId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+        }
     }
 }

@@ -7,7 +7,5 @@
         string FirstName { get; set; }
 
         string LastName { get; set; }
-
-        int ImagesId { get; set; }
     }
 }

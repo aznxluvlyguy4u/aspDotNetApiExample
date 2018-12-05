@@ -21,14 +21,11 @@ namespace samsung.api.Models.Response
             Id = profile.Id;
             FirstName = profile.FirstName;
             LastName = profile.LastName;
-            ImagesId = profile.ImagesId;
         }
 
         public int Id { get; set; }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-
-        public int ImagesId { get; set; }
     }
 }

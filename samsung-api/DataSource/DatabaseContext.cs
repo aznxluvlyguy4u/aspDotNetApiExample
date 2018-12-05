@@ -48,6 +48,12 @@ namespace samsung.api.DataSource
         {
             base.OnModelCreating(mb);
 
+            mb.Entity<AppUser>(entity =>
+            {
+                entity.HasKey(key => key.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            });
+
             mb.Entity<Buddies>(entity =>
             {
                 entity

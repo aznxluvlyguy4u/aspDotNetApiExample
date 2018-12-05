@@ -32,9 +32,77 @@ namespace samsung_api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            // Identity settings
+            //services.AddDefaultIdentity<AppUser>().AddEntityFrameworkStores<DatabaseContext>();
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    // Password settings.
+            //    options.Password.RequireDigit = false;
+            //    options.Password.RequireLowercase = false;
+            //    options.Password.RequireNonAlphanumeric = false;
+            //    options.Password.RequireUppercase = false;
+            //    options.Password.RequiredLength = 6;
+            //    options.Password.RequiredUniqueChars = 1;
+
+            //    // Lockout settings.
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            //    options.Lockout.MaxFailedAccessAttempts = 5;
+            //    options.Lockout.AllowedForNewUsers = true;
+
+            //    // User settings.
+            //    options.User.AllowedUserNameCharacters =
+            //    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            //    options.User.RequireUniqueEmail = false;
+            //});
+
+            // api user claim policy
+
+            //services.AddAuthorization(options =>
+
+            //{
+
+            //    options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess));
+
+            //});
+
+
+
+            // add identity
+
+            var builder = services.AddIdentityCore<AppUser>(options =>
+
+            {
+
+                // configure identity options
+
+                options.Password.RequireDigit = false;
+
+                options.Password.RequireLowercase = false;
+
+                options.Password.RequireUppercase = false;
+
+                options.Password.RequireNonAlphanumeric = false;
+
+                options.Password.RequiredLength = 6;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+            builder.AddEntityFrameworkStores<DatabaseContext>().AddDefaultTokenProviders();
+
+
             // Dependencies
             services
-                .AddSingleton<UserManager<Profile>>()
+                .AddScoped<UserManager<AppUser>>()
                 .AddSingleton(_configuration)
                 .AddSingleton(CreateMapper())
                 .AddSingleton<DatabaseContext>()
@@ -63,6 +131,7 @@ namespace samsung_api
             app.UseSwaggerUI(x => x.SwaggerEndpoint("/swagger/v1/swagger.json", "Samsung School Link V1"));
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             // TODO: make this more specific
             app.UseCors(x =>
@@ -81,6 +150,7 @@ namespace samsung_api
         {
             return new MapperConfiguration(cfg =>
             {
+                cfg.CreateMap<IGeneralUser, AppUser>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
                 cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
                 cfg.CreateMap<IGeneralUser, GeneralUser>(MemberList.None).ReverseMap();
             }).CreateMapper();

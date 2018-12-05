@@ -13,8 +13,6 @@ namespace samsung.api.DataSource.Models
 
         public string City { get; set; }
 
-        public string Phone { get; set; }
-
         public int TechLevel { get; set; }
 
         public int LinkedInId { get; set; }

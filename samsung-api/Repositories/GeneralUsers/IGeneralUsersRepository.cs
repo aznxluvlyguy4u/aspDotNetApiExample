@@ -1,9 +1,10 @@
 ﻿using samsung_api.Models.Interfaces;
+using System.Threading.Tasks;
 
 namespace samsung.api.Repositories.GeneralUsers
 {
     public interface IGeneralUsersRepository
     {
-        IGeneralUser CreateGeneralUser(IGeneralUser generalUser);
+        Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser generalUser);
     }
 }

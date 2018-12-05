@@ -22,14 +22,14 @@ namespace samsung_api.Controllers
     {
         private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
-        private readonly IGeneralUsersService _usersService;
+        private readonly IGeneralUsersService _generalUsersService;
         private readonly ILogger _logger;
 
         public GeneralUsersController(DatabaseContext context, IMapper mapper, IGeneralUsersService usersService, ILogger logger)
         {
             _databaseContext = context;
             _mapper = mapper;
-            _usersService = usersService;
+            _generalUsersService = usersService;
             _logger = logger;
         }
 
@@ -51,12 +51,12 @@ namespace samsung_api.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public JsonResponse Post([FromBody] GeneralUserCreateRequest userCreateRequest)
+        public async Task<JsonResponse> Post([FromBody] GeneralUserCreateRequest generalUserCreateRequest)
         {
             try
             {
-                var user = _mapper.Map<GeneralUserCreateRequest, IGeneralUser>(userCreateRequest);
-                var result = _usersService.CreateGeneralUser(user);
+                var generalUser = _mapper.Map<GeneralUserCreateRequest, IGeneralUser>(generalUserCreateRequest);
+                var result = await _generalUsersService.CreateGeneralUserAsync(generalUser);
                 var response = new GeneralUserCreateResponse(result);
 
                 return new JsonResponse(response, System.Net.HttpStatusCode.Created);

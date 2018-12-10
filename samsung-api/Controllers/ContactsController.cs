@@ -86,7 +86,6 @@ namespace samsung.api.Controllers
 
                 var response = new GetBuddiesResponse
                 {
-
                 };
 
                 return new JsonResponse(null, HttpStatusCode.OK);

@@ -1,6 +1,5 @@
 using samsung.api.Controllers;
 using samsung.api.DataSource.Models;
-using System.Collections.Generic;
 
 namespace samsung_api.DataSource.Models
 {

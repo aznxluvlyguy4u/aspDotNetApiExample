@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using samsung.api.DataSource;
 using samsung.api.Models;
@@ -13,6 +8,8 @@ using samsung.api.Services.GeneralUsers;
 using samsung_api.Extensions;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
+using System;
+using System.Threading.Tasks;
 
 namespace samsung_api.Controllers
 {
@@ -64,7 +61,7 @@ namespace samsung_api.Controllers
             catch (Exception ex)
             {
                 _logger.LogErrorAsync(ex.Message, ex).GetAwaiter().GetResult();
-           
+
                 return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
             }
         }

@@ -10,6 +10,7 @@ namespace samsung_api.Models.Interfaces
         Task<List<IBuddy>> GetContactsAsync(ClaimsPrincipal user, BuddyRequestState state);
 
         Task SendBuddyRequestAsync(ClaimsPrincipal user, int receivingUserId);
+
         Task RegisterBuddyResponseAsync(ClaimsPrincipal user, int requestingBuddy, bool hasAccepted);
     }
 }

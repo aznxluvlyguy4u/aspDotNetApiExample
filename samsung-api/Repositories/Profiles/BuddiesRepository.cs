@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using samsung.api.Controllers;
+﻿using samsung.api.Controllers;
 using samsung.api.DataSource;
 using samsung_api.DataSource.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace samsung.api.Repositories.Profiles
 {

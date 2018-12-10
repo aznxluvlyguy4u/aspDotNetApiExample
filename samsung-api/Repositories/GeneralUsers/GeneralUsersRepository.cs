@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using samsung.api.DataSource;
-using samsung_api.Models.Interfaces;
-using samsung.api.DataSource.Models;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using samsung.api.DataSource;
+using samsung.api.DataSource.Models;
+using samsung_api.Models.Interfaces;
+using System.Threading.Tasks;
 
 namespace samsung.api.Repositories.GeneralUsers
 {
@@ -16,7 +12,6 @@ namespace samsung.api.Repositories.GeneralUsers
         private readonly DatabaseContext _dbContext;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
-
 
         public GeneralUsersRepository(DatabaseContext dbContext, IMapper mapper, UserManager<AppUser> userManager)
         {

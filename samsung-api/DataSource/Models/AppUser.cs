@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using samsung_api.DataSource.Models;
-using samsung_api.Models.Interfaces;
-using System.Collections.Generic;
 
 namespace samsung.api.DataSource.Models
 {

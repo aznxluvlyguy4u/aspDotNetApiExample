@@ -1,4 +1,6 @@
-﻿namespace samsung.api.Controllers
+﻿using samsung.api.Enumerations;
+
+namespace samsung.api.Controllers
 {
     public interface IBuddy
     {

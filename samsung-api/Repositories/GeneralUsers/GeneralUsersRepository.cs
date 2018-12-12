@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung_api.Models.Interfaces;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace samsung.api.Repositories.GeneralUsers

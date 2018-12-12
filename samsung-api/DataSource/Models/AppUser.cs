@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using samsung_api.DataSource.Models;
 using samsung_api.Models.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace samsung.api.DataSource.Models
 {
-    public class AppUser : IdentityUser
+    public class AppUser : IdentityUser<Guid>
     {
         public string FirstName { get; set; }
 
@@ -18,9 +21,5 @@ namespace samsung.api.DataSource.Models
         public int LinkedInId { get; set; }
 
         public int FacebookId { get; set; }
-
-        public int? ImageId { get; set; }
-
-        public Image Image { get; set; }
     }
 }

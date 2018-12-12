@@ -33,57 +33,20 @@ namespace samsung_api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Identity settings
-            //services.AddDefaultIdentity<AppUser>().AddEntityFrameworkStores<DatabaseContext>();
-            //services.Configure<IdentityOptions>(options =>
-            //{
-            //    // Password settings.
-            //    options.Password.RequireDigit = false;
-            //    options.Password.RequireLowercase = false;
-            //    options.Password.RequireNonAlphanumeric = false;
-            //    options.Password.RequireUppercase = false;
-            //    options.Password.RequiredLength = 6;
-            //    options.Password.RequiredUniqueChars = 1;
-
-            //    // Lockout settings.
-            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            //    options.Lockout.MaxFailedAccessAttempts = 5;
-            //    options.Lockout.AllowedForNewUsers = true;
-
-            //    // User settings.
-            //    options.User.AllowedUserNameCharacters =
-            //    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            //    options.User.RequireUniqueEmail = false;
-            //});
-
-            // api user claim policy
-
-            //services.AddAuthorization(options =>
-
-            //{
-
-            //    options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess));
-
-            //});
-
-
-
             // add identity
+            services
+                .AddDefaultIdentity<AppUser>()
+                .AddEntityFrameworkStores<DatabaseContext>();
 
-            var builder = services.AddIdentityCore<AppUser>(options =>
-
+            services.Configure<IdentityOptions>(options =>
             {
-
-                // configure identity options
-
-                options.Password.RequireDigit = false;
-
-                options.Password.RequireLowercase = false;
-
-                options.Password.RequireUppercase = false;
-
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = false;
-
+                options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 0;
 
                 // Lockout settings.
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
@@ -95,9 +58,6 @@ namespace samsung_api
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
-
-            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
-            builder.AddEntityFrameworkStores<DatabaseContext>().AddDefaultTokenProviders();
 
 
             // Dependencies

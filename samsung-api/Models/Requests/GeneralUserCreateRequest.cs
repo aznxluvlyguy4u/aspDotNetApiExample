@@ -29,8 +29,6 @@ namespace samsung.api.Models.Requests
 
         public string City { get; set; }
 
-        public int? ImageId { get; set; }
-
         public int? LinkedInId { get; set; }
 
         public int? FacebookId { get; set; }

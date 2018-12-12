@@ -31,11 +31,18 @@ namespace samsung.api.Repositories.GeneralUsers
             {
                 var userIdentity = _mapper.Map<IGeneralUser, AppUser>(generalUser);
                 var result = await _userManager.CreateAsync(userIdentity, generalUser.Password);
-                var newGeneralUser = new GeneralUser { IdentityId = userIdentity.Id, Location = generalUser.Location };
 
-                await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
-                await _dbContext.SaveChangesAsync();
-                return await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(newGeneralUser));
+                if (result.Succeeded)
+                {
+                    var newGeneralUser = new GeneralUser { IdentityId = userIdentity.Id, Location = generalUser.Location };
+
+                    await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
+                    await _dbContext.SaveChangesAsync();
+                    return await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(newGeneralUser));
+                }
+
+                // TODO Alter exception message in production to prevent email data leak
+                throw new ArgumentException(result.Errors.FirstOrDefault()?.Description);
             }
         }
     }

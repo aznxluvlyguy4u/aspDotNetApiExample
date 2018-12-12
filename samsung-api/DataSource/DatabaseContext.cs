@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace samsung.api.DataSource
 {
-    public class DatabaseContext : IdentityDbContext<AppUser>
+    public class DatabaseContext : IdentityDbContext<AppUser, AppRole, Guid>
 
     {
         private readonly IConfiguration _config;
@@ -36,23 +36,19 @@ namespace samsung.api.DataSource
             {
                 optionsBuilder
                     .UseSqlServer(_config.GetConnectionString("sqlserver"), options => options.EnableRetryOnFailure());
+                base.OnConfiguring(optionsBuilder);
             }
             else
             {
                 optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=SamsungDatabase;Integrated Security=True;Pooling=False;Connect Timeout=30", 
                     options => options.EnableRetryOnFailure());
+                base.OnConfiguring(optionsBuilder);
             }
         }
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
             base.OnModelCreating(mb);
-
-            mb.Entity<AppUser>(entity =>
-            {
-                entity.HasKey(key => key.Id);
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
 
             mb.Entity<Buddies>(entity =>
             {

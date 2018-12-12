@@ -12,7 +12,6 @@
         int TechLevel { get; set; }
         int LinkedInId { get; set; }
         int FacebookId { get; set; }
-        int? ImageId { get; set; }
         string IdentityId { get; set; }
         string Location { get; set; }
         string Locale { get; set; }

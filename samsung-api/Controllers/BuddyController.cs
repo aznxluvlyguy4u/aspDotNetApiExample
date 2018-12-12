@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using samsung.api.Enumerations;
 using samsung.api.Extensions;
 using samsung.api.Models;
 using samsung.api.Models.Response;
@@ -9,18 +10,12 @@ using samsung_api.Models.Requests;
 using samsung_api.Services.Logger;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace samsung.api.Controllers
 {
-    public enum BuddyRequestState
-    {
-        None,
-        Pending,
-        Matched
-    }
-
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -82,14 +77,11 @@ namespace samsung.api.Controllers
             try
             {
                 base.HttpContext.TryGetEnumQueryValue(StateParameter, out BuddyRequestState state);
-                List<IBuddy> contacts = await _contactsService.GetContactsAsync(base.User, state);
+                IEnumerable<IBuddy> buddies = await _contactsService.GetBuddiesAsync(base.User, state);
 
-                var response = new GetBuddiesResponse
-                {
+                var response = buddies.Select(x => _mapper.Map<GetBuddiesResponse>(buddies));
 
-                };
-
-                return new JsonResponse(null, HttpStatusCode.OK);
+                return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

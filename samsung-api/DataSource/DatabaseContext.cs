@@ -4,14 +4,10 @@ using Microsoft.Extensions.Configuration;
 using samsung.api.DataSource.Models;
 using samsung_api.DataSource.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace samsung.api.DataSource
 {
     public class DatabaseContext : IdentityDbContext<AppUser, AppRole, Guid>
-
     {
         private readonly IConfiguration _config;
 
@@ -40,7 +36,7 @@ namespace samsung.api.DataSource
             }
             else
             {
-                optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=SamsungDatabase;Integrated Security=True;Pooling=False;Connect Timeout=30", 
+                optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=SamsungDatabase;Integrated Security=True;Pooling=False;Connect Timeout=30",
                     options => options.EnableRetryOnFailure());
                 base.OnConfiguring(optionsBuilder);
             }
@@ -53,7 +49,7 @@ namespace samsung.api.DataSource
             mb.Entity<Buddies>(entity =>
             {
                 entity
-                    .HasKey(key => new { key.ReceivingGeneralUserId, key.RequestingGeneralUserId});
+                    .HasKey(key => new { key.ReceivingGeneralUserId, key.RequestingGeneralUserId });
 
                 entity
                     .HasOne(source => source.ReceivingGeneralUser)
@@ -62,7 +58,7 @@ namespace samsung.api.DataSource
                     .OnDelete(DeleteBehavior.ClientSetNull);
                 entity
                     .HasOne(source => source.RequestingGeneralUser)
-                    .WithMany(prop=>prop.RequestingBuddy)
+                    .WithMany(prop => prop.RequestingBuddy)
                     .HasForeignKey(b => b.RequestingGeneralUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });

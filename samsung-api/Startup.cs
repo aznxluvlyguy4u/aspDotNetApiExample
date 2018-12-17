@@ -27,12 +27,13 @@ namespace samsung_api
     public class Startup
     {
         private readonly IConfiguration _configuration;
-        private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; // todo: get this from somewhere secure
-        private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
+        private readonly SymmetricSecurityKey _signingKey;
 
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
+            var secretKey = _configuration.GetSection("SecretKey").Value;
+            _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -111,8 +112,6 @@ namespace samsung_api
             {
                 options.AddPolicy("ApiUser", policy => policy.RequireClaim(JwtConstants.Strings.JwtClaimIdentifiers.Rol, JwtConstants.Strings.JwtClaims.ApiAccess));
             });
-
-
 
             // Dependencies
             services

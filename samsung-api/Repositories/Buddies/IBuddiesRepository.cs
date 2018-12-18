@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace samsung.api.Repositories.Profiles
+namespace samsung.api.Repositories.Buddies
 {
     public interface IBuddiesRepository
     {

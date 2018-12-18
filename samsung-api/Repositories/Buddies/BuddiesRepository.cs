@@ -9,7 +9,7 @@ using samsung.api.Extensions;
 using System.Collections.Generic;
 using AutoMapper;
 
-namespace samsung.api.Repositories.Profiles
+namespace samsung.api.Repositories.Buddies
 {
     public class BuddiesRepository : IBuddiesRepository
     {
@@ -24,7 +24,7 @@ namespace samsung.api.Repositories.Profiles
 
         public async Task CreateBuddyRequestAsync(int requestingUserId, int receivingUserId)
         {
-            _databaseContext.Buddies.Add(new Buddies()
+            _databaseContext.Buddies.Add(new samsung_api.DataSource.Models.Buddies()
             {
                 ReceivingGeneralUserId = receivingUserId,
                 RequestingGeneralUserId = requestingUserId,

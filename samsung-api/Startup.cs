@@ -7,14 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using samsung.api.Auth;
 using samsung.api.Constants;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung.api.Middleware;
 using samsung.api.Models;
 using samsung.api.Models.Requests;
+using samsung.api.Repositories.Buddies;
 using samsung.api.Repositories.GeneralUsers;
+using samsung.api.Services.Auth;
+using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
@@ -122,9 +124,11 @@ namespace samsung_api
                 .AddSingleton<ILogger, ConsoleLogger>()
                 // Services
                 .AddTransient<IGeneralUsersService, GeneralUsersService>()
-                .AddSingleton<IJwtFactory, JwtFactory>()
+                .AddTransient<IBuddiesService, BuddiesService>()
+                .AddTransient<IJwtFactory, JwtFactory>()
                 // Repositories
-                .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>();
+                .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>()
+                .AddTransient<IBuddiesRepository, BuddiesRepository>();
 
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "Samsung School Link", Version = "v1" }));
         }

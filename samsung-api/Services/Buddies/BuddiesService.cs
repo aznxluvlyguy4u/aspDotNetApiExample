@@ -2,21 +2,21 @@
 using samsung.api.Controllers;
 using samsung.api.DataSource.Models;
 using samsung.api.Enumerations;
-using samsung.api.Repositories.Profiles;
+using samsung.api.Repositories.Buddies;
 using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace samsung.api.Services.Contacts
+namespace samsung.api.Services.Buddies
 {
-    public class BuddyService : IBuddyService
+    public class BuddiesService : IBuddiesService
     {
         private readonly IBuddiesRepository _buddiesRepository;
         private readonly UserManager<GeneralUser> _userManager;
 
-        public BuddyService(IBuddiesRepository buddiesRepository, UserManager<GeneralUser> userManager)
+        public BuddiesService(IBuddiesRepository buddiesRepository, UserManager<GeneralUser> userManager)
         {
             _buddiesRepository = buddiesRepository;
             _userManager = userManager;

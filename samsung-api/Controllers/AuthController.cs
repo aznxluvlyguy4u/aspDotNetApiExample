@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using samsung.api.Auth;
+using samsung.api.Services.Auth;
 using samsung.api.DataSource.Models;
 using samsung.api.Models;
 using samsung.api.Models.Requests;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using samsung.api.Models.Response;
 
 namespace samsung.api.Controllers
 {
@@ -36,8 +37,8 @@ namespace samsung.api.Controllers
                 return new JsonResponse("Invalid email or password.", System.Net.HttpStatusCode.BadRequest);
             }
 
-            var jwt = await Tokens.GenerateJwt(identity, _jwtFactory, credentials.Email, _jwtOptions);
-            return new JsonResponse(jwt, System.Net.HttpStatusCode.OK);
+            var response = new LoginResponse(identity, _jwtFactory, credentials.Email, _jwtOptions);
+            return new JsonResponse(response, System.Net.HttpStatusCode.OK);
         }
 
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)

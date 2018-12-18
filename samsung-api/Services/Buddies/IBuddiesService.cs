@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace samsung_api.Models.Interfaces
+namespace samsung.api.Services.Buddies
 {
-    public interface IBuddyService
+    public interface IBuddiesService
     {
         Task<IEnumerable<IBuddy>> GetBuddiesAsync(ClaimsPrincipal user, BuddyRequestState state);
 

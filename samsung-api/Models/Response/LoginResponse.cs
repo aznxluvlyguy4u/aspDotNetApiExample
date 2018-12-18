@@ -1,28 +1,31 @@
-﻿using samsung_api.Models.Interfaces;
+﻿using samsung.api.Services.Auth;
+using System.Linq;
+using System.Security.Claims;
 
 namespace samsung.api.Models.Response
 {
     public class LoginResponse
     {
-        //public LoginResponse()
-        //{
-        //}
+        public LoginResponse()
+        {
+        }
 
-        //public LoginResponse(IGeneralUser token)
-        //{
-        //    if (generalUser == null)
-        //    {
-        //        return;
-        //    }
-        //    Id = generalUser.Id;
-        //    FirstName = generalUser.FirstName;
-        //    LastName = generalUser.LastName;
-        //}
+        public LoginResponse(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions)
+        {
+            if (identity == null)
+            {
+                return;
+            }
 
-        //public int Id { get; set; }
+            Id = identity.Claims.Single(c => c.Type == "id").Value;
+            AuthToken = jwtFactory.GenerateEncodedTokenAsync(userName, identity).GetAwaiter().GetResult();
+            ExpiresIn = (int)jwtOptions.ValidFor.TotalSeconds;
+        }
 
-        //public string FirstName { get; set; }
+        public string Id { get; set; }
 
-        //public string LastName { get; set; }
+        public string AuthToken { get; set; }
+
+        public int ExpiresIn { get; set; }
     }
 }

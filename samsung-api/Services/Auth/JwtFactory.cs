@@ -9,7 +9,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using JwtConstants = samsung.api.Constants.JwtConstants;
 
-namespace samsung.api.Auth
+namespace samsung.api.Services.Auth
 {
     public class JwtFactory : IJwtFactory
     {

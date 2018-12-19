@@ -1,4 +1,5 @@
 ﻿using samsung.api.Services.Auth;
+using System;
 using System.Linq;
 using System.Security.Claims;
 
@@ -10,19 +11,19 @@ namespace samsung.api.Models.Response
         {
         }
 
-        public LoginResponse(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions)
+        public LoginResponse(JwtToken jwt)
         {
-            if (identity == null)
+            if (jwt == null)
             {
                 return;
             }
 
-            Id = identity.Claims.Single(c => c.Type == "id").Value;
-            AuthToken = jwtFactory.GenerateEncodedTokenAsync(userName, identity).GetAwaiter().GetResult();
-            ExpiresIn = (int)jwtOptions.ValidFor.TotalSeconds;
+            Id = jwt.Id;
+            AuthToken = jwt.AuthToken;
+            ExpiresIn = jwt.ExpiresIn;
         }
 
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public string AuthToken { get; set; }
 

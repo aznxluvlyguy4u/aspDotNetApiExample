@@ -22,7 +22,7 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<GeneralUser> GeneralUsers { get; set; }
 
-        public virtual DbSet<Buddies> Buddies { get; set; }
+        public virtual DbSet<Buddy> Buddies { get; set; }
 
         public virtual DbSet<Image> Images { get; set; }
 
@@ -46,7 +46,7 @@ namespace samsung.api.DataSource
         {
             base.OnModelCreating(mb);
 
-            mb.Entity<Buddies>(entity =>
+            mb.Entity<Buddy>(entity =>
             {
                 entity
                     .HasKey(key => new { key.ReceivingGeneralUserId, key.RequestingGeneralUserId });

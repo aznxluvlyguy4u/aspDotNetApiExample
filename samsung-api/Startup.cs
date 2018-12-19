@@ -125,6 +125,7 @@ namespace samsung_api
                 // Services
                 .AddTransient<IGeneralUsersService, GeneralUsersService>()
                 .AddTransient<IBuddiesService, BuddiesService>()
+                .AddTransient<IAuthService, AuthService>()
                 .AddTransient<IJwtFactory, JwtFactory>()
                 // Repositories
                 .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>()

@@ -13,7 +13,7 @@ namespace samsung.api.DataSource.Models
         public string Locale { get; set; }
         public string Gender { get; set; }
 
-        public IEnumerable<Buddies> RequestingBuddy { get; set; } = new HashSet<Buddies>();
-        public IEnumerable<Buddies> ReceivingBuddy { get; set; } = new HashSet<Buddies>();
+        public IEnumerable<Buddy> RequestingBuddy { get; set; } = new HashSet<Buddy>();
+        public IEnumerable<Buddy> ReceivingBuddy { get; set; } = new HashSet<Buddy>();
     }
 }

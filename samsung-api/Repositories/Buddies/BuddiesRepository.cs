@@ -24,7 +24,7 @@ namespace samsung.api.Repositories.Buddies
 
         public async Task CreateBuddyRequestAsync(int requestingUserId, int receivingUserId)
         {
-            _databaseContext.Buddies.Add(new samsung_api.DataSource.Models.Buddies()
+            _databaseContext.Buddies.Add(new samsung_api.DataSource.Models.Buddy()
             {
                 ReceivingGeneralUserId = receivingUserId,
                 RequestingGeneralUserId = requestingUserId,

@@ -1,7 +1,4 @@
-﻿using samsung.api.Services.Auth;
-using System;
-using System.Linq;
-using System.Security.Claims;
+﻿using System;
 
 namespace samsung.api.Models.Response
 {

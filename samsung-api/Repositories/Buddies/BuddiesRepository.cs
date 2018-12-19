@@ -1,13 +1,11 @@
-﻿using samsung.api.Controllers;
+﻿using AutoMapper;
+using samsung.api.Controllers;
 using samsung.api.DataSource;
 using samsung.api.Enumerations;
-using samsung_api.DataSource.Models;
-using System;
-using System.Threading.Tasks;
-using System.Linq;
 using samsung.api.Extensions;
 using System.Collections.Generic;
-using AutoMapper;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace samsung.api.Repositories.Buddies
 {

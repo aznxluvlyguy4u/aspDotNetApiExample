@@ -11,6 +11,7 @@ namespace samsung.api.Repositories.Buddies
         Task CreateBuddyRequestAsync(int requestingUserId, int receivingUserId);
 
         Task RegisterBuddyResponseAsync(int receivingUserId, int requestingBuddy, bool hasAccepted);
+
         Task<IEnumerable<IBuddy>> GetBuddiesAysnc(int userId);
     }
 }

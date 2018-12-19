@@ -3,7 +3,6 @@ using samsung.api.Controllers;
 using samsung.api.DataSource.Models;
 using samsung.api.Enumerations;
 using samsung.api.Repositories.Buddies;
-using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;

@@ -22,6 +22,7 @@ using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace samsung_api
@@ -131,7 +132,24 @@ namespace samsung_api
                 .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>()
                 .AddTransient<IBuddiesRepository, BuddiesRepository>();
 
-            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "Samsung School Link", Version = "v1" }));
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Samsung School Link", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+
+                // Swagger 2.+ support
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+                c.AddSecurityRequirement(security);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

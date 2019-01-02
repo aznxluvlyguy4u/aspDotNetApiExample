@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using samsung.api.DataSource;
 using samsung.api.Models;
@@ -30,7 +31,7 @@ namespace samsung_api.Controllers
             _logger = logger;
         }
 
-        // GET: api/Users
+        // GET: api/generalUsers
         [HttpGet]
         public string Get()
         {
@@ -48,6 +49,7 @@ namespace samsung_api.Controllers
 
         // POST: api/Users
         [HttpPost]
+        [AllowAnonymous]
         public async Task<JsonResponse> Post([FromBody] GeneralUserCreateRequest generalUserCreateRequest)
         {
             try

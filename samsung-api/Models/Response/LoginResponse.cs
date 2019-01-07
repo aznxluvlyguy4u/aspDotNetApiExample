@@ -15,15 +15,12 @@ namespace samsung.api.Models.Response
                 return;
             }
 
-            Id = jwt.Id;
-            AuthToken = jwt.AuthToken;
-            ExpiresIn = jwt.ExpiresIn;
+            authToken = jwt.AuthToken;
+            expiresIn = jwt.ExpiresIn;
         }
 
-        public Guid Id { get; set; }
+        public string authToken { get; set; }
 
-        public string AuthToken { get; set; }
-
-        public int ExpiresIn { get; set; }
+        public int expiresIn { get; set; }
     }
 }

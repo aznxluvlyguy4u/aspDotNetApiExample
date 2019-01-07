@@ -25,6 +25,16 @@ namespace samsung.api.Models.Requests
 
         public string City { get; set; }
 
+
+
+        //subjects (aparte GET endpoints)
+
+        //interests (aparte GET endpoint)
+
+        //schoolLevel (vwo wo aparte GET endpoint)
+
+        //ageGroup (12+ 16+ etc aparte GET endpoint)
+
         public int? LinkedInId { get; set; }
 
         public int? FacebookId { get; set; }

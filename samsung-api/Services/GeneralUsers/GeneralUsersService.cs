@@ -1,5 +1,8 @@
-﻿using samsung.api.Repositories.GeneralUsers;
+﻿using samsung.api.DataSource.Models;
+using samsung.api.Repositories.GeneralUsers;
 using samsung_api.Models.Interfaces;
+using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace samsung.api.Services.GeneralUsers
@@ -16,6 +19,11 @@ namespace samsung.api.Services.GeneralUsers
         public Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser generalUser)
         {
             return _generalUsersRepository.CreateGeneralUserAsync(generalUser);
+        }
+
+        public Task<IGeneralUser> FindByIdentityAsync(ClaimsPrincipal user)
+        {
+            return _generalUsersRepository.FindByIdentityAsync(user);
         }
     }
 }

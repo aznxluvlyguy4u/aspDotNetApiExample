@@ -71,6 +71,9 @@ namespace samsung_api
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
+
+                // ClaimsIdentity settings.
+                options.ClaimsIdentity.UserIdClaimType = "Id";
             });
 
             // JWT settings
@@ -198,9 +201,18 @@ namespace samsung_api
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<IGeneralUser, AppUser>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
+                cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.Email));
                 cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
-                cfg.CreateMap<IGeneralUser, GeneralUser>(MemberList.None).ReverseMap();
+                cfg.CreateMap<GeneralUser, IGeneralUser>()
+                    .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Identity.FirstName))
+                    .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.Identity.LastName))
+                    .ForMember(d => d.Email, opt => opt.MapFrom(src => src.Identity.Email))
+                    .ForMember(d => d.City, opt => opt.MapFrom(src => src.Identity.City))
+                    .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.Identity.PhoneNumber))
+                    .ForMember(d => d.TechLevel, opt => opt.MapFrom(src => src.Identity.TechLevel))
+                    .ForMember(d => d.LinkedInId, opt => opt.MapFrom(src => src.Identity.LinkedInId))
+                    .ForMember(d => d.FacebookId, opt => opt.MapFrom(src => src.Identity.FacebookId))
+                    .ReverseMap();
             }).CreateMapper();
         }
     }

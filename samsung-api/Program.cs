@@ -18,7 +18,7 @@ namespace samsung_api
                     options.AddServerHeader = false;
                     options.Listen(IPAddress.Any, 5001, listenOptions =>
                     {
-                        listenOptions.UseHttps("Test.crt", "Test123!");
+                        listenOptions.UseHttps("Test_2.pfx", "Test123!");
                     });
 
                 }) // Remove Server header,

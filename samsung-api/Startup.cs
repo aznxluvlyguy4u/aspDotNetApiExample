@@ -128,7 +128,18 @@ namespace samsung_api
                     .RequireAuthenticatedUser()
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
+                options.SslPort = 5001;
+                options.Filters.Add(new RequireHttpsAttribute());
             });
+
+            services.AddAntiforgery(options =>
+                {
+                    options.Cookie.Name = "_af";
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                    options.HeaderName = "X-XSRF-TOKEN";
+                }
+            );
 
             // Dependencies
             services

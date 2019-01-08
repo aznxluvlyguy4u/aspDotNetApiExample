@@ -18,7 +18,6 @@ namespace samsung.api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
     public class BuddiesController : ControllerBase
     {
         private const string StateParameter = "state";

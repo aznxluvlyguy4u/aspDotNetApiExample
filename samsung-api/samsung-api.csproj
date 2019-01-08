@@ -25,6 +25,13 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Services\Teaching\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Test.crt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

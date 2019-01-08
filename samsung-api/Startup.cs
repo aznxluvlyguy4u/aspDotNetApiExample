@@ -192,7 +192,6 @@ namespace samsung_api
             app.UseSwagger();
             app.UseSwaggerUI(x => x.SwaggerEndpoint("/swagger/v1/swagger.json", "Samsung School Link V1"));
 
-            app.UseHttpsRedirection();
             app.UseAuthentication();
 
             // TODO: make this more specific
@@ -203,7 +202,8 @@ namespace samsung_api
                 .AllowAnyMethod()
             );
 
-            app.UseHttpsRedirection()
+            app
+                //.UseHttpsRedirection()
                 .UseMiddleware<ExceptionHandlingMiddleware>()
                 .UseMvc();
         }

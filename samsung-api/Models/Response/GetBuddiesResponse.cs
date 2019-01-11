@@ -5,6 +5,10 @@ namespace samsung.api.Models.Response
 {
     public class GetBuddiesResponse
     {
+        public GetBuddiesResponse()
+        {
+        }
+
         public IEnumerable<IBuddy> incomingRequests { get; set; }
         public IEnumerable<IBuddy> outGoingRequests { get; set; }
         public IEnumerable<IBuddy> matched { get; set; }

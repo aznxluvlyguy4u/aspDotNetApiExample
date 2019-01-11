@@ -39,9 +39,9 @@ namespace samsung.api.Controllers
             {
                 IEnumerable<ITeachingSubject> teachingSubjects = await _teachingSubjectsService.GetAllTeachingSubjects();
 
-                //var response = teachingSubjects.<GetTeachingSubjectsResponse>(teachingSubjects));
+                var response = teachingSubjects.Select(x => _mapper.Map<GetTeachingSubjectsResponse>(x));
 
-                return new JsonResponse("ok", HttpStatusCode.OK);
+                return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

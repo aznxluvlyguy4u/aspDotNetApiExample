@@ -79,7 +79,7 @@ namespace samsung.api.Controllers
                 base.HttpContext.TryGetEnumQueryValue(StateParameter, out BuddyRequestState state);
                 IEnumerable<IBuddy> buddies = await _buddiesService.GetBuddiesAsync(base.User, state);
 
-                var response = buddies.Select(x => _mapper.Map<GetBuddiesResponse>(buddies));
+                var response = buddies.Select(x => _mapper.Map<GetBuddiesResponse>(x));
 
                 return new JsonResponse(response, HttpStatusCode.OK);
             }

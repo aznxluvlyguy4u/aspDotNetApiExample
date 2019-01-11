@@ -15,6 +15,7 @@ using samsung.api.DataSource.Models;
 using samsung.api.Middleware;
 using samsung.api.Models;
 using samsung.api.Models.Requests;
+using samsung.api.Models.Response;
 using samsung.api.Repositories.Buddies;
 using samsung.api.Repositories.GeneralUsers;
 using samsung.api.Repositories.TeachingSubjects;
@@ -208,6 +209,8 @@ namespace samsung_api
             {
                 cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.email));
                 cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
+                cfg.CreateMap<TeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
+                cfg.CreateMap<ITeachingSubject, GetTeachingSubjectsResponse>(MemberList.None).ReverseMap();
                 cfg.CreateMap<GeneralUser, IGeneralUser>()
                     .ForMember(d => d.firstName, opt => opt.MapFrom(src => src.Identity.FirstName))
                     .ForMember(d => d.lastName, opt => opt.MapFrom(src => src.Identity.LastName))

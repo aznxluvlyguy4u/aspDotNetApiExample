@@ -1,7 +1,10 @@
-﻿using samsung_api.Models.Interfaces;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using samsung_api.Models.Interfaces;
 
 namespace samsung.api.Models.Response
 {
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public class GeneralUserCreateResponse
     {
         public GeneralUserCreateResponse()
@@ -15,23 +18,23 @@ namespace samsung.api.Models.Response
                 return;
             }
 
-            userName = generalUser.email;
-            firstName = generalUser.firstName;
-            lastName = generalUser.lastName;
-            authToken = jwt.AuthToken;
-            expiresIn = jwt.ExpiresIn;
+            UserName = generalUser.email;
+            FirstName = generalUser.firstName;
+            LastName = generalUser.lastName;
+            AuthToken = jwt.AuthToken;
+            ExpiresIn = jwt.ExpiresIn;
         }
 
 
-        public string userName { get; set; }
+        public string UserName { get; set; }
 
-        public string firstName { get; set; }
+        public string FirstName { get; set; }
 
-        public string lastName { get; set; }
+        public string LastName { get; set; }
 
-        public string authToken { get; set; }
+        public string AuthToken { get; set; }
 
-        public int expiresIn { get; set; }
+        public int ExpiresIn { get; set; }
 
     }
 }

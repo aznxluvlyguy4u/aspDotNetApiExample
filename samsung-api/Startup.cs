@@ -17,9 +17,11 @@ using samsung.api.Models;
 using samsung.api.Models.Requests;
 using samsung.api.Repositories.Buddies;
 using samsung.api.Repositories.GeneralUsers;
+using samsung.api.Repositories.TeachingSubjects;
 using samsung.api.Services.Auth;
 using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
+using samsung.api.Services.TeachingSubjects;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using Swashbuckle.AspNetCore.Swagger;
@@ -128,18 +130,7 @@ namespace samsung_api
                     .RequireAuthenticatedUser()
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
-                options.SslPort = 5001;
-                options.Filters.Add(new RequireHttpsAttribute());
             });
-
-            services.AddAntiforgery(options =>
-                {
-                    options.Cookie.Name = "_af";
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
-                    options.HeaderName = "X-XSRF-TOKEN";
-                }
-            );
 
             // Dependencies
             services
@@ -151,11 +142,13 @@ namespace samsung_api
                 // Services
                 .AddTransient<IGeneralUsersService, GeneralUsersService>()
                 .AddTransient<IBuddiesService, BuddiesService>()
+                .AddTransient<ITeachingSubjectsService, TeachingSubjectsService>()
                 .AddTransient<IAuthService, AuthService>()
                 .AddTransient<IJwtFactory, JwtFactory>()
                 // Repositories
                 .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>()
-                .AddTransient<IBuddiesRepository, BuddiesRepository>();
+                .AddTransient<IBuddiesRepository, BuddiesRepository>()
+                .AddTransient<ITeachingSubjectsRepository, TeachingSubjectsRepository>();
 
             services.AddSwaggerGen(c =>
             {
@@ -186,7 +179,8 @@ namespace samsung_api
             }
             else
             {
-                app.UseHsts();
+                // TODO: Reactivate this on AWS deployement
+                //app.UseHsts();
             }
 
             app.UseSwagger();
@@ -202,9 +196,9 @@ namespace samsung_api
                 .AllowAnyMethod()
             );
 
-            app
-                //.UseHttpsRedirection()
-                .UseMiddleware<ExceptionHandlingMiddleware>()
+            // TODO: Reactivate this on AWS deployement
+            //app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionHandlingMiddleware>()
                 .UseMvc();
         }
 
@@ -212,17 +206,17 @@ namespace samsung_api
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.Email));
+                cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.email));
                 cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
                 cfg.CreateMap<GeneralUser, IGeneralUser>()
-                    .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Identity.FirstName))
-                    .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.Identity.LastName))
-                    .ForMember(d => d.Email, opt => opt.MapFrom(src => src.Identity.Email))
-                    .ForMember(d => d.City, opt => opt.MapFrom(src => src.Identity.City))
-                    .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.Identity.PhoneNumber))
-                    .ForMember(d => d.TechLevel, opt => opt.MapFrom(src => src.Identity.TechLevel))
-                    .ForMember(d => d.LinkedInId, opt => opt.MapFrom(src => src.Identity.LinkedInId))
-                    .ForMember(d => d.FacebookId, opt => opt.MapFrom(src => src.Identity.FacebookId))
+                    .ForMember(d => d.firstName, opt => opt.MapFrom(src => src.Identity.FirstName))
+                    .ForMember(d => d.lastName, opt => opt.MapFrom(src => src.Identity.LastName))
+                    .ForMember(d => d.email, opt => opt.MapFrom(src => src.Identity.Email))
+                    .ForMember(d => d.city, opt => opt.MapFrom(src => src.Identity.City))
+                    .ForMember(d => d.phoneNumber, opt => opt.MapFrom(src => src.Identity.PhoneNumber))
+                    .ForMember(d => d.techLevel, opt => opt.MapFrom(src => src.Identity.TechLevel))
+                    .ForMember(d => d.linkedInId, opt => opt.MapFrom(src => src.Identity.LinkedInId))
+                    .ForMember(d => d.facebookId, opt => opt.MapFrom(src => src.Identity.FacebookId))
                     .ReverseMap();
             }).CreateMapper();
         }

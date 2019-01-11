@@ -27,11 +27,11 @@ namespace samsung.api.Repositories.GeneralUsers
         public async Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser generalUser)
         {
             var userIdentity = _mapper.Map<IGeneralUser, AppUser>(generalUser);
-            var result = await _userManager.CreateAsync(userIdentity, generalUser.Password);
+            var result = await _userManager.CreateAsync(userIdentity, generalUser.password);
 
             if (result.Succeeded)
             {
-                var newGeneralUser = new GeneralUser { IdentityId = userIdentity.Id, Location = generalUser.Location };
+                var newGeneralUser = new GeneralUser { IdentityId = userIdentity.Id, Location = generalUser.location };
 
                 await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
                 await _dbContext.SaveChangesAsync();
@@ -48,8 +48,6 @@ namespace samsung.api.Repositories.GeneralUsers
 
             using (_dbContext)
             {
-                //var generalUser = _dbContext.GeneralUsers.Single(u => u.IdentityId == appUser.Id);
-
                 return await Task.FromResult(
                     _mapper.Map<GeneralUser, IGeneralUser>(
                         _dbContext.GeneralUsers

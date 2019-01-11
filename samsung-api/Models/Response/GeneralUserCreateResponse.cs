@@ -15,9 +15,9 @@ namespace samsung.api.Models.Response
                 return;
             }
 
-            userName = generalUser.Email;
-            firstName = generalUser.FirstName;
-            lastName = generalUser.LastName;
+            userName = generalUser.email;
+            firstName = generalUser.firstName;
+            lastName = generalUser.lastName;
             authToken = jwt.AuthToken;
             expiresIn = jwt.ExpiresIn;
         }

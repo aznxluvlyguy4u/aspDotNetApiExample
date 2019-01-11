@@ -55,6 +55,8 @@ namespace samsung.api.Middleware
                     json = ((object)new JsonResponse(json, HttpStatusCode.BadRequest)).ToJson();
                 }
 
+                context.Response.StatusCode = jResult?.code ?? HttpStatusCode.BadRequest;
+
                 // Write (manipulated) response back to original stream.
                 await context.Response.WriteAsync(json).ConfigureAwait(false);
             }

@@ -32,12 +32,12 @@ namespace samsung.api.Controllers
         [AllowAnonymous]
         public async Task<JsonResponse> LoginAsync([FromBody]LoginRequest credentials)
         {
-            var identity = await _authService.GetClaimsIdentityAsync(credentials.Email, credentials.Password);
-            if (identity == null) return new JsonResponse("Invalid email or password.", HttpStatusCode.BadRequest);
+            var identity = await _authService.GetClaimsIdentityAsync(credentials.email, credentials.password);
+            if (identity == null) return new JsonResponse("Invalid email or password.", HttpStatusCode.Unauthorized);
 
             try
             {
-                var jwt = await _authService.GenerateJwtAsync(identity, credentials.Email);
+                var jwt = await _authService.GenerateJwtAsync(identity, credentials.email);
                 //var generalUser = await _generalUsersService.FindByIdentity
 
                 var response = new LoginResponse(jwt);

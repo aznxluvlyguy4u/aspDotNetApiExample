@@ -1,4 +1,4 @@
-﻿using samsung.api.Controllers;
+﻿using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

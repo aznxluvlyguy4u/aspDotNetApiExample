@@ -6,6 +6,7 @@ using samsung.api.Extensions;
 using samsung.api.Models;
 using samsung.api.Models.Response;
 using samsung.api.Services.Buddies;
+using samsung_api.Models.Interfaces;
 using samsung_api.Models.Requests;
 using samsung_api.Services.Logger;
 using System;
@@ -37,7 +38,7 @@ namespace samsung.api.Controllers
         {
             try
             {
-                await _buddiesService.SendBuddyRequestAsync(base.User, buddyRequest.UserId);
+                await _buddiesService.SendBuddyRequestAsync(base.User, buddyRequest.userId);
                 return new JsonResponse(null, HttpStatusCode.OK);
             }
             catch (Exception ex)

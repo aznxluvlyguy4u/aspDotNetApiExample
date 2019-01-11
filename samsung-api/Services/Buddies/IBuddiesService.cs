@@ -1,5 +1,5 @@
-using samsung.api.Controllers;
 using samsung.api.Enumerations;
+using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;

@@ -26,6 +26,8 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<Image> Images { get; set; }
 
+        public virtual DbSet<TeachingSubject> TeachingSubjects { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (_config != null && !optionsBuilder.IsConfigured)

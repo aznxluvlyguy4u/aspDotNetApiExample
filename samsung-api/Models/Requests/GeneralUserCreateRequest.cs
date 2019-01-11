@@ -6,24 +6,24 @@ namespace samsung.api.Models.Requests
     public class GeneralUserCreateRequest
     {
         [JsonRequired]
-        public string FirstName { get; set; }
+        public string firstName { get; set; }
 
         [JsonRequired]
-        public string LastName { get; set; }
+        public string lastName { get; set; }
 
         [JsonRequired]
         [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public string email { get; set; }
 
         [JsonRequired]
-        public string Password { get; set; }
+        public string password { get; set; }
 
         [JsonRequired]
-        public int TechLevel { get; set; }
+        public int techLevel { get; set; }
 
-        public string PhoneNumber { get; set; }
+        public string phoneNumber { get; set; }
 
-        public string City { get; set; }
+        public string city { get; set; }
 
 
 
@@ -35,8 +35,8 @@ namespace samsung.api.Models.Requests
 
         //ageGroup (12+ 16+ etc aparte GET endpoint)
 
-        public int? LinkedInId { get; set; }
+        public int? linkedInId { get; set; }
 
-        public int? FacebookId { get; set; }
+        public int? facebookId { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 ﻿using samsung.api.Enumerations;
 
-namespace samsung.api.Controllers
+namespace samsung_api.Models.Interfaces
 {
     public interface IBuddy
     {
-        string Image { get; set; }
-        string FullName { get; set; }
-        string Role { get; set; } // Biology teacher
-        int Rating { get; set; }
+        string image { get; set; }
+        string fullName { get; set; }
+        string role { get; set; } // Biology teacher
+        int rating { get; set; }
 
-        BuddyRequestState ContactRequestState { get; set; }
+        BuddyRequestState contactRequestState { get; set; }
     }
 }

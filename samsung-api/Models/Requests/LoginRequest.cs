@@ -7,9 +7,9 @@ namespace samsung.api.Models.Requests
     {
         [JsonRequired]
         [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public string email { get; set; }
 
         [JsonRequired]
-        public string Password { get; set; }
+        public string password { get; set; }
     }
 }

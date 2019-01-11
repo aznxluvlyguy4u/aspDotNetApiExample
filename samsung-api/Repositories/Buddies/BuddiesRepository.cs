@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using samsung.api.Controllers;
 using samsung.api.DataSource;
 using samsung.api.Enumerations;
 using samsung.api.Extensions;
+using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

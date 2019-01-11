@@ -2,19 +2,19 @@
 {
     public interface IGeneralUser
     {
-        int Id { get; set; }
-        string FirstName { get; set; }
-        string LastName { get; set; }
-        string Email { get; set; }
-        string Password { get; set; }
-        string City { get; set; }
-        string PhoneNumber { get; set; }
-        int TechLevel { get; set; }
-        int LinkedInId { get; set; }
-        int FacebookId { get; set; }
-        string IdentityId { get; set; }
-        string Location { get; set; }
-        string Locale { get; set; }
-        string Gender { get; set; }
+        int id { get; set; }
+        string firstName { get; set; }
+        string lastName { get; set; }
+        string email { get; set; }
+        string password { get; set; }
+        string city { get; set; }
+        string phoneNumber { get; set; }
+        int techLevel { get; set; }
+        int linkedInId { get; set; }
+        int facebookId { get; set; }
+        string identityId { get; set; }
+        string location { get; set; }
+        string locale { get; set; }
+        string gender { get; set; }
     }
 }

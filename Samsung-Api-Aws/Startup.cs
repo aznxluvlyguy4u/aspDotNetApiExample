@@ -190,7 +190,7 @@ namespace Samsung_Api_Aws
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(x => x.SwaggerEndpoint("/swagger/v1/swagger.json", "Samsung School Link V1"));
+            app.UseSwaggerUI(x => x.SwaggerEndpoint("../swagger/v1/swagger.json", "Samsung School Link V1"));
 
             app.UseAuthentication();
 

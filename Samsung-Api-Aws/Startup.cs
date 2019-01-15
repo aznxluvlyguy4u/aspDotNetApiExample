@@ -26,6 +26,7 @@ using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
 using samsung.api.Services.TeachingSubjects;
 using samsung_api.Models.Interfaces;
+using samsung_api.Models.Requests;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;

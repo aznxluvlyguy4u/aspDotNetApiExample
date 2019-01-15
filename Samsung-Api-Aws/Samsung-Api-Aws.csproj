@@ -5,6 +5,8 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <AWSProjectType>Lambda</AWSProjectType>
     <LangVersion>7.1</LangVersion>
+    <AssemblyName>Samsung-Api-Aws</AssemblyName>
+    <RootNamespace>SamsungApiAws</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

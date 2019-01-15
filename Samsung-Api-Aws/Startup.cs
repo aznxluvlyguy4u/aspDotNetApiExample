@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using Microsoft.IdentityModel.Tokens;
 using samsung.api.Constants;
 using samsung.api.DataSource;
@@ -24,18 +26,16 @@ using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
 using samsung.api.Services.TeachingSubjects;
 using samsung_api.Models.Interfaces;
-using samsung_api.Services.Logger;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace samsung_api
+namespace Samsung_Api_Aws
 {
     public class Startup
     {
         public const string AppS3BucketKey = "AppS3Bucket";
-
         private readonly IConfiguration _configuration;
         private readonly SymmetricSecurityKey _signingKey;
 
@@ -46,7 +46,7 @@ namespace samsung_api
             _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -144,7 +144,7 @@ namespace samsung_api
                 .AddSingleton(_configuration)
                 .AddSingleton(CreateMapper())
                 .AddSingleton<DatabaseContext>()
-                //.AddSingleton<ILogger, ConsoleLogger>()
+                .AddSingleton<ILogger, ConsoleLogger>()
                 // Services
                 .AddTransient<IGeneralUsersService, GeneralUsersService>()
                 .AddTransient<IBuddiesService, BuddiesService>()
@@ -176,7 +176,7 @@ namespace samsung_api
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -204,7 +204,7 @@ namespace samsung_api
 
             // TODO: Reactivate this on AWS deployement
             //app.UseHttpsRedirection();
-            app.UseMiddleware<ExceptionHandlingMiddleware>()
+            app//.UseMiddleware<ExceptionHandlingMiddleware>()
                 .UseMvc();
         }
 

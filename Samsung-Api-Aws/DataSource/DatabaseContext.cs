@@ -76,7 +76,7 @@ namespace samsung.api.DataSource
             mb.Entity<GeneralUserTeachingSubject>()
                 .HasOne(g => g.GeneralUser)
                 .WithMany(g => g.GeneralUserTeachingSubjects)
-                .HasForeignKey(g => g.GeneralUser);
+                .HasForeignKey(g => g.GeneralUserId);
 
             mb.Entity<GeneralUserTeachingSubject>()
                 .HasOne(g => g.TeachingSubject)

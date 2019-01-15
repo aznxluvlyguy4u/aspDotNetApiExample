@@ -69,6 +69,19 @@ namespace samsung.api.DataSource
                 new TeachingSubject { Id = 1, Name = "Subject 1" },
                 new TeachingSubject { Id = 2, Name = "Subject 2" }
             );
+
+            mb.Entity<GeneralUserTeachingSubject>()
+                .HasKey(k => new { k.GeneralUserId, k.TeachingSubjectId });
+
+            mb.Entity<GeneralUserTeachingSubject>()
+                .HasOne(g => g.GeneralUser)
+                .WithMany(g => g.GeneralUserTeachingSubjects)
+                .HasForeignKey(g => g.GeneralUser);
+
+            mb.Entity<GeneralUserTeachingSubject>()
+                .HasOne(g => g.TeachingSubject)
+                .WithMany(t => t.GeneralUserTeachingSubjects)
+                .HasForeignKey(g => g.TeachingSubjectId);
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 
 namespace samsung.api.Models.Response
 {
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public class LoginResponse
     {
         public LoginResponse()
@@ -15,12 +18,12 @@ namespace samsung.api.Models.Response
                 return;
             }
 
-            authToken = jwt.AuthToken;
-            expiresIn = jwt.ExpiresIn;
+            AuthToken = jwt.AuthToken;
+            ExpiresIn = jwt.ExpiresIn;
         }
 
-        public string authToken { get; set; }
+        public string AuthToken { get; set; }
 
-        public int expiresIn { get; set; }
+        public int ExpiresIn { get; set; }
     }
 }

@@ -12,20 +12,6 @@ namespace samsung.api.Models.Response
         {
         }
 
-        //public GeneralUserCreateResponse(IGeneralUser generalUser, JwtToken jwt)
-        //{
-        //    if (generalUser == null || jwt == null)
-        //    {
-        //        return;
-        //    }
-
-        //    userName = generalUser.email;
-        //    firstName = generalUser.firstName;
-        //    lastName = generalUser.lastName;
-        //    authToken = jwt.AuthToken;
-        //    expiresIn = jwt.ExpiresIn;
-        //}
-
         public string Id { get; set; }
 
         public string Name { get; set; }

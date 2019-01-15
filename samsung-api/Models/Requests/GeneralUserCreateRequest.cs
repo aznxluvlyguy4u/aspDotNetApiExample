@@ -26,7 +26,6 @@ namespace samsung.api.Models.Requests
         public string city { get; set; }
 
 
-
         //subjects (aparte GET endpoints)
 
         //interests (aparte GET endpoint)

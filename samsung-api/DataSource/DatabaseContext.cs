@@ -64,6 +64,11 @@ namespace samsung.api.DataSource
                     .HasForeignKey(b => b.RequestingGeneralUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
+
+            mb.Entity<TeachingSubject>().HasData(
+                new TeachingSubject { Id = 1, Name = "Subject 1" },
+                new TeachingSubject { Id = 2, Name = "Subject 2" }
+            );
         }
     }
 }

@@ -8,13 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Microsoft.IdentityModel.Tokens;
 using samsung.api.Constants;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
-using samsung.api.Middleware;
 using samsung.api.Models;
 using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
@@ -26,11 +23,12 @@ using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
 using samsung.api.Services.TeachingSubjects;
 using samsung_api.Models.Interfaces;
-using samsung_api.Models.Requests;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ConsoleLogger = samsung_api.Services.Logger.ConsoleLogger;
+using ILogger = samsung_api.Services.Logger.ILogger;
 
 namespace Samsung_Api_Aws
 {
@@ -213,20 +211,24 @@ namespace Samsung_Api_Aws
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.email));
+                cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.Email));
                 cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
+                cfg.CreateMap<TeachingSubjectRequest, ITeachingSubject>(MemberList.None).ReverseMap();
                 cfg.CreateMap<TeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
                 cfg.CreateMap<ITeachingSubject, GetTeachingSubjectsResponse>(MemberList.None).ReverseMap();
                 cfg.CreateMap<GeneralUser, IGeneralUser>()
-                    .ForMember(d => d.firstName, opt => opt.MapFrom(src => src.Identity.FirstName))
-                    .ForMember(d => d.lastName, opt => opt.MapFrom(src => src.Identity.LastName))
-                    .ForMember(d => d.email, opt => opt.MapFrom(src => src.Identity.Email))
-                    .ForMember(d => d.city, opt => opt.MapFrom(src => src.Identity.City))
-                    .ForMember(d => d.phoneNumber, opt => opt.MapFrom(src => src.Identity.PhoneNumber))
-                    .ForMember(d => d.techLevel, opt => opt.MapFrom(src => src.Identity.TechLevel))
-                    .ForMember(d => d.linkedInId, opt => opt.MapFrom(src => src.Identity.LinkedInId))
-                    .ForMember(d => d.facebookId, opt => opt.MapFrom(src => src.Identity.FacebookId))
+                    .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Identity.FirstName))
+                    .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.Identity.LastName))
+                    .ForMember(d => d.Email, opt => opt.MapFrom(src => src.Identity.Email))
+                    .ForMember(d => d.City, opt => opt.MapFrom(src => src.Identity.City))
+                    .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.Identity.PhoneNumber))
+                    .ForMember(d => d.TechLevel, opt => opt.MapFrom(src => src.Identity.TechLevel))
+                    .ForMember(d => d.LinkedInId, opt => opt.MapFrom(src => src.Identity.LinkedInId))
+                    .ForMember(d => d.FacebookId, opt => opt.MapFrom(src => src.Identity.FacebookId))
+                    .ForMember(d => d.TeachingSubjects, opt => opt.MapFrom(src => src.GeneralUserTeachingSubjects))
                     .ReverseMap();
+                cfg.CreateMap<GeneralUserTeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
+
             }).CreateMapper();
         }
     }

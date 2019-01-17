@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using samsung.api.Constants;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
@@ -26,12 +27,21 @@ namespace samsung.api.Repositories.GeneralUsers
 
         public async Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser generalUser)
         {
+            var user = _dbContext.GeneralUsers.Include(g => g.GeneralUserTeachingSubjects).First();
+
             var userIdentity = _mapper.Map<IGeneralUser, AppUser>(generalUser);
             var result = await _userManager.CreateAsync(userIdentity, generalUser.Password);
 
             if (result.Succeeded)
             {
-                var newGeneralUser = new GeneralUser { IdentityId = userIdentity.Id, Location = generalUser.Location };
+                var newGeneralUser = new GeneralUser
+                {
+                    IdentityId = userIdentity.Id,
+                    Location = generalUser.Location,
+                    Locale = generalUser.Locale,
+                    Gender = generalUser.Gender
+                    //GeneralUserTeachingSubjects =
+                };
 
                 await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
                 await _dbContext.SaveChangesAsync();

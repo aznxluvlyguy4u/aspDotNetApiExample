@@ -212,7 +212,7 @@ namespace Samsung_Api_Aws
             return new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.Email));
-                cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
+                cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>().ReverseMap();
                 cfg.CreateMap<TeachingSubjectRequest, ITeachingSubject>(MemberList.None).ReverseMap();
                 cfg.CreateMap<TeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
                 cfg.CreateMap<ITeachingSubject, GetTeachingSubjectsResponse>(MemberList.None).ReverseMap();
@@ -225,7 +225,7 @@ namespace Samsung_Api_Aws
                     .ForMember(d => d.TechLevel, opt => opt.MapFrom(src => src.Identity.TechLevel))
                     .ForMember(d => d.LinkedInId, opt => opt.MapFrom(src => src.Identity.LinkedInId))
                     .ForMember(d => d.FacebookId, opt => opt.MapFrom(src => src.Identity.FacebookId))
-                    .ForMember(d => d.TeachingSubjects, opt => opt.MapFrom(src => src.GeneralUserTeachingSubjects))
+                    //.ForMember(d => d.TeachingSubjects, opt => opt.MapFrom(src => src.GeneralUserTeachingSubjects))
                     .ReverseMap();
                 cfg.CreateMap<GeneralUserTeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
 

@@ -38,7 +38,7 @@ namespace samsung.api.Controllers
         {
             try
             {
-                await _buddiesService.SendBuddyRequestAsync(base.User, buddyRequest.userId);
+                await _buddiesService.SendBuddyRequestAsync(base.User, buddyRequest.UserId);
                 return new JsonResponse(null, HttpStatusCode.OK);
             }
             catch (Exception ex)

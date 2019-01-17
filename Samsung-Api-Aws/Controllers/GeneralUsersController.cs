@@ -89,8 +89,8 @@ namespace samsung_api.Controllers
                 JwtToken jwt = null;
                 if (createdUser != null)
                 {
-                    var identity = await _authService.GetClaimsIdentityAsync(createdUser.email, toBeCreatedUser.password);
-                    jwt = await _authService.GenerateJwtAsync(identity, createdUser.email);
+                    var identity = await _authService.GetClaimsIdentityAsync(createdUser.Email, toBeCreatedUser.Password);
+                    jwt = await _authService.GenerateJwtAsync(identity, createdUser.Email);
                 }
 
                 var response = new GeneralUserCreateResponse(createdUser, jwt);

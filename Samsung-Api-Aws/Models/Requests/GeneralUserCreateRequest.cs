@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace samsung.api.Models.Requests
@@ -6,27 +7,27 @@ namespace samsung.api.Models.Requests
     public class GeneralUserCreateRequest
     {
         [JsonRequired]
-        public string firstName { get; set; }
+        public string FirstName { get; set; }
 
         [JsonRequired]
-        public string lastName { get; set; }
+        public string LastName { get; set; }
 
         [JsonRequired]
         [DataType(DataType.EmailAddress)]
-        public string email { get; set; }
+        public string Email { get; set; }
 
         [JsonRequired]
-        public string password { get; set; }
+        public string Password { get; set; }
 
         [JsonRequired]
-        public int techLevel { get; set; }
+        public int TechLevel { get; set; }
 
-        public string phoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
-        public string city { get; set; }
+        public string City { get; set; }
 
-
-        //subjects (aparte GET endpoints)
+        [JsonRequired]
+        public List<TeachingSubjectRequest> TeachingSubjects { get; set; }
 
         //interests (aparte GET endpoint)
 
@@ -34,8 +35,8 @@ namespace samsung.api.Models.Requests
 
         //ageGroup (12+ 16+ etc aparte GET endpoint)
 
-        public int? linkedInId { get; set; }
+        public int? LinkedInId { get; set; }
 
-        public int? facebookId { get; set; }
+        public int? FacebookId { get; set; }
     }
 }

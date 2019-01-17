@@ -7,6 +7,6 @@ namespace samsung.api.DataSource.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public List<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; }
+        public IEnumerable<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; }
     }
 }

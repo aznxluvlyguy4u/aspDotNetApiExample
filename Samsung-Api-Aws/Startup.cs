@@ -187,7 +187,7 @@ namespace Samsung_Api_Aws
             else
             {
                 // TODO: Reactivate this on AWS deployement
-                //app.UseHsts();
+                app.UseHsts();
             }
 
             app.UseSwagger();
@@ -204,7 +204,7 @@ namespace Samsung_Api_Aws
             );
 
             // TODO: Reactivate this on AWS deployement
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app//.UseMiddleware<ExceptionHandlingMiddleware>()
                 .UseMvc();
         }

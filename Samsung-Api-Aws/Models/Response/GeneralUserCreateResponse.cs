@@ -25,7 +25,6 @@ namespace samsung.api.Models.Response
             ExpiresIn = jwt.ExpiresIn;
         }
 
-
         public string UserName { get; set; }
 
         public string FirstName { get; set; }
@@ -35,6 +34,5 @@ namespace samsung.api.Models.Response
         public string AuthToken { get; set; }
 
         public int ExpiresIn { get; set; }
-
     }
 }

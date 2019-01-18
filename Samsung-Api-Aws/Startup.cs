@@ -17,10 +17,12 @@ using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
 using samsung.api.Repositories.Buddies;
 using samsung.api.Repositories.GeneralUsers;
+using samsung.api.Repositories.Interests;
 using samsung.api.Repositories.TeachingSubjects;
 using samsung.api.Services.Auth;
 using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
+using samsung.api.Services.Interests;
 using samsung.api.Services.TeachingSubjects;
 using samsung_api.Models.Interfaces;
 using Swashbuckle.AspNetCore.Swagger;
@@ -149,10 +151,12 @@ namespace Samsung_Api_Aws
                 .AddTransient<IGeneralUsersService, GeneralUsersService>()
                 .AddTransient<IBuddiesService, BuddiesService>()
                 .AddTransient<ITeachingSubjectsService, TeachingSubjectsService>()
+                .AddTransient<IInterestsService, InterestsService>()
                 .AddTransient<IAuthService, AuthService>()
                 .AddTransient<IJwtFactory, JwtFactory>()
                 // Repositories
                 .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>()
+                .AddTransient<IInterestsRepository, InterestsRepository>()
                 .AddTransient<IBuddiesRepository, BuddiesRepository>()
                 .AddTransient<ITeachingSubjectsRepository, TeachingSubjectsRepository>();
 
@@ -214,9 +218,11 @@ namespace Samsung_Api_Aws
             {
                 cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.Email));
                 cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
-                //cfg.CreateMap<TeachingSubjectRequest, ITeachingSubject>(MemberList.None).ReverseMap();
                 cfg.CreateMap<TeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
                 cfg.CreateMap<ITeachingSubject, GetTeachingSubjectsResponse>(MemberList.None).ReverseMap();
+                cfg.CreateMap<Interest, IInterest>(MemberList.None).ReverseMap();
+                cfg.CreateMap<IInterest, GetInterestsResponse>(MemberList.None).ReverseMap();
+
                 cfg.CreateMap<GeneralUser, IGeneralUser>()
                     .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Identity.FirstName))
                     .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.Identity.LastName))
@@ -233,7 +239,6 @@ namespace Samsung_Api_Aws
                 //    .ForMember(d => d.Identity, opt => opt.
                 //    })
 
-
                 //    .ForMember(d => d.Identity.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 //    .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.Identity.LastName))
                 //    .ForMember(d => d.Email, opt => opt.MapFrom(src => src.Identity.Email))
@@ -244,9 +249,7 @@ namespace Samsung_Api_Aws
                 //    .ForMember(d => d.FacebookId, opt => opt.MapFrom(src => src.Identity.FacebookId))
                 //.ForMember(d => d.TeachingSubjects, opt => opt.MapFrom(src => src.GeneralUserTeachingSubjects))
 
-
                 //cfg.CreateMap<GeneralUserTeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
-
             }).CreateMapper();
         }
     }

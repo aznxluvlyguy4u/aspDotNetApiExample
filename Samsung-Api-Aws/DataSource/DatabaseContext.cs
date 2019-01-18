@@ -40,9 +40,15 @@ namespace samsung.api.DataSource
             }
             else
             {
-                optionsBuilder.UseSqlServer("Data Source=samsungschoollink.cgqkqazuj2mg.eu-west-1.rds.amazonaws.com;Initial Catalog=SamsungDatabase;User Id=root;Password=MuQSFP4vVkenYnGiGOc7AunEg07LNqyt;Pooling=False;Connect Timeout=30",
+#if DEBUG
+                optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=SamsungDatabase;Integrated Security=True;Pooling=False;Connect Timeout=30",
                     options => options.EnableRetryOnFailure());
                 base.OnConfiguring(optionsBuilder);
+#else
+                optionsBuilder.UseSqlServer("Data Source=samsung-ii.cgqkqazuj2mg.eu-west-1.rds.amazonaws.com;Initial Catalog=SamsungDatabase;User Id=root;Password=MuQSFP4vVkenYnGiGOc7AunEg07LNqyt;Pooling=False;Connect Timeout=30",
+                    options => options.EnableRetryOnFailure());
+                base.OnConfiguring(optionsBuilder);
+#endif
             }
         }
 
@@ -86,7 +92,6 @@ namespace samsung.api.DataSource
                 .HasOne(g => g.TeachingSubject)
                 .WithMany(t => t.GeneralUserTeachingSubjects)
                 .HasForeignKey(g => g.TeachingSubjectId);
-
 
             // Interest data seeds
             mb.Entity<Interest>().HasData(

@@ -1,7 +1,5 @@
-﻿using samsung.api.DataSource.Models;
-using samsung.api.Repositories.GeneralUsers;
+﻿using samsung.api.Repositories.GeneralUsers;
 using samsung_api.Models.Interfaces;
-using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 

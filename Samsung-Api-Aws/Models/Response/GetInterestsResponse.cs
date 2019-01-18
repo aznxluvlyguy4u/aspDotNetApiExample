@@ -4,9 +4,9 @@ using Newtonsoft.Json.Serialization;
 namespace samsung.api.Models.Response
 {
     [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-    public class GetTeachingSubjectsResponse
+    public class GetInterestsResponse
     {
-        public GetTeachingSubjectsResponse()
+        public GetInterestsResponse()
         {
         }
 

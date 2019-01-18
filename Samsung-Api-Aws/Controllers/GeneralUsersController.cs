@@ -31,7 +31,8 @@ namespace samsung_api.Controllers
             IGeneralUsersService usersService,
             IAuthService authService,
             ILogger logger
-        ) {
+        )
+        {
             _databaseContext = context;
             _mapper = mapper;
             _generalUsersService = usersService;

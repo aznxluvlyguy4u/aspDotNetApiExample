@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using samsung.api.Constants;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung_api.Models.Interfaces;

@@ -28,6 +28,8 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<TeachingSubject> TeachingSubjects { get; set; }
 
+        public virtual DbSet<Interest> Interests { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (_config != null && !optionsBuilder.IsConfigured)
@@ -48,6 +50,7 @@ namespace samsung.api.DataSource
         {
             base.OnModelCreating(mb);
 
+            // Buddy
             mb.Entity<Buddy>(entity =>
             {
                 entity
@@ -65,6 +68,7 @@ namespace samsung.api.DataSource
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
+            // TeachingSubject data seeds
             mb.Entity<TeachingSubject>().HasData(
                 new TeachingSubject { Id = 1, Name = "Subject 1" },
                 new TeachingSubject { Id = 2, Name = "Subject 2" }
@@ -82,6 +86,26 @@ namespace samsung.api.DataSource
                 .HasOne(g => g.TeachingSubject)
                 .WithMany(t => t.GeneralUserTeachingSubjects)
                 .HasForeignKey(g => g.TeachingSubjectId);
+
+
+            // Interest data seeds
+            mb.Entity<Interest>().HasData(
+                new Interest { Id = 1, Name = "Interest 1" },
+                new Interest { Id = 2, Name = "Interest 2" }
+            );
+
+            mb.Entity<GeneralUserInterest>()
+                .HasKey(k => new { k.GeneralUserId, k.InterestId });
+
+            mb.Entity<GeneralUserInterest>()
+                .HasOne(g => g.GeneralUser)
+                .WithMany(g => g.GeneralUserInterests)
+                .HasForeignKey(g => g.GeneralUserId);
+
+            mb.Entity<GeneralUserInterest>()
+                .HasOne(g => g.Interest)
+                .WithMany(t => t.GeneralUserInterests)
+                .HasForeignKey(g => g.InterestId);
         }
     }
 }

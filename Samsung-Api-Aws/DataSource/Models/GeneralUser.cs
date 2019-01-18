@@ -13,8 +13,9 @@ namespace samsung.api.DataSource.Models
         public string Locale { get; set; }
         public string Gender { get; set; }
 
-        public IEnumerable<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; } = new HashSet<GeneralUserTeachingSubject>();
-        public IEnumerable<Buddy> RequestingBuddy { get; set; } = new HashSet<Buddy>();
-        public IEnumerable<Buddy> ReceivingBuddy { get; set; } = new HashSet<Buddy>();
+        public ICollection<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; } = new HashSet<GeneralUserTeachingSubject>();
+        public ICollection<GeneralUserInterest> GeneralUserInterests { get; set; } = new HashSet<GeneralUserInterest>();
+        public ICollection<Buddy> RequestingBuddy { get; set; } = new HashSet<Buddy>();
+        public ICollection<Buddy> ReceivingBuddy { get; set; } = new HashSet<Buddy>();
     }
 }

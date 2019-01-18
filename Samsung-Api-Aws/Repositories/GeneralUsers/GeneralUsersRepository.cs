@@ -6,6 +6,7 @@ using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung_api.Models.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -27,8 +28,6 @@ namespace samsung.api.Repositories.GeneralUsers
 
         public async Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser generalUser)
         {
-            var user = _dbContext.GeneralUsers.Include(g => g.GeneralUserTeachingSubjects).First();
-
             var userIdentity = _mapper.Map<IGeneralUser, AppUser>(generalUser);
             var result = await _userManager.CreateAsync(userIdentity, generalUser.Password);
 
@@ -39,11 +38,24 @@ namespace samsung.api.Repositories.GeneralUsers
                     IdentityId = userIdentity.Id,
                     Location = generalUser.Location,
                     Locale = generalUser.Locale,
-                    Gender = generalUser.Gender
-                    //GeneralUserTeachingSubjects =
+                    Gender = generalUser.Gender,
+                    GeneralUserTeachingSubjects = new List<GeneralUserTeachingSubject>()
                 };
 
                 await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
+
+                if (generalUser.TeachingSubjects != null)
+                {
+                    foreach (int teachingSubjectId in generalUser.TeachingSubjects)
+                    {
+                        GeneralUserTeachingSubject newGeneralUserTeachingSubject = new GeneralUserTeachingSubject
+                        {
+                            TeachingSubjectId = teachingSubjectId
+                        };
+                        newGeneralUser.GeneralUserTeachingSubjects.Add(newGeneralUserTeachingSubject);
+                    }
+                }
+
                 await _dbContext.SaveChangesAsync();
                 return await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(newGeneralUser));
             }

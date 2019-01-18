@@ -18,6 +18,6 @@ namespace samsung_api.Models.Interfaces
         string Location { get; set; }
         string Locale { get; set; }
         string Gender { get; set; }
-        //List<ITeachingSubject> TeachingSubjects { get; set; }
+        List<int> TeachingSubjects { get; set; }
     }
 }

@@ -7,6 +7,6 @@ namespace samsung.api.DataSource.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public IEnumerable<GeneralUserInterest> GeneralUserInterests { get; set; }
+        public ICollection<GeneralUserInterest> GeneralUserInterests { get; set; } = new HashSet<GeneralUserInterest>();
     }
 }

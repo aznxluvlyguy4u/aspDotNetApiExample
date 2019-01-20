@@ -24,27 +24,26 @@ namespace samsung.api.Repositories.GeneralUsers
             _userManager = userManager;
         }
 
-        public async Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser generalUser)
+        public async Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser toBeCreatedgeneralUser)
         {
-            var userIdentity = _mapper.Map<IGeneralUser, AppUser>(generalUser);
-            var result = await _userManager.CreateAsync(userIdentity, generalUser.Password);
+            var userIdentity = _mapper.Map<IGeneralUser, AppUser>(toBeCreatedgeneralUser);
+            var result = await _userManager.CreateAsync(userIdentity, toBeCreatedgeneralUser.Password);
 
             if (result.Succeeded)
             {
                 var newGeneralUser = new GeneralUser
                 {
                     IdentityId = userIdentity.Id,
-                    Location = generalUser.Location,
-                    Locale = generalUser.Locale,
-                    Gender = generalUser.Gender,
-                    GeneralUserTeachingSubjects = new List<GeneralUserTeachingSubject>()
+                    Location = toBeCreatedgeneralUser.Location,
+                    Locale = toBeCreatedgeneralUser.Locale,
+                    Gender = toBeCreatedgeneralUser.Gender
                 };
 
-                await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
 
-                if (generalUser.TeachingSubjects != null)
+                // Save TeachingSubjects
+                if (toBeCreatedgeneralUser.TeachingSubjects != null)
                 {
-                    foreach (int teachingSubjectId in generalUser.TeachingSubjects)
+                    foreach (int teachingSubjectId in toBeCreatedgeneralUser.TeachingSubjects)
                     {
                         GeneralUserTeachingSubject newGeneralUserTeachingSubject = new GeneralUserTeachingSubject
                         {
@@ -54,6 +53,20 @@ namespace samsung.api.Repositories.GeneralUsers
                     }
                 }
 
+                // Save Interests
+                if (toBeCreatedgeneralUser.Interests != null)
+                {
+                    foreach (int interestId in toBeCreatedgeneralUser.Interests)
+                    {
+                        GeneralUserInterest newGeneralUserInterest = new GeneralUserInterest
+                        {
+                            InterestId = interestId
+                        };
+                        newGeneralUser.GeneralUserInterests.Add(newGeneralUserInterest);
+                    }
+                }
+
+                await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
                 await _dbContext.SaveChangesAsync();
                 return await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(newGeneralUser));
             }

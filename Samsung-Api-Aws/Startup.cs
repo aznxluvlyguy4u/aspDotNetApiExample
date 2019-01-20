@@ -248,8 +248,6 @@ namespace Samsung_Api_Aws
                 //    .ForMember(d => d.LinkedInId, opt => opt.MapFrom(src => src.Identity.LinkedInId))
                 //    .ForMember(d => d.FacebookId, opt => opt.MapFrom(src => src.Identity.FacebookId))
                 //.ForMember(d => d.TeachingSubjects, opt => opt.MapFrom(src => src.GeneralUserTeachingSubjects))
-
-                //cfg.CreateMap<GeneralUserTeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
             }).CreateMapper();
         }
     }

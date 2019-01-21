@@ -144,6 +144,14 @@ namespace samsung.api.DataSource
                 .HasOne(g => g.Interest)
                 .WithMany(t => t.GeneralUserInterests)
                 .HasForeignKey(g => g.InterestId);
+
+            // AgeGroup data seeds
+            mb.Entity<AgeGroup>().HasData(
+                new AgeGroup { Id = 1, Name = "10 - 15" },
+                new AgeGroup { Id = 2, Name = "15 - 20" },
+                new AgeGroup { Id = 3, Name = "25 - 30" },
+                new AgeGroup { Id = 4, Name = "30+" }
+            );
         }
     }
 }

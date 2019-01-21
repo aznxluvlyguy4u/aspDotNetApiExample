@@ -18,11 +18,13 @@ using samsung.api.Models.Response;
 using samsung.api.Repositories.Buddies;
 using samsung.api.Repositories.GeneralUsers;
 using samsung.api.Repositories.Interests;
+using samsung.api.Repositories.TeachingLevels;
 using samsung.api.Repositories.TeachingSubjects;
 using samsung.api.Services.Auth;
 using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
 using samsung.api.Services.Interests;
+using samsung.api.Services.TeachingLevels;
 using samsung.api.Services.TeachingSubjects;
 using samsung_api.Models.Interfaces;
 using Swashbuckle.AspNetCore.Swagger;
@@ -151,6 +153,7 @@ namespace Samsung_Api_Aws
                 .AddTransient<IGeneralUsersService, GeneralUsersService>()
                 .AddTransient<IBuddiesService, BuddiesService>()
                 .AddTransient<ITeachingSubjectsService, TeachingSubjectsService>()
+                .AddTransient<ITeachingLevelsService, TeachingLevelsService>()
                 .AddTransient<IInterestsService, InterestsService>()
                 .AddTransient<IAuthService, AuthService>()
                 .AddTransient<IJwtFactory, JwtFactory>()
@@ -158,7 +161,8 @@ namespace Samsung_Api_Aws
                 .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>()
                 .AddTransient<IInterestsRepository, InterestsRepository>()
                 .AddTransient<IBuddiesRepository, BuddiesRepository>()
-                .AddTransient<ITeachingSubjectsRepository, TeachingSubjectsRepository>();
+                .AddTransient<ITeachingSubjectsRepository, TeachingSubjectsRepository>()
+                .AddTransient<ITeachingLevelsRepository, TeachingLevelsRepository>();
 
             services.AddSwaggerGen(c =>
             {
@@ -220,9 +224,9 @@ namespace Samsung_Api_Aws
                 cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
                 cfg.CreateMap<TeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
                 cfg.CreateMap<ITeachingSubject, GetTeachingSubjectsResponse>(MemberList.None).ReverseMap();
+                cfg.CreateMap<ITeachingLevel, GetTeachingLevelsResponse>(MemberList.None).ReverseMap();
                 cfg.CreateMap<Interest, IInterest>(MemberList.None).ReverseMap();
                 cfg.CreateMap<IInterest, GetInterestsResponse>(MemberList.None).ReverseMap();
-
                 cfg.CreateMap<GeneralUser, IGeneralUser>()
                     .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Identity.FirstName))
                     .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.Identity.LastName))

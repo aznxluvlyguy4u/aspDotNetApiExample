@@ -101,9 +101,9 @@ namespace samsung.api.DataSource
                 new TeachingLevel { Id = 2, Name = "MAVO" },
                 new TeachingLevel { Id = 3, Name = "HAVO" },
                 new TeachingLevel { Id = 4, Name = "VWO" },
-                new TeachingLevel { Id = 2, Name = "HBO" },
-                new TeachingLevel { Id = 2, Name = "WO" },
-                new TeachingLevel { Id = 2, Name = "Anders" }
+                new TeachingLevel { Id = 5, Name = "HBO" },
+                new TeachingLevel { Id = 6, Name = "WO" },
+                new TeachingLevel { Id = 7, Name = "Anders" }
             );
 
             mb.Entity<GeneralUserTeachingLevel>()

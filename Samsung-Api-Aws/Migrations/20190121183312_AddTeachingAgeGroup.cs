@@ -3,17 +3,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace samsung.api.Migrations
 {
-    public partial class AddAgeGroup : Migration
+    public partial class AddTeachingAgeGroup : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "AgeGroupId",
+                name: "TeachingAgeGroupId",
                 table: "GeneralUsers",
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "AgeGroups",
+                name: "TeachingAgeGroups",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -22,11 +22,11 @@ namespace samsung.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AgeGroups", x => x.Id);
+                    table.PrimaryKey("PK_TeachingAgeGroups", x => x.Id);
                 });
 
             migrationBuilder.InsertData(
-                table: "AgeGroups",
+                table: "TeachingAgeGroups",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
@@ -37,15 +37,15 @@ namespace samsung.api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_GeneralUsers_AgeGroupId",
+                name: "IX_GeneralUsers_TeachingAgeGroupId",
                 table: "GeneralUsers",
-                column: "AgeGroupId");
+                column: "TeachingAgeGroupId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_GeneralUsers_AgeGroups_AgeGroupId",
+                name: "FK_GeneralUsers_TeachingAgeGroups_TeachingAgeGroupId",
                 table: "GeneralUsers",
-                column: "AgeGroupId",
-                principalTable: "AgeGroups",
+                column: "TeachingAgeGroupId",
+                principalTable: "TeachingAgeGroups",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }
@@ -53,18 +53,18 @@ namespace samsung.api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_GeneralUsers_AgeGroups_AgeGroupId",
+                name: "FK_GeneralUsers_TeachingAgeGroups_TeachingAgeGroupId",
                 table: "GeneralUsers");
 
             migrationBuilder.DropTable(
-                name: "AgeGroups");
+                name: "TeachingAgeGroups");
 
             migrationBuilder.DropIndex(
-                name: "IX_GeneralUsers_AgeGroupId",
+                name: "IX_GeneralUsers_TeachingAgeGroupId",
                 table: "GeneralUsers");
 
             migrationBuilder.DropColumn(
-                name: "AgeGroupId",
+                name: "TeachingAgeGroupId",
                 table: "GeneralUsers");
         }
     }

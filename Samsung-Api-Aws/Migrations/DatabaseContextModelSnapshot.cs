@@ -102,26 +102,6 @@ namespace samsung.api.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("samsung.api.DataSource.Models.AgeGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AgeGroups");
-
-                    b.HasData(
-                        new { Id = 1, Name = "10 - 15" },
-                        new { Id = 2, Name = "15 - 20" },
-                        new { Id = 3, Name = "25 - 30" },
-                        new { Id = 4, Name = "30+" }
-                    );
-                });
-
             modelBuilder.Entity("samsung.api.DataSource.Models.AppRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -215,8 +195,6 @@ namespace samsung.api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AgeGroupId");
-
                     b.Property<string>("Gender");
 
                     b.Property<Guid>("IdentityId");
@@ -225,11 +203,13 @@ namespace samsung.api.Migrations
 
                     b.Property<string>("Location");
 
+                    b.Property<int?>("TeachingAgeGroupId");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AgeGroupId");
-
                     b.HasIndex("IdentityId");
+
+                    b.HasIndex("TeachingAgeGroupId");
 
                     b.ToTable("GeneralUsers");
                 });
@@ -299,6 +279,26 @@ namespace samsung.api.Migrations
                     b.HasData(
                         new { Id = 1, Name = "Interest 1" },
                         new { Id = 2, Name = "Interest 2" }
+                    );
+                });
+
+            modelBuilder.Entity("samsung.api.DataSource.Models.TeachingAgeGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TeachingAgeGroups");
+
+                    b.HasData(
+                        new { Id = 1, Name = "10 - 15" },
+                        new { Id = 2, Name = "15 - 20" },
+                        new { Id = 3, Name = "25 - 30" },
+                        new { Id = 4, Name = "30+" }
                     );
                 });
 
@@ -405,14 +405,14 @@ namespace samsung.api.Migrations
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUser", b =>
                 {
-                    b.HasOne("samsung.api.DataSource.Models.AgeGroup", "AgeGroup")
-                        .WithMany("GeneralUsers")
-                        .HasForeignKey("AgeGroupId");
-
                     b.HasOne("samsung.api.DataSource.Models.AppUser", "Identity")
                         .WithMany()
                         .HasForeignKey("IdentityId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("samsung.api.DataSource.Models.TeachingAgeGroup", "TeachingAgeGroup")
+                        .WithMany("GeneralUsers")
+                        .HasForeignKey("TeachingAgeGroupId");
                 });
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserInterest", b =>

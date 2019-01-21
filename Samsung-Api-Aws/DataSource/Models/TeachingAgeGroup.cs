@@ -2,7 +2,7 @@
 
 namespace samsung.api.DataSource.Models
 {
-    public class AgeGroup
+    public class TeachingAgeGroup
     {
         public int Id { get; set; }
         public string Name { get; set; }

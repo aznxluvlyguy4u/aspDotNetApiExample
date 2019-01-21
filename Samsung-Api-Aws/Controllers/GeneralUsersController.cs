@@ -55,10 +55,10 @@ namespace samsung_api.Controllers
         {
             try
             {
-                var generalUser = await _generalUsersService.FindByIdentityAsync(base.User);
-                //var response = new GeneralUserCreateResponse(result);
+                IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(base.User);
+                var response = _mapper.Map<IGeneralUser, GetGeneralUserResponse>(generalUser);
 
-                return new JsonResponse("ok", System.Net.HttpStatusCode.OK);
+                return new JsonResponse(response, System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

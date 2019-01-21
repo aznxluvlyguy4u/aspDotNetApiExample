@@ -28,6 +28,8 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<TeachingSubject> TeachingSubjects { get; set; }
 
+        public virtual DbSet<TeachingLevel> TeachingLevels { get; set; }
+
         public virtual DbSet<Interest> Interests { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -92,6 +94,30 @@ namespace samsung.api.DataSource
                 .HasOne(g => g.TeachingSubject)
                 .WithMany(t => t.GeneralUserTeachingSubjects)
                 .HasForeignKey(g => g.TeachingSubjectId);
+
+            // TeachingLevel data seeds
+            mb.Entity<TeachingLevel>().HasData(
+                new TeachingLevel { Id = 1, Name = "VMBO" },
+                new TeachingLevel { Id = 2, Name = "MAVO" },
+                new TeachingLevel { Id = 3, Name = "HAVO" },
+                new TeachingLevel { Id = 4, Name = "VWO" },
+                new TeachingLevel { Id = 2, Name = "HBO" },
+                new TeachingLevel { Id = 2, Name = "WO" },
+                new TeachingLevel { Id = 2, Name = "Anders" }
+            );
+
+            mb.Entity<GeneralUserTeachingLevel>()
+                .HasKey(k => new { k.GeneralUserId, k.TeachingLevelId });
+
+            mb.Entity<GeneralUserTeachingLevel>()
+                .HasOne(g => g.GeneralUser)
+                .WithMany(g => g.GeneralUserTeachingLevels)
+                .HasForeignKey(g => g.GeneralUserId);
+
+            mb.Entity<GeneralUserTeachingLevel>()
+                .HasOne(g => g.TeachingLevel)
+                .WithMany(t => t.GeneralUserTeachingLevels)
+                .HasForeignKey(g => g.TeachingLevelId);
 
             // Interest data seeds
             mb.Entity<Interest>().HasData(

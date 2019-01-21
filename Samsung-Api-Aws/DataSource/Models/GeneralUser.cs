@@ -14,6 +14,7 @@ namespace samsung.api.DataSource.Models
         public string Gender { get; set; }
 
         public ICollection<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; } = new HashSet<GeneralUserTeachingSubject>();
+        public ICollection<GeneralUserTeachingLevel> GeneralUserTeachingLevels { get; set; } = new HashSet<GeneralUserTeachingLevel>();
         public ICollection<GeneralUserInterest> GeneralUserInterests { get; set; } = new HashSet<GeneralUserInterest>();
         public ICollection<Buddy> RequestingBuddy { get; set; } = new HashSet<Buddy>();
         public ICollection<Buddy> ReceivingBuddy { get; set; } = new HashSet<Buddy>();

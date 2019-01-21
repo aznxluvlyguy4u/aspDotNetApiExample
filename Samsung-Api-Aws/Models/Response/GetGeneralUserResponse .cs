@@ -11,6 +11,7 @@ namespace samsung.api.Models.Response
         public GetGeneralUserResponse()
         {
         }
+
         public GetGeneralUserResponse(IGeneralUser generalUser)
         {
         }

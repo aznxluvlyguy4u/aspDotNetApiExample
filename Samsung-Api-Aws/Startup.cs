@@ -268,7 +268,6 @@ namespace Samsung_Api_Aws
                 cfg.CreateMap<ITeachingLevel, GetTeachingLevelsResponse>(MemberList.None).ReverseMap();
                 cfg.CreateMap<IInterest, GetInterestsResponse>(MemberList.None).ReverseMap();
                 cfg.CreateMap<IGeneralUser, GetGeneralUserResponse>(MemberList.None).ReverseMap();
-
             }).CreateMapper();
         }
     }

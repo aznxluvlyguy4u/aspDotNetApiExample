@@ -30,9 +30,10 @@ namespace samsung.api.Models.Requests
         public List<int> TeachingSubjects { get; set; }
 
         [JsonRequired]
-        public List<int> Interests { get; set; }
+        public List<int> TeachingLevels { get; set; }
 
-        //schoolLevel (vwo wo aparte GET endpoint)
+        [JsonRequired]
+        public List<int> Interests { get; set; }
 
         //ageGroup (12+ 16+ etc aparte GET endpoint)
 

@@ -40,6 +40,7 @@ namespace samsung.api.Repositories.GeneralUsers
                 };
 
 
+                // TODO: simplify mapping mechanism so that these relational objects don't need to be saved separately
                 // Save TeachingSubjects
                 if (toBeCreatedgeneralUser.TeachingSubjects != null)
                 {
@@ -50,6 +51,19 @@ namespace samsung.api.Repositories.GeneralUsers
                             TeachingSubjectId = teachingSubjectId
                         };
                         newGeneralUser.GeneralUserTeachingSubjects.Add(newGeneralUserTeachingSubject);
+                    }
+                }
+
+                // Save TeachingLevels
+                if (toBeCreatedgeneralUser.TeachingLevels != null)
+                {
+                    foreach (int teachingLevelId in toBeCreatedgeneralUser.TeachingLevels)
+                    {
+                        GeneralUserTeachingLevel newGeneralUserTeachingLevel = new GeneralUserTeachingLevel
+                        {
+                            TeachingLevelId = teachingLevelId
+                        };
+                        newGeneralUser.GeneralUserTeachingLevels.Add(newGeneralUserTeachingLevel);
                     }
                 }
 

@@ -5,7 +5,6 @@ using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung_api.Models.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -39,7 +38,6 @@ namespace samsung.api.Repositories.GeneralUsers
                     Locale = toBeCreatedgeneralUser.Locale,
                     Gender = toBeCreatedgeneralUser.Gender
                 };
-
 
                 // TODO: simplify mapping mechanism so that these relational objects don't need to be saved separately
                 // Save TeachingSubjects

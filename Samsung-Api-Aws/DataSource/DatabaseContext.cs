@@ -32,6 +32,8 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<Interest> Interests { get; set; }
 
+        public virtual DbSet<AgeGroup> AgeGroups { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (_config != null && !optionsBuilder.IsConfigured)
@@ -57,6 +59,11 @@ namespace samsung.api.DataSource
         protected override void OnModelCreating(ModelBuilder mb)
         {
             base.OnModelCreating(mb);
+
+            // GeneralUser
+            mb.Entity<GeneralUser>()
+                .HasOne(g => g.AgeGroup)
+                .WithMany(a => a.GeneralUsers);
 
             // Buddy
             mb.Entity<Buddy>(entity =>

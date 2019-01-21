@@ -9,6 +9,8 @@ namespace samsung.api.DataSource.Models
         public int Id { get; set; }
         public Guid IdentityId { get; set; }
         public virtual AppUser Identity { get; set; }  // navigation property
+        public int AgeGroupId { get; set; }
+        public virtual AgeGroup AgeGroup { get; set; } // navigation property
         public string Location { get; set; }
         public string Locale { get; set; }
         public string Gender { get; set; }

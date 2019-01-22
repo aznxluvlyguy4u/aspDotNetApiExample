@@ -40,15 +40,6 @@ namespace samsung_api.Controllers
             _logger = logger;
         }
 
-        // GET: api/GeneralUsers
-        [HttpGet]
-        public string GetAll()
-        {
-            var wtf = "fu".ToJson();
-
-            return wtf;
-        }
-
         // GET: api/GeneralUsers/me
         [HttpGet("me", Name = "GetMe")]
         public async Task<JsonResponse> GetMeAsync()
@@ -66,13 +57,6 @@ namespace samsung_api.Controllers
 
                 return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
             }
-        }
-
-        // GET: api/GeneralUsers/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
         }
 
         // POST: api/Users

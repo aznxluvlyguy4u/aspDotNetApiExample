@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using samsung.api.DataSource;
 
 namespace samsung.api.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20190122100353_Testing MIgration")]
+    partial class TestingMIgration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,6 +102,26 @@ namespace samsung.api.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("samsung.api.DataSource.Models.AgeGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AgeGroups");
+
+                    b.HasData(
+                        new { Id = 1, Name = "10 - 15" },
+                        new { Id = 2, Name = "15 - 20" },
+                        new { Id = 3, Name = "25 - 30" },
+                        new { Id = 4, Name = "30+" }
+                    );
                 });
 
             modelBuilder.Entity("samsung.api.DataSource.Models.AppRole", b =>
@@ -207,15 +229,13 @@ namespace samsung.api.Migrations
 
                     b.Property<string>("Location");
 
-                    b.Property<int?>("TeachingAgeGroupId");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AgeGroupId");
 
                     b.HasIndex("CitiesId");
 
                     b.HasIndex("IdentityId");
-
-                    b.HasIndex("TeachingAgeGroupId");
 
                     b.ToTable("GeneralUsers");
                 });
@@ -285,26 +305,6 @@ namespace samsung.api.Migrations
                     b.HasData(
                         new { Id = 1, Name = "Interest 1" },
                         new { Id = 2, Name = "Interest 2" }
-                    );
-                });
-
-            modelBuilder.Entity("samsung.api.DataSource.Models.TeachingAgeGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TeachingAgeGroups");
-
-                    b.HasData(
-                        new { Id = 1, Name = "10 - 15" },
-                        new { Id = 2, Name = "15 - 20" },
-                        new { Id = 3, Name = "25 - 30" },
-                        new { Id = 4, Name = "30+" }
                     );
                 });
 
@@ -441,10 +441,6 @@ namespace samsung.api.Migrations
                         .WithMany()
                         .HasForeignKey("IdentityId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("samsung.api.DataSource.Models.TeachingAgeGroup", "TeachingAgeGroup")
-                        .WithMany("GeneralUsers")
-                        .HasForeignKey("TeachingAgeGroupId");
                 });
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserInterest", b =>

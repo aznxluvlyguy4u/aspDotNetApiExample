@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using samsung.api.DataSource.Models;
 using samsung_api.DataSource.Models;
+using SamsungApiAws.DataSource.Models;
 using System;
 
 namespace samsung.api.DataSource
@@ -33,6 +34,8 @@ namespace samsung.api.DataSource
         public virtual DbSet<Interest> Interests { get; set; }
 
         public virtual DbSet<TeachingAgeGroup> TeachingAgeGroups { get; set; }
+
+        public virtual DbSet<Cities> Cities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

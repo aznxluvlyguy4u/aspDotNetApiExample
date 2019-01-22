@@ -26,6 +26,22 @@ namespace SamsungApiAws.Controllers
             _geoService = geoService;
         }
 
+        [HttpGet("/{cityId")]
+        public async Task<JsonResponse> GetCityAsync(int cityId)
+        {
+            try
+            { 
+                var name = await _geoService.GetCityNameById(cityId);
+                return new JsonResponse(name, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
+                // TODO: When creating a release, don't send ex.Message in response
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
         [HttpGet("/{countryCode}/{searchText}")]
         public async Task<JsonResponse> GetCitiesAsync(string countryCode, string searchText)
         {

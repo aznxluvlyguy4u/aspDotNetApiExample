@@ -36,5 +36,10 @@ namespace SamsungApiAws.Repositories.Geo
             cities.ForEach(x => dict.Add(x.Id, x.CityAccentName));
             return dict;
         }
+
+        public async Task<string> GetCityNameAsync(int cityId)
+        {
+            return _dbContext.Cities.FirstOrDefault(x => x.Id == cityId)?.CityAccentName;
+        }
     }
 }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SamsungApiAws.DataSource.Models
+﻿namespace SamsungApiAws.DataSource.Models
 {
-
-    public class Cities
+    public class City
     {
         public int Id { get; set; }
         public string CountryCode { get; set; }

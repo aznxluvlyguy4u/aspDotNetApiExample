@@ -17,7 +17,7 @@ namespace samsung.api.DataSource.Models
         public string Gender { get; set; }
 
         public int CitiesId { get; set; }
-        public virtual Cities City { get; set; } // navigation property
+        public virtual City City { get; set; } // navigation property
 
         public ICollection<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; } = new HashSet<GeneralUserTeachingSubject>();
         public ICollection<GeneralUserTeachingLevel> GeneralUserTeachingLevels { get; set; } = new HashSet<GeneralUserTeachingLevel>();

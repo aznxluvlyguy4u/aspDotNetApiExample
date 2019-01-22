@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using samsung.api.DataSource;
+using samsung.api.Extensions;
 using SamsungApiAws.Services.Geo;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,21 @@ namespace SamsungApiAws.Repositories.Geo
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<string>> GetCitiesAsync(string countryCode)
+        public async Task<Dictionary<int,string>> GetCitiesAsync(string countryCode, string searchText)
         {
-            return _dbContext.Cities
-                .Where(x => x.CountryCode == countryCode)
-                .Select(x => x.CityAccentName)
-                .ToList();
+            var cities = _dbContext.Cities
+                .Where(x =>
+                    x.CountryCode == countryCode
+                    &&
+                    (
+                        x.CityName.StartsWith(searchText.ToLowerInvariant())
+                        || x.CityAccentName.StartsWith(searchText)
+                    )
+                )
+                .Select(x => new { x.CityAccentName, x.Id });
+            var dict = new Dictionary<int, string>();
+            cities.ForEach(x => dict.Add(x.Id, x.CityAccentName));
+            return dict;
         }
     }
 }

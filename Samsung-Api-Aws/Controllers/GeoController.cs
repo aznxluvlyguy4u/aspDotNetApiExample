@@ -26,15 +26,18 @@ namespace SamsungApiAws.Controllers
             _geoService = geoService;
         }
 
-        [HttpGet("/{countryCode}")]
-        public async Task<JsonResponse> GetCitiesAsync(string countryCode)
+        [HttpGet("/{countryCode}/{searchText}")]
+        public async Task<JsonResponse> GetCitiesAsync(string countryCode, string searchText)
         {
             try
             {
                 if (countryCode.ToUpperInvariant() != "NL" && countryCode.ToUpperInvariant() != "BE")
                     return new JsonResponse($"Country {countryCode} not supported", HttpStatusCode.BadRequest);
 
-                var cities = await _geoService.GetCountryCitiesAsync(countryCode.ToLowerInvariant());
+                if (searchText.Length < 3)
+                    return new JsonResponse($"At least 3 characters required for city search", HttpStatusCode.BadRequest);
+
+                var cities = await _geoService.GetCountryCitiesAsync(countryCode.ToLowerInvariant(), searchText);
                 return new JsonResponse(cities, HttpStatusCode.OK);
             }
             catch(Exception ex)

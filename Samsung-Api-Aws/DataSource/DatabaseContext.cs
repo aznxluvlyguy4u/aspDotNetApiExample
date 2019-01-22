@@ -35,7 +35,7 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<AgeGroup> AgeGroups { get; set; }
 
-        public virtual DbSet<Cities> Cities { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

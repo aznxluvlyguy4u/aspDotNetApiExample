@@ -14,7 +14,7 @@ namespace SamsungApiAws.Services.Geo
             _geoRepository = geoRepository;
         }
 
-        public async Task<IEnumerable<string>> GetCountryCitiesAsync(string countryCode)
-            => await _geoRepository.GetCitiesAsync(countryCode);
+        public async Task<Dictionary<int, string>> GetCountryCitiesAsync(string countryCode, string searchText)
+            => await _geoRepository.GetCitiesAsync(countryCode, searchText);
     }
 }

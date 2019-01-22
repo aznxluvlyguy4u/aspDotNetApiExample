@@ -62,7 +62,7 @@ namespace samsung_api.Controllers
         // POST: api/Users
         [HttpPost]
         [AllowAnonymous]
-        public async Task<JsonResponse> Post([FromBody] GeneralUserCreateRequest generalUserCreateRequest)
+        public async Task<JsonResponse> Post([FromBody]GeneralUserCreateRequest generalUserCreateRequest)
         {
             try
             {

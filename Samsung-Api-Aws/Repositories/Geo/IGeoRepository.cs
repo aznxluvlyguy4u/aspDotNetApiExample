@@ -5,6 +5,6 @@ namespace SamsungApiAws.Services.Geo
 {
     public interface IGeoRepository
     {
-        Task<IEnumerable<string>> GetCitiesAsync(string countryCode);
+        Task<Dictionary<int, string>> GetCitiesAsync(string countryCode, string searchText);
     }
 }

@@ -9,7 +9,7 @@ namespace samsung_api.Models.Interfaces
         string LastName { get; set; }
         string Email { get; set; }
         string Password { get; set; }
-        string City { get; set; }
+        int CityId { get; set; }
         string PhoneNumber { get; set; }
         int TechLevel { get; set; }
         int LinkedInId { get; set; }

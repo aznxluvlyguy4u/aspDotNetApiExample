@@ -250,7 +250,6 @@ namespace Samsung_Api_Aws
                     .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Identity.FirstName))
                     .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.Identity.LastName))
                     .ForMember(d => d.Email, opt => opt.MapFrom(src => src.Identity.Email))
-                    .ForMember(d => d.City, opt => opt.MapFrom(src => src.Identity.City))
                     .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.Identity.PhoneNumber))
                     .ForMember(d => d.TechLevel, opt => opt.MapFrom(src => src.Identity.TechLevel))
                     .ForMember(d => d.LinkedInId, opt => opt.MapFrom(src => src.Identity.LinkedInId))

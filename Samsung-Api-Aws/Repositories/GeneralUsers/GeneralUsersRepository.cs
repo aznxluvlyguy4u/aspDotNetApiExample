@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung_api.Models.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -39,16 +39,15 @@ namespace samsung.api.Repositories.GeneralUsers
                     Gender = toBeCreatedgeneralUser.Gender
                 };
 
-
                 // TODO: simplify mapping mechanism so that these relational objects don't need to be saved separately
                 // Save TeachingSubjects
                 if (toBeCreatedgeneralUser.TeachingSubjects != null)
                 {
-                    foreach (int teachingSubjectId in toBeCreatedgeneralUser.TeachingSubjects)
+                    foreach (ITeachingSubject teachingSubject in toBeCreatedgeneralUser.TeachingSubjects)
                     {
                         GeneralUserTeachingSubject newGeneralUserTeachingSubject = new GeneralUserTeachingSubject
                         {
-                            TeachingSubjectId = teachingSubjectId
+                            TeachingSubjectId = teachingSubject.Id
                         };
                         newGeneralUser.GeneralUserTeachingSubjects.Add(newGeneralUserTeachingSubject);
                     }
@@ -57,11 +56,11 @@ namespace samsung.api.Repositories.GeneralUsers
                 // Save TeachingLevels
                 if (toBeCreatedgeneralUser.TeachingLevels != null)
                 {
-                    foreach (int teachingLevelId in toBeCreatedgeneralUser.TeachingLevels)
+                    foreach (ITeachingLevel teachingLevel in toBeCreatedgeneralUser.TeachingLevels)
                     {
                         GeneralUserTeachingLevel newGeneralUserTeachingLevel = new GeneralUserTeachingLevel
                         {
-                            TeachingLevelId = teachingLevelId
+                            TeachingLevelId = teachingLevel.Id
                         };
                         newGeneralUser.GeneralUserTeachingLevels.Add(newGeneralUserTeachingLevel);
                     }
@@ -70,11 +69,11 @@ namespace samsung.api.Repositories.GeneralUsers
                 // Save Interests
                 if (toBeCreatedgeneralUser.Interests != null)
                 {
-                    foreach (int interestId in toBeCreatedgeneralUser.Interests)
+                    foreach (IInterest interest in toBeCreatedgeneralUser.Interests)
                     {
                         GeneralUserInterest newGeneralUserInterest = new GeneralUserInterest
                         {
-                            InterestId = interestId
+                            InterestId = interest.Id
                         };
                         newGeneralUser.GeneralUserInterests.Add(newGeneralUserInterest);
                     }
@@ -91,17 +90,19 @@ namespace samsung.api.Repositories.GeneralUsers
 
         public async Task<IGeneralUser> FindByIdentityAsync(ClaimsPrincipal user)
         {
-            var appUser = await _userManager.GetUserAsync(user);
+            var appUserId = _userManager.GetUserId(user);
+            var generalUser = _dbContext.GeneralUsers
+                .Include(g => g.Identity)
+                .Include(g => g.GeneralUserTeachingSubjects)
+                    .ThenInclude(t => t.TeachingSubject)
+                .Include(g => g.GeneralUserTeachingLevels)
+                    .ThenInclude(t => t.TeachingLevel)
+                .Include(g => g.GeneralUserInterests)
+                    .ThenInclude(t => t.Interest)
+                .FirstOrDefault(g => g.IdentityId == new Guid(appUserId));
 
-            using (_dbContext)
-            {
-                return await Task.FromResult(
-                    _mapper.Map<GeneralUser, IGeneralUser>(
-                        _dbContext.GeneralUsers
-                            .Single(generalUser => generalUser.Identity == appUser)
-                    )
-                );
-            }
+            IGeneralUser IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
+            return IGeneralUser;
         }
     }
 }

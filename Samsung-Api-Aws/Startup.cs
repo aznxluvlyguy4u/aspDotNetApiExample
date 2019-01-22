@@ -265,7 +265,7 @@ namespace Samsung_Api_Aws
                     .ReverseMap();
 
                 // Requests
-                cfg.CreateMap<GeneralUserCreateRequest, IGeneralUser>(MemberList.None).ReverseMap();
+                cfg.CreateMap<CreateGeneralUserRequest, IGeneralUser>(MemberList.None).ReverseMap();
 
                 // Responses
                 cfg.CreateMap<ITeachingSubject, GetTeachingSubjectsResponse>(MemberList.None).ReverseMap();

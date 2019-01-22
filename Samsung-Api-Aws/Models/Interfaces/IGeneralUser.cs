@@ -15,6 +15,7 @@ namespace samsung_api.Models.Interfaces
         int LinkedInId { get; set; }
         int FacebookId { get; set; }
         string IdentityId { get; set; }
+        int TeachingAgeGroupId { get; set; }
         string Location { get; set; }
         string Locale { get; set; }
         string Gender { get; set; }

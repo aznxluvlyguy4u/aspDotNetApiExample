@@ -13,6 +13,8 @@ namespace samsung.api.DataSource.Models
         public string Locale { get; set; }
         public string Gender { get; set; }
 
+        public int CitiesId { get; set; }
+
         public ICollection<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; } = new HashSet<GeneralUserTeachingSubject>();
         public ICollection<GeneralUserTeachingLevel> GeneralUserTeachingLevels { get; set; } = new HashSet<GeneralUserTeachingLevel>();
         public ICollection<GeneralUserInterest> GeneralUserInterests { get; set; } = new HashSet<GeneralUserInterest>();

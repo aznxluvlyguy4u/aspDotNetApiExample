@@ -62,12 +62,12 @@ namespace samsung_api.Controllers
         // POST: api/Users
         [HttpPost]
         [AllowAnonymous]
-        public async Task<JsonResponse> Post([FromBody]GeneralUserCreateRequest generalUserCreateRequest)
+        public async Task<JsonResponse> Post([FromBody]CreateGeneralUserRequest createGeneralUserRequest)
         {
             try
             {
                 // Create GeneralUser
-                var toBeCreatedUser = _mapper.Map<GeneralUserCreateRequest, IGeneralUser>(generalUserCreateRequest);
+                var toBeCreatedUser = _mapper.Map<CreateGeneralUserRequest, IGeneralUser>(createGeneralUserRequest);
                 var createdUser = await _generalUsersService.CreateGeneralUserAsync(toBeCreatedUser);
 
                 // Create identity and jwt

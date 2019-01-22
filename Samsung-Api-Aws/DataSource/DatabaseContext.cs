@@ -33,7 +33,7 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<Interest> Interests { get; set; }
 
-        public virtual DbSet<AgeGroup> AgeGroups { get; set; }
+        public virtual DbSet<TeachingAgeGroup> TeachingAgeGroups { get; set; }
 
         public virtual DbSet<City> Cities { get; set; }
 
@@ -41,9 +41,17 @@ namespace samsung.api.DataSource
         {
             if (_config != null && !optionsBuilder.IsConfigured)
             {
+#if DEBUG
                 optionsBuilder
                     .UseSqlServer(_config.GetConnectionString("sqlserver"), options => options.EnableRetryOnFailure());
                 base.OnConfiguring(optionsBuilder);
+#else
+                optionsBuilder.UseSqlServer("Data Source=samsung-ii.cgqkqazuj2mg.eu-west-1.rds.amazonaws.com;Initial Catalog=SamsungDatabase;User Id=root;Password=MuQSFP4vVkenYnGiGOc7AunEg07LNqyt;Pooling=False;Connect Timeout=30",
+                    options => options.EnableRetryOnFailure());
+                base.OnConfiguring(optionsBuilder);
+#endif
+
+
             }
             else
             {
@@ -65,7 +73,7 @@ namespace samsung.api.DataSource
 
             // GeneralUser
             mb.Entity<GeneralUser>()
-                .HasOne(g => g.AgeGroup)
+                .HasOne(g => g.TeachingAgeGroup)
                 .WithMany(a => a.GeneralUsers);
 
             // Buddy
@@ -149,11 +157,11 @@ namespace samsung.api.DataSource
                 .HasForeignKey(g => g.InterestId);
 
             // AgeGroup data seeds
-            mb.Entity<AgeGroup>().HasData(
-                new AgeGroup { Id = 1, Name = "10 - 15" },
-                new AgeGroup { Id = 2, Name = "15 - 20" },
-                new AgeGroup { Id = 3, Name = "25 - 30" },
-                new AgeGroup { Id = 4, Name = "30+" }
+            mb.Entity<TeachingAgeGroup>().HasData(
+                new TeachingAgeGroup { Id = 1, Name = "10 - 15" },
+                new TeachingAgeGroup { Id = 2, Name = "15 - 20" },
+                new TeachingAgeGroup { Id = 3, Name = "25 - 30" },
+                new TeachingAgeGroup { Id = 4, Name = "30+" }
             );
         }
     }

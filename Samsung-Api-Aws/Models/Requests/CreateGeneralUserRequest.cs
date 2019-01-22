@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace samsung.api.Models.Requests
 {
-    public class GeneralUserCreateRequest
+    public class CreateGeneralUserRequest
     {
         [JsonRequired]
         public string FirstName { get; set; }
@@ -26,6 +26,9 @@ namespace samsung.api.Models.Requests
 
         public int CityId { get; set; }
 
+        //[JsonRequired]
+        //public int TeachingAgeGroupId { get; set; }
+
         [JsonRequired]
         public List<int> TeachingSubjects { get; set; }
 
@@ -34,8 +37,6 @@ namespace samsung.api.Models.Requests
 
         [JsonRequired]
         public List<int> Interests { get; set; }
-
-        //ageGroup (12+ 16+ etc aparte GET endpoint)
 
         public int? LinkedInId { get; set; }
 

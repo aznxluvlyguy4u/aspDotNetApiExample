@@ -10,7 +10,7 @@ namespace samsung.api.Migrations
                 name: "CitiesId",
                 table: "GeneralUsers",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 1);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GeneralUsers_CitiesId",

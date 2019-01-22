@@ -31,14 +31,19 @@ namespace SamsungApiAws.Controllers
         {
             try
             {
-                if (countryCode.ToUpperInvariant() != "NL" && countryCode.ToUpperInvariant() != "BE")
+                if (
+                    !string.Equals(countryCode, "NL", StringComparison.InvariantCultureIgnoreCase) 
+                    && !string.Equals(countryCode, "BE", StringComparison.InvariantCultureIgnoreCase)
+                )
+                {
                     return new JsonResponse($"Country {countryCode} not supported", HttpStatusCode.BadRequest);
+                }
 
                 if (searchText.Length < 3)
                     return new JsonResponse($"At least 3 characters required for city search", HttpStatusCode.BadRequest);
 
                 var cities = await _geoService.GetCountryCitiesAsync(countryCode.ToLowerInvariant(), searchText);
-                var response = cities.Select(x => new { name = x.Key, id = x.Value });
+                var response = cities.Select(x => new { name = x.Value, id = x.Key });
                 return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch(Exception ex)

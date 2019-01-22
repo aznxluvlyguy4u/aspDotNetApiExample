@@ -30,6 +30,9 @@ using samsung.api.Services.TeachingAgeGroups;
 using samsung.api.Services.TeachingLevels;
 using samsung.api.Services.TeachingSubjects;
 using samsung_api.Models.Interfaces;
+using SamsungApiAws.Extensions;
+using SamsungApiAws.Repositories.Geo;
+using SamsungApiAws.Services.Geo;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
@@ -161,13 +164,16 @@ namespace Samsung_Api_Aws
                 .AddTransient<IInterestsService, InterestsService>()
                 .AddTransient<IAuthService, AuthService>()
                 .AddTransient<IJwtFactory, JwtFactory>()
+                .AddTransient<IGeoService, GeoService>()
                 // Repositories
                 .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>()
                 .AddTransient<IInterestsRepository, InterestsRepository>()
                 .AddTransient<IBuddiesRepository, BuddiesRepository>()
                 .AddTransient<ITeachingSubjectsRepository, TeachingSubjectsRepository>()
                 .AddTransient<ITeachingLevelsRepository, TeachingLevelsRepository>()
-                .AddTransient<ITeachingAgeGroupsRepository, TeachingAgeGroupsRepository>();
+                .AddTransient<ITeachingAgeGroupsRepository, TeachingAgeGroupsRepository>()
+                .AddTransient<IGeoRepository, GeoRepository>()
+                ;
 
             services.AddSwaggerGen(c =>
             {
@@ -187,6 +193,8 @@ namespace Samsung_Api_Aws
                 };
                 c.AddSecurityRequirement(security);
             });
+
+            services.Verify();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

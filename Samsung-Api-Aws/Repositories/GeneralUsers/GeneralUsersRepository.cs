@@ -33,7 +33,7 @@ namespace samsung.api.Repositories.GeneralUsers
             {
                 var newGeneralUser = new GeneralUser
                 {
-                    IdentityId = userIdentity.Id,
+                    Identity = userIdentity,
                     Location = toBeCreatedgeneralUser.Location,
                     Locale = toBeCreatedgeneralUser.Locale,
                     Gender = toBeCreatedgeneralUser.Gender
@@ -99,7 +99,7 @@ namespace samsung.api.Repositories.GeneralUsers
                     .ThenInclude(t => t.TeachingLevel)
                 .Include(g => g.GeneralUserInterests)
                     .ThenInclude(t => t.Interest)
-                .FirstOrDefault(g => g.IdentityId == new Guid(appUserId));
+                .FirstOrDefault(g => g.Identity.Id == new Guid(appUserId));
 
             IGeneralUser IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
             return IGeneralUser;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using samsung.api.DataSource;
 
-namespace samsung.api.Migrations
+namespace SamsungApiAws.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
@@ -195,15 +195,11 @@ namespace samsung.api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AgeGroupId");
-
-                    b.Property<int>("CitiesId");
-
                     b.Property<int?>("CityId");
 
                     b.Property<string>("Gender");
 
-                    b.Property<Guid>("IdentityId");
+                    b.Property<Guid?>("IdentityId");
 
                     b.Property<string>("Locale");
 
@@ -430,18 +426,13 @@ namespace samsung.api.Migrations
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUser", b =>
                 {
-                    b.HasOne("samsung.api.DataSource.Models.AgeGroup", "AgeGroup")
-                        .WithMany("GeneralUsers")
-                        .HasForeignKey("AgeGroupId");
-
                     b.HasOne("SamsungApiAws.DataSource.Models.City", "City")
                         .WithMany()
                         .HasForeignKey("CityId");
 
                     b.HasOne("samsung.api.DataSource.Models.AppUser", "Identity")
                         .WithMany()
-                        .HasForeignKey("IdentityId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("IdentityId");
 
                     b.HasOne("samsung.api.DataSource.Models.TeachingAgeGroup", "TeachingAgeGroup")
                         .WithMany("GeneralUsers")

@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using samsung.api.DataSource;
 
-namespace samsung.api.Migrations
+namespace SamsungApiAws.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190118131517_AddInterest")]
-    partial class AddInterest
+    [Migration("20190122125929_Cities data seeding")]
+    partial class Citiesdataseeding
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -197,17 +197,25 @@ namespace samsung.api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CityId");
+
                     b.Property<string>("Gender");
 
-                    b.Property<Guid>("IdentityId");
+                    b.Property<Guid?>("IdentityId");
 
                     b.Property<string>("Locale");
 
                     b.Property<string>("Location");
 
+                    b.Property<int?>("TeachingAgeGroupId");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CityId");
+
                     b.HasIndex("IdentityId");
+
+                    b.HasIndex("TeachingAgeGroupId");
 
                     b.ToTable("GeneralUsers");
                 });
@@ -223,6 +231,19 @@ namespace samsung.api.Migrations
                     b.HasIndex("InterestId");
 
                     b.ToTable("GeneralUserInterest");
+                });
+
+            modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserTeachingLevel", b =>
+                {
+                    b.Property<int>("GeneralUserId");
+
+                    b.Property<int>("TeachingLevelId");
+
+                    b.HasKey("GeneralUserId", "TeachingLevelId");
+
+                    b.HasIndex("TeachingLevelId");
+
+                    b.ToTable("GeneralUserTeachingLevel");
                 });
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserTeachingSubject", b =>
@@ -267,6 +288,49 @@ namespace samsung.api.Migrations
                     );
                 });
 
+            modelBuilder.Entity("samsung.api.DataSource.Models.TeachingAgeGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TeachingAgeGroups");
+
+                    b.HasData(
+                        new { Id = 1, Name = "10 - 15" },
+                        new { Id = 2, Name = "15 - 20" },
+                        new { Id = 3, Name = "25 - 30" },
+                        new { Id = 4, Name = "30+" }
+                    );
+                });
+
+            modelBuilder.Entity("samsung.api.DataSource.Models.TeachingLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TeachingLevels");
+
+                    b.HasData(
+                        new { Id = 1, Name = "VMBO" },
+                        new { Id = 2, Name = "MAVO" },
+                        new { Id = 3, Name = "HAVO" },
+                        new { Id = 4, Name = "VWO" },
+                        new { Id = 5, Name = "HBO" },
+                        new { Id = 6, Name = "WO" },
+                        new { Id = 7, Name = "Anders" }
+                    );
+                });
+
             modelBuilder.Entity("samsung.api.DataSource.Models.TeachingSubject", b =>
                 {
                     b.Property<int>("Id")
@@ -298,6 +362,23 @@ namespace samsung.api.Migrations
                     b.HasIndex("RequestingGeneralUserId");
 
                     b.ToTable("Buddies");
+                });
+
+            modelBuilder.Entity("SamsungApiAws.DataSource.Models.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CityAccentName");
+
+                    b.Property<string>("CityName");
+
+                    b.Property<string>("CountryCode");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -347,10 +428,17 @@ namespace samsung.api.Migrations
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUser", b =>
                 {
+                    b.HasOne("SamsungApiAws.DataSource.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId");
+
                     b.HasOne("samsung.api.DataSource.Models.AppUser", "Identity")
                         .WithMany()
-                        .HasForeignKey("IdentityId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("IdentityId");
+
+                    b.HasOne("samsung.api.DataSource.Models.TeachingAgeGroup", "TeachingAgeGroup")
+                        .WithMany("GeneralUsers")
+                        .HasForeignKey("TeachingAgeGroupId");
                 });
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserInterest", b =>
@@ -363,6 +451,19 @@ namespace samsung.api.Migrations
                     b.HasOne("samsung.api.DataSource.Models.Interest", "Interest")
                         .WithMany("GeneralUserInterests")
                         .HasForeignKey("InterestId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserTeachingLevel", b =>
+                {
+                    b.HasOne("samsung.api.DataSource.Models.GeneralUser", "GeneralUser")
+                        .WithMany("GeneralUserTeachingLevels")
+                        .HasForeignKey("GeneralUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("samsung.api.DataSource.Models.TeachingLevel", "TeachingLevel")
+                        .WithMany("GeneralUserTeachingLevels")
+                        .HasForeignKey("TeachingLevelId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

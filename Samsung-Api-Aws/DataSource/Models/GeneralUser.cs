@@ -8,16 +8,14 @@ namespace samsung.api.DataSource.Models
     public class GeneralUser
     {
         public int Id { get; set; }
-        public Guid IdentityId { get; set; }
-        public virtual AppUser Identity { get; set; }  // navigation property
-        public int? TeachingAgeGroupId { get; set; }
-        public virtual TeachingAgeGroup TeachingAgeGroup { get; set; } // navigation property
+
         public string Location { get; set; }
         public string Locale { get; set; }
         public string Gender { get; set; }
 
-        public int CitiesId { get; set; }
-        public virtual City City { get; set; } // navigation property
+        public virtual City City { get; set; }
+        public virtual AppUser Identity { get; set; }  
+        public virtual TeachingAgeGroup TeachingAgeGroup { get; set; }
 
         public ICollection<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; } = new HashSet<GeneralUserTeachingSubject>();
         public ICollection<GeneralUserTeachingLevel> GeneralUserTeachingLevels { get; set; } = new HashSet<GeneralUserTeachingLevel>();

@@ -38,7 +38,8 @@ namespace SamsungApiAws.Controllers
                     return new JsonResponse($"At least 3 characters required for city search", HttpStatusCode.BadRequest);
 
                 var cities = await _geoService.GetCountryCitiesAsync(countryCode.ToLowerInvariant(), searchText);
-                return new JsonResponse(cities, HttpStatusCode.OK);
+                var response = cities.Select(x => new { name = x.Key, id = x.Value });
+                return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch(Exception ex)
             {

@@ -1,26 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace samsung.api.Migrations
+namespace SamsungApiAws.Migrations
 {
-    public partial class addCitiesmodel : Migration
+    public partial class Citiesdataseeding : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Cities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CountryCode = table.Column<string>(nullable: true),
-                    CityName = table.Column<string>(nullable: true),
-                    CityAccentName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cities", x => x.Id);
-                });
 
             migrationBuilder.InsertData(table: "Cities", columns: new[] { "CountryCode", "CityName", "CityAccentName" }, values: new object[,]{{"nl","1e exloermond","1e Exloërmond"},
 {"nl","2e exloermond","2e Exloërmond"},
@@ -25279,8 +25264,7 @@ namespace samsung.api.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Cities");
+
         }
     }
 }

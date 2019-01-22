@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using samsung.api.Models;
 using samsung_api.Services.Logger;
@@ -26,7 +27,7 @@ namespace SamsungApiAws.Controllers
             _geoService = geoService;
         }
 
-        [HttpGet("/{cityId")]
+        [HttpGet("/{cityId}")]
         public async Task<JsonResponse> GetCityAsync(int cityId)
         {
             try
@@ -43,6 +44,7 @@ namespace SamsungApiAws.Controllers
         }
 
         [HttpGet("/{countryCode}/{searchText}")]
+        [AllowAnonymous]
         public async Task<JsonResponse> GetCitiesAsync(string countryCode, string searchText)
         {
             try

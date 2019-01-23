@@ -126,7 +126,7 @@ namespace samsung_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogErrorAsync(ex.Message, ex).GetAwaiter().GetResult();
+                await _logger.LogErrorAsync(ex.Message, ex);
 
                 return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
             }

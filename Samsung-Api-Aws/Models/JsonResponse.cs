@@ -66,7 +66,7 @@ namespace samsung.api.Models
 
         private string GetErrorMessage(object payload, HttpStatusCode httpStatusCode)
         {
-            if (payload != null && payload.GetType() == typeof(string))
+            if (payload != null && (payload is string))
                 return payload.ToString();
 
             switch (httpStatusCode)

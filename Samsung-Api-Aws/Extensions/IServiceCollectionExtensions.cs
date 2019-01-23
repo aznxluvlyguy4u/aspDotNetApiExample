@@ -30,11 +30,13 @@ namespace SamsungApiAws.Extensions
 
                 foreach (var constructor in constructors)
                 {
+                    // Assume constructor is valid, till proven otherwise
                     var validConstructor = true;
 
                     var parameters = constructor.GetParameters();
 
-                    // If constructor does not take arguments, it is self defined .ctor, and thus not an injectable class.
+                    // If constructor does not take arguments, it is self defined .ctor
+                    // This means it has no injection dependencies and can be safely ignored.
                     if (parameters.Length == 0) break;
                     foreach (var param in parameters)
                     {
@@ -49,13 +51,15 @@ namespace SamsungApiAws.Extensions
                     if (!validConstructor) break;
 
                     var interfaces = loadableType.GetInterfaces();
+
                     // Limit interfaces to the project namespaces.
-                    // This to prevent system interfaces such as IEnumerable etc.
+                    // This to prevent rougue interfaces from intervering
                     interfaces = interfaces.Where(x =>
                         x.Namespace.StartsWith("Samsung")
                     ).ToArray();
 
                     // If any interface is left afterwards, attempt to add it, to see if it is already in there.
+                    // This does assume, the first interface is the implementation interface.
                     if (!interfaces.IsNullOrEmpty())
                         services.TryAddScoped(interfaces.FirstOrDefault());
                     if (services.Count > count)

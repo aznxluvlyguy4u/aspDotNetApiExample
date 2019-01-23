@@ -11,6 +11,10 @@ using samsung_api.Extensions;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace samsung_api.Controllers
@@ -99,6 +103,33 @@ namespace samsung_api.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpPost("images")]
+        [AllowAnonymous]
+        public async Task<JsonResponse> FindImagesOnUrl(FindImageRequest findImageRequest)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var result = await client.GetStringAsync(findImageRequest.Url);
+                    if (string.IsNullOrWhiteSpace(result))
+                        return new JsonResponse(null, System.Net.HttpStatusCode.NoContent);
+
+                    MatchCollection m1 = Regex.Matches(result, "(?:src|href)=\"(.*\\.(?:jpg|png|jpeg|gif))\"");
+
+                    var images = m1.Select(m => m.Groups?[1]?.Value ?? null).Where(x => !string.IsNullOrWhiteSpace(x));
+
+                    return new JsonResponse(images, System.Net.HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogErrorAsync(ex.Message, ex).GetAwaiter().GetResult();
+
+                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
+            }
         }
     }
 }

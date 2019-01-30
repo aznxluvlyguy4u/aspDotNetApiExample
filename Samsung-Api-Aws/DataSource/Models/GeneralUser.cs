@@ -2,6 +2,7 @@
 using SamsungApiAws.DataSource.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace samsung.api.DataSource.Models
 {
@@ -13,6 +14,7 @@ namespace samsung.api.DataSource.Models
         public string Locale { get; set; }
         public string Gender { get; set; }
 
+        [Required]
         public virtual City City { get; set; }
         public virtual AppUser Identity { get; set; }  
         public virtual TeachingAgeGroup TeachingAgeGroup { get; set; }

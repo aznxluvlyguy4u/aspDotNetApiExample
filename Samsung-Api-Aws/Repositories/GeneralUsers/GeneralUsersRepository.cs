@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung_api.Models.Interfaces;
+using SamsungApiAws.DataSource.Models;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace samsung.api.Repositories.GeneralUsers
 {
@@ -26,66 +28,108 @@ namespace samsung.api.Repositories.GeneralUsers
 
         public async Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser toBeCreatedgeneralUser)
         {
-            var userIdentity = _mapper.Map<IGeneralUser, AppUser>(toBeCreatedgeneralUser);
-            var result = await _userManager.CreateAsync(userIdentity, toBeCreatedgeneralUser.Password);
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
+            IGeneralUser returnValue = default;
 
-            if (result.Succeeded)
+            await strategy.Execute(async () =>
             {
-                var newGeneralUser = new GeneralUser
+                using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    Identity = userIdentity,
-                    Location = toBeCreatedgeneralUser.Location,
-                    Locale = toBeCreatedgeneralUser.Locale,
-                    Gender = toBeCreatedgeneralUser.Gender
-                };
+                    var userIdentity = _mapper.Map<IGeneralUser, AppUser>(toBeCreatedgeneralUser);
+                    var result = await _userManager.CreateAsync(userIdentity, toBeCreatedgeneralUser.Password);
 
-                // TODO: simplify mapping mechanism so that these relational objects don't need to be saved separately
-                // Save TeachingSubjects
-                if (toBeCreatedgeneralUser.TeachingSubjects != null)
-                {
-                    foreach (ITeachingSubject teachingSubject in toBeCreatedgeneralUser.TeachingSubjects)
+                    if (!result.Succeeded)
                     {
-                        GeneralUserTeachingSubject newGeneralUserTeachingSubject = new GeneralUserTeachingSubject
-                        {
-                            TeachingSubjectId = teachingSubject.Id
-                        };
-                        newGeneralUser.GeneralUserTeachingSubjects.Add(newGeneralUserTeachingSubject);
+                        throw new ArgumentException(result.Errors.FirstOrDefault()?.Description);
                     }
-                }
 
-                // Save TeachingLevels
-                if (toBeCreatedgeneralUser.TeachingLevels != null)
-                {
-                    foreach (ITeachingLevel teachingLevel in toBeCreatedgeneralUser.TeachingLevels)
+                    // Validate related id's
+                    var newGeneralUser = new GeneralUser
                     {
-                        GeneralUserTeachingLevel newGeneralUserTeachingLevel = new GeneralUserTeachingLevel
-                        {
-                            TeachingLevelId = teachingLevel.Id
-                        };
-                        newGeneralUser.GeneralUserTeachingLevels.Add(newGeneralUserTeachingLevel);
-                    }
-                }
+                        Identity = userIdentity,
+                        Location = toBeCreatedgeneralUser.Location,
+                        Locale = toBeCreatedgeneralUser.Locale,
+                        Gender = toBeCreatedgeneralUser.Gender
+                    };
 
-                // Save Interests
-                if (toBeCreatedgeneralUser.Interests != null)
-                {
-                    foreach (IInterest interest in toBeCreatedgeneralUser.Interests)
+                    // TODO: simplify mapping mechanism so that these relational objects don't need to be saved separately
+                    // Validate and save city
+                    City city = _dbContext.Cities.SingleOrDefault(c => c.Id == toBeCreatedgeneralUser.CityId);
+                    newGeneralUser.City = city ?? throw new ArgumentException($"City ID: {toBeCreatedgeneralUser.CityId} could not be found.");
+
+                    // Validate and save TeachingAgeGroup
+                    TeachingAgeGroup teachingAgeGroup = _dbContext.TeachingAgeGroups.SingleOrDefault(t => t.Id == toBeCreatedgeneralUser.TeachingAgeGroupId);
+                    newGeneralUser.TeachingAgeGroup = teachingAgeGroup ?? throw new ArgumentException($"TeachingAgeGroup ID: {toBeCreatedgeneralUser.TeachingAgeGroupId} could not be found.");
+
+                    // Save TeachingSubjects
+                    if (toBeCreatedgeneralUser.TeachingSubjects != null)
                     {
-                        GeneralUserInterest newGeneralUserInterest = new GeneralUserInterest
+                        foreach (ITeachingSubject iTeachingSubject in toBeCreatedgeneralUser.TeachingSubjects)
                         {
-                            InterestId = interest.Id
-                        };
-                        newGeneralUser.GeneralUserInterests.Add(newGeneralUserInterest);
+                            TeachingSubject teachingSubject = _dbContext.TeachingSubjects.SingleOrDefault(t => t.Id == iTeachingSubject.Id);
+                            if (teachingSubject == default)
+                            {
+                                throw new ArgumentException($"TeachingSubject ID: {iTeachingSubject.Id} could not be found.");
+                            }
+
+                            GeneralUserTeachingSubject newGeneralUserTeachingSubject = new GeneralUserTeachingSubject
+                            {
+                                TeachingSubjectId = iTeachingSubject.Id
+                            };
+                            newGeneralUser.GeneralUserTeachingSubjects.Add(newGeneralUserTeachingSubject);
+                        }
                     }
+
+                    // Save TeachingLevels
+                    if (toBeCreatedgeneralUser.TeachingLevels != null)
+                    {
+                        foreach (ITeachingLevel iTeachingLevel in toBeCreatedgeneralUser.TeachingLevels)
+                        {
+                            TeachingLevel teachingLevel = _dbContext.TeachingLevels.SingleOrDefault(t => t.Id == iTeachingLevel.Id);
+                            if (teachingLevel == default)
+                            {
+                                throw new ArgumentException($"TeachingLevel ID: {iTeachingLevel.Id} could not be found.");
+                            }
+
+                            GeneralUserTeachingLevel newGeneralUserTeachingLevel = new GeneralUserTeachingLevel
+                            {
+                                TeachingLevelId = iTeachingLevel.Id
+                            };
+                            newGeneralUser.GeneralUserTeachingLevels.Add(newGeneralUserTeachingLevel);
+                        }
+                    }
+
+                    // Save Interests
+                    if (toBeCreatedgeneralUser.Interests != null)
+                    {
+                        foreach (IInterest iInterest in toBeCreatedgeneralUser.Interests)
+                        {
+                            Interest interest = _dbContext.Interests.SingleOrDefault(i => i.Id == iInterest.Id);
+                            if (interest == default)
+                            {
+                                throw new ArgumentException($"Interest ID: {iInterest.Id} could not be found.");
+                            }
+
+                            GeneralUserInterest newGeneralUserInterest = new GeneralUserInterest
+                            {
+                                InterestId = iInterest.Id
+                            };
+                            newGeneralUser.GeneralUserInterests.Add(newGeneralUserInterest);
+                        }
+                    }
+
+                    await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
+                    await _dbContext.SaveChangesAsync();
+
+                    // Commit transaction if all commands succeed, transaction will auto-rollback
+                    // when disposed if either commands fails
+                    transaction.Complete();
+
+                    returnValue = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(newGeneralUser));
                 }
+            });
 
-                await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
-                await _dbContext.SaveChangesAsync();
-                return await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(newGeneralUser));
-            }
-
-            // TODO Alter exception message in production to prevent email data leak
-            throw new ArgumentException(result.Errors.FirstOrDefault()?.Description);
+            return returnValue;
         }
 
         public async Task<IGeneralUser> FindByIdentityAsync(ClaimsPrincipal user)

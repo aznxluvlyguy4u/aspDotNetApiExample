@@ -57,7 +57,7 @@ namespace samsung_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogErrorAsync(ex.Message, ex).GetAwaiter().GetResult();
+                await _logger.LogErrorAsync(ex.Message, ex);
 
                 return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
             }
@@ -76,18 +76,15 @@ namespace samsung_api.Controllers
 
                 // Create identity and jwt
                 JwtToken jwt = null;
-                if (createdUser != null)
-                {
-                    var identity = await _authService.GetClaimsIdentityAsync(createdUser.Email, toBeCreatedUser.Password);
-                    jwt = await _authService.GenerateJwtAsync(identity, createdUser.Email);
-                }
+                var identity = await _authService.GetClaimsIdentityAsync(createdUser.Email, toBeCreatedUser.Password);
+                jwt = await _authService.GenerateJwtAsync(identity, createdUser.Email);
 
                 var response = new GeneralUserCreateResponse(createdUser, jwt);
                 return new JsonResponse(response, System.Net.HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
-                _logger.LogErrorAsync(ex.Message, ex).GetAwaiter().GetResult();
+                await _logger.LogErrorAsync(ex.Message, ex);
 
                 return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
             }

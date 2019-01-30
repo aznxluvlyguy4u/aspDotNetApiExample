@@ -54,12 +54,12 @@ namespace samsung.api.Repositories.GeneralUsers
 
                     // TODO: simplify mapping mechanism so that these relational objects don't need to be saved separately
                     // Validate and save city
-                    City city = _dbContext.Cities.SingleOrDefault(c => c.Id == toBeCreatedgeneralUser.CityId);
-                    newGeneralUser.City = city ?? throw new ArgumentException($"City ID: {toBeCreatedgeneralUser.CityId} could not be found.");
+                    City city = _dbContext.Cities.SingleOrDefault(c => c.Id == toBeCreatedgeneralUser.City.Id);
+                    newGeneralUser.City = city ?? throw new ArgumentException($"City ID: {toBeCreatedgeneralUser.City.Id} could not be found.");
 
                     // Validate and save TeachingAgeGroup
-                    TeachingAgeGroup teachingAgeGroup = _dbContext.TeachingAgeGroups.SingleOrDefault(t => t.Id == toBeCreatedgeneralUser.TeachingAgeGroupId);
-                    newGeneralUser.TeachingAgeGroup = teachingAgeGroup ?? throw new ArgumentException($"TeachingAgeGroup ID: {toBeCreatedgeneralUser.TeachingAgeGroupId} could not be found.");
+                    TeachingAgeGroup teachingAgeGroup = _dbContext.TeachingAgeGroups.SingleOrDefault(t => t.Id == toBeCreatedgeneralUser.TeachingAgeGroup.Id);
+                    newGeneralUser.TeachingAgeGroup = teachingAgeGroup ?? throw new ArgumentException($"TeachingAgeGroup ID: {toBeCreatedgeneralUser.TeachingAgeGroup.Id} could not be found.");
 
                     // Save TeachingSubjects
                     if (toBeCreatedgeneralUser.TeachingSubjects != null)
@@ -137,6 +137,8 @@ namespace samsung.api.Repositories.GeneralUsers
             var appUserId = _userManager.GetUserId(user);
             var generalUser = _dbContext.GeneralUsers
                 .Include(g => g.Identity)
+                .Include(g => g.City)
+                .Include(g => g.TeachingAgeGroup)
                 .Include(g => g.GeneralUserTeachingSubjects)
                     .ThenInclude(t => t.TeachingSubject)
                 .Include(g => g.GeneralUserTeachingLevels)

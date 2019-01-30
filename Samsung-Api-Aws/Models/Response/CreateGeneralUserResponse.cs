@@ -5,13 +5,13 @@ using samsung_api.Models.Interfaces;
 namespace samsung.api.Models.Response
 {
     [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-    public class GeneralUserCreateResponse
+    public class CreateGeneralUserResponse
     {
-        public GeneralUserCreateResponse()
+        public CreateGeneralUserResponse()
         {
         }
 
-        public GeneralUserCreateResponse(IGeneralUser generalUser, JwtToken jwt)
+        public CreateGeneralUserResponse(IGeneralUser generalUser, JwtToken jwt)
         {
             if (generalUser == null || jwt == null)
             {

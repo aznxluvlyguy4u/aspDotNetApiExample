@@ -79,7 +79,7 @@ namespace samsung_api.Controllers
                 var identity = await _authService.GetClaimsIdentityAsync(createdUser.Email, toBeCreatedUser.Password);
                 jwt = await _authService.GenerateJwtAsync(identity, createdUser.Email);
 
-                var response = new GeneralUserCreateResponse(createdUser, jwt);
+                var response = new CreateGeneralUserResponse(createdUser, jwt);
                 return new JsonResponse(response, System.Net.HttpStatusCode.Created);
             }
             catch (Exception ex)

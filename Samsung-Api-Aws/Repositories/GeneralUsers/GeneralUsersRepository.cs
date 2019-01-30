@@ -57,11 +57,26 @@ namespace samsung.api.Repositories.GeneralUsers
                     City city = _dbContext.Cities.SingleOrDefault(c => c.Id == toBeCreatedgeneralUser.City.Id);
                     newGeneralUser.City = city ?? throw new ArgumentException($"City ID: {toBeCreatedgeneralUser.City.Id} could not be found.");
 
-                    // Validate and save TeachingAgeGroup
-                    TeachingAgeGroup teachingAgeGroup = _dbContext.TeachingAgeGroups.SingleOrDefault(t => t.Id == toBeCreatedgeneralUser.TeachingAgeGroup.Id);
-                    newGeneralUser.TeachingAgeGroup = teachingAgeGroup ?? throw new ArgumentException($"TeachingAgeGroup ID: {toBeCreatedgeneralUser.TeachingAgeGroup.Id} could not be found.");
+                    // Validate and save TeachingAgeGroups
+                    if (toBeCreatedgeneralUser.TeachingAgeGroups != null)
+                    {
+                        foreach (ITeachingAgeGroup iTeachingAgeGroup in toBeCreatedgeneralUser.TeachingAgeGroups)
+                        {
+                            TeachingAgeGroup teachingAgeGroup = _dbContext.TeachingAgeGroups.SingleOrDefault(t => t.Id == iTeachingAgeGroup.Id);
+                            if (teachingAgeGroup == default)
+                            {
+                                throw new ArgumentException($"TeachingGroup ID: {iTeachingAgeGroup.Id} could not be found.");
+                            }
 
-                    // Save TeachingSubjects
+                            GeneralUserTeachingAgeGroup newGeneralUserTeachingAgeGroup = new GeneralUserTeachingAgeGroup
+                            {
+                                TeachingAgeGroupId = iTeachingAgeGroup.Id
+                            };
+                            newGeneralUser.GeneralUserTeachingAgeGroups.Add(newGeneralUserTeachingAgeGroup);
+                        }
+                    }
+
+                    // Validate and Save TeachingSubjects
                     if (toBeCreatedgeneralUser.TeachingSubjects != null)
                     {
                         foreach (ITeachingSubject iTeachingSubject in toBeCreatedgeneralUser.TeachingSubjects)
@@ -80,7 +95,7 @@ namespace samsung.api.Repositories.GeneralUsers
                         }
                     }
 
-                    // Save TeachingLevels
+                    // Validate and Save TeachingLevels
                     if (toBeCreatedgeneralUser.TeachingLevels != null)
                     {
                         foreach (ITeachingLevel iTeachingLevel in toBeCreatedgeneralUser.TeachingLevels)
@@ -99,7 +114,7 @@ namespace samsung.api.Repositories.GeneralUsers
                         }
                     }
 
-                    // Save Interests
+                    // Validate and Save Interests
                     if (toBeCreatedgeneralUser.Interests != null)
                     {
                         foreach (IInterest iInterest in toBeCreatedgeneralUser.Interests)
@@ -138,7 +153,8 @@ namespace samsung.api.Repositories.GeneralUsers
             var generalUser = _dbContext.GeneralUsers
                 .Include(g => g.Identity)
                 .Include(g => g.City)
-                .Include(g => g.TeachingAgeGroup)
+                .Include(g => g.GeneralUserTeachingAgeGroups)
+                    .ThenInclude(t => t.TeachingAgeGroup)
                 .Include(g => g.GeneralUserTeachingSubjects)
                     .ThenInclude(t => t.TeachingSubject)
                 .Include(g => g.GeneralUserTeachingLevels)

@@ -71,11 +71,6 @@ namespace samsung.api.DataSource
         {
             base.OnModelCreating(mb);
 
-            // GeneralUser
-            mb.Entity<GeneralUser>()
-                .HasOne(g => g.TeachingAgeGroup)
-                .WithMany(a => a.GeneralUsers);
-
             // Buddy
             mb.Entity<Buddy>(entity =>
             {
@@ -163,6 +158,19 @@ namespace samsung.api.DataSource
                 new TeachingAgeGroup { Id = 3, Name = "25 - 30" },
                 new TeachingAgeGroup { Id = 4, Name = "30+" }
             );
+
+            mb.Entity<GeneralUserTeachingAgeGroup>()
+                .HasKey(k => new { k.GeneralUserId, k.TeachingAgeGroupId });
+
+            mb.Entity<GeneralUserTeachingAgeGroup>()
+                .HasOne(g => g.GeneralUser)
+                .WithMany(g => g.GeneralUserTeachingAgeGroups)
+                .HasForeignKey(g => g.GeneralUserId);
+
+            mb.Entity<GeneralUserTeachingAgeGroup>()
+                .HasOne(g => g.TeachingAgeGroup)
+                .WithMany(t => t.GeneralUserTeachingAgeGroups)
+                .HasForeignKey(g => g.TeachingAgeGroupId);
         }
     }
 }

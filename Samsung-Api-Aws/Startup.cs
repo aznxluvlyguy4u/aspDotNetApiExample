@@ -245,8 +245,12 @@ namespace Samsung_Api_Aws
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src));
                 cfg.CreateMap<int, IInterest>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src));
-                cfg.CreateMap<TeachingSubject, ITeachingSubject>(MemberList.None).ReverseMap();
-                cfg.CreateMap<Interest, IInterest>(MemberList.None).ReverseMap();
+
+                cfg.CreateMap<GeneralUserTeachingAgeGroup, ITeachingAgeGroup>()
+                    .ForMember(d => d.Id, opt => opt.MapFrom(src => src.TeachingAgeGroup.Id))
+                    .ForMember(d => d.Name, opt => opt.MapFrom(src => src.TeachingAgeGroup.Name))
+                    .ReverseMap();
+
                 cfg.CreateMap<GeneralUserTeachingSubject, ITeachingSubject>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src.TeachingSubject.Id))
                     .ForMember(d => d.Name, opt => opt.MapFrom(src => src.TeachingSubject.Name))
@@ -270,6 +274,7 @@ namespace Samsung_Api_Aws
                     .ForMember(d => d.TechLevel, opt => opt.MapFrom(src => src.Identity.TechLevel))
                     .ForMember(d => d.LinkedInId, opt => opt.MapFrom(src => src.Identity.LinkedInId))
                     .ForMember(d => d.FacebookId, opt => opt.MapFrom(src => src.Identity.FacebookId))
+                    .ForMember(d => d.TeachingAgeGroups, opt => opt.MapFrom(src => src.GeneralUserTeachingAgeGroups.Select(x => x)))
                     .ForMember(d => d.TeachingSubjects, opt => opt.MapFrom(src => src.GeneralUserTeachingSubjects.Select(x => x)))
                     .ForMember(d => d.TeachingLevels, opt => opt.MapFrom(src => src.GeneralUserTeachingLevels.Select(x => x)))
                     .ForMember(d => d.Interests, opt => opt.MapFrom(src => src.GeneralUserInterests.Select(x => x)))
@@ -279,9 +284,6 @@ namespace Samsung_Api_Aws
                 cfg.CreateMap<CreateGeneralUserRequest, IGeneralUser>(MemberList.None).ReverseMap();
 
                 // Responses
-                cfg.CreateMap<ITeachingSubject, GetTeachingSubjectsResponse>(MemberList.None).ReverseMap();
-                cfg.CreateMap<ITeachingLevel, GetTeachingLevelsResponse>(MemberList.None).ReverseMap();
-                cfg.CreateMap<IInterest, GetInterestsResponse>(MemberList.None).ReverseMap();
                 cfg.CreateMap<IGeneralUser, GetGeneralUserResponse>(MemberList.None).ReverseMap();
             }).CreateMapper();
         }

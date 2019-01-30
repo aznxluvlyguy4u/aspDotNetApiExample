@@ -20,7 +20,7 @@ namespace samsung_api.Models.Interfaces
         string Locale { get; set; }
         string Gender { get; set; }
         ICity City { get; set; }
-        ITeachingAgeGroup TeachingAgeGroup { get; set; }
+        List<ITeachingAgeGroup> TeachingAgeGroups { get; set; }
         List<ITeachingSubject> TeachingSubjects { get; set; }
         List<ITeachingLevel> TeachingLevels { get; set; }
         List<IInterest> Interests { get; set; }

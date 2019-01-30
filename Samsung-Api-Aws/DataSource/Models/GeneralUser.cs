@@ -18,9 +18,8 @@ namespace samsung.api.DataSource.Models
         public virtual City City { get; set; }
         [Required]
         public virtual AppUser Identity { get; set; }
-        [Required]
-        public virtual TeachingAgeGroup TeachingAgeGroup { get; set; }
 
+        public ICollection<GeneralUserTeachingAgeGroup> GeneralUserTeachingAgeGroups { get; set; } = new HashSet<GeneralUserTeachingAgeGroup>();
         public ICollection<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; } = new HashSet<GeneralUserTeachingSubject>();
         public ICollection<GeneralUserTeachingLevel> GeneralUserTeachingLevels { get; set; } = new HashSet<GeneralUserTeachingLevel>();
         public ICollection<GeneralUserInterest> GeneralUserInterests { get; set; } = new HashSet<GeneralUserInterest>();

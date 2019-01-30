@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SamsungApiAws.Migrations
 {
-    public partial class AddInitialDatabaseWithSeeds : Migration
+    public partial class InitialDatabaseSeeding : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -248,8 +248,7 @@ namespace SamsungApiAws.Migrations
                     Locale = table.Column<string>(nullable: true),
                     Gender = table.Column<string>(nullable: true),
                     CityId = table.Column<int>(nullable: false),
-                    IdentityId = table.Column<Guid>(nullable: false),
-                    TeachingAgeGroupId = table.Column<int>(nullable: false)
+                    IdentityId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -264,12 +263,6 @@ namespace SamsungApiAws.Migrations
                         name: "FK_GeneralUsers_AspNetUsers_IdentityId",
                         column: x => x.IdentityId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GeneralUsers_TeachingAgeGroups_TeachingAgeGroupId",
-                        column: x => x.TeachingAgeGroupId,
-                        principalTable: "TeachingAgeGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -319,6 +312,30 @@ namespace SamsungApiAws.Migrations
                         name: "FK_GeneralUserInterest_Interests_InterestId",
                         column: x => x.InterestId,
                         principalTable: "Interests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GeneralUserTeachingAgeGroup",
+                columns: table => new
+                {
+                    GeneralUserId = table.Column<int>(nullable: false),
+                    TeachingAgeGroupId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneralUserTeachingAgeGroup", x => new { x.GeneralUserId, x.TeachingAgeGroupId });
+                    table.ForeignKey(
+                        name: "FK_GeneralUserTeachingAgeGroup_GeneralUsers_GeneralUserId",
+                        column: x => x.GeneralUserId,
+                        principalTable: "GeneralUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GeneralUserTeachingAgeGroup_TeachingAgeGroups_TeachingAgeGroupId",
+                        column: x => x.TeachingAgeGroupId,
+                        principalTable: "TeachingAgeGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -474,8 +491,8 @@ namespace SamsungApiAws.Migrations
                 column: "IdentityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GeneralUsers_TeachingAgeGroupId",
-                table: "GeneralUsers",
+                name: "IX_GeneralUserTeachingAgeGroup_TeachingAgeGroupId",
+                table: "GeneralUserTeachingAgeGroup",
                 column: "TeachingAgeGroupId");
 
             migrationBuilder.CreateIndex(
@@ -513,6 +530,9 @@ namespace SamsungApiAws.Migrations
                 name: "GeneralUserInterest");
 
             migrationBuilder.DropTable(
+                name: "GeneralUserTeachingAgeGroup");
+
+            migrationBuilder.DropTable(
                 name: "GeneralUserTeachingLevel");
 
             migrationBuilder.DropTable(
@@ -528,6 +548,9 @@ namespace SamsungApiAws.Migrations
                 name: "Interests");
 
             migrationBuilder.DropTable(
+                name: "TeachingAgeGroups");
+
+            migrationBuilder.DropTable(
                 name: "TeachingLevels");
 
             migrationBuilder.DropTable(
@@ -541,9 +564,6 @@ namespace SamsungApiAws.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "TeachingAgeGroups");
         }
     }
 }

@@ -205,15 +205,11 @@ namespace SamsungApiAws.Migrations
 
                     b.Property<string>("Location");
 
-                    b.Property<int>("TeachingAgeGroupId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
 
                     b.HasIndex("IdentityId");
-
-                    b.HasIndex("TeachingAgeGroupId");
 
                     b.ToTable("GeneralUsers");
                 });
@@ -229,6 +225,19 @@ namespace SamsungApiAws.Migrations
                     b.HasIndex("InterestId");
 
                     b.ToTable("GeneralUserInterest");
+                });
+
+            modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserTeachingAgeGroup", b =>
+                {
+                    b.Property<int>("GeneralUserId");
+
+                    b.Property<int>("TeachingAgeGroupId");
+
+                    b.HasKey("GeneralUserId", "TeachingAgeGroupId");
+
+                    b.HasIndex("TeachingAgeGroupId");
+
+                    b.ToTable("GeneralUserTeachingAgeGroup");
                 });
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserTeachingLevel", b =>
@@ -435,11 +444,6 @@ namespace SamsungApiAws.Migrations
                         .WithMany()
                         .HasForeignKey("IdentityId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("samsung.api.DataSource.Models.TeachingAgeGroup", "TeachingAgeGroup")
-                        .WithMany("GeneralUsers")
-                        .HasForeignKey("TeachingAgeGroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserInterest", b =>
@@ -452,6 +456,19 @@ namespace SamsungApiAws.Migrations
                     b.HasOne("samsung.api.DataSource.Models.Interest", "Interest")
                         .WithMany("GeneralUserInterests")
                         .HasForeignKey("InterestId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserTeachingAgeGroup", b =>
+                {
+                    b.HasOne("samsung.api.DataSource.Models.GeneralUser", "GeneralUser")
+                        .WithMany("GeneralUserTeachingAgeGroups")
+                        .HasForeignKey("GeneralUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("samsung.api.DataSource.Models.TeachingAgeGroup", "TeachingAgeGroup")
+                        .WithMany("GeneralUserTeachingAgeGroups")
+                        .HasForeignKey("TeachingAgeGroupId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

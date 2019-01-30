@@ -10,7 +10,7 @@ using samsung.api.DataSource;
 namespace SamsungApiAws.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190130142802_AddCitiesDataSeeding")]
+    [Migration("20190130182802_AddCitiesDataSeeding")]
     partial class AddCitiesDataSeeding
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

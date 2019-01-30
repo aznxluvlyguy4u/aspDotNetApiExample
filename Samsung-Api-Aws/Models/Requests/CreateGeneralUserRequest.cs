@@ -28,7 +28,7 @@ namespace samsung.api.Models.Requests
         public int City { get; set; }
 
         [JsonRequired]
-        public int TeachingAgeGroup { get; set; }
+        public List<int> TeachingAgeGroups { get; set; }
 
         [JsonRequired]
         public List<int> TeachingSubjects { get; set; }

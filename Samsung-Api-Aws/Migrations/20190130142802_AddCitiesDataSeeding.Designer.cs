@@ -10,8 +10,8 @@ using samsung.api.DataSource;
 namespace SamsungApiAws.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190122125919_initial migration")]
-    partial class initialmigration
+    [Migration("20190130142802_AddCitiesDataSeeding")]
+    partial class AddCitiesDataSeeding
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -197,17 +197,17 @@ namespace SamsungApiAws.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CityId");
+                    b.Property<int>("CityId");
 
                     b.Property<string>("Gender");
 
-                    b.Property<Guid?>("IdentityId");
+                    b.Property<Guid>("IdentityId");
 
                     b.Property<string>("Locale");
 
                     b.Property<string>("Location");
 
-                    b.Property<int?>("TeachingAgeGroupId");
+                    b.Property<int>("TeachingAgeGroupId");
 
                     b.HasKey("Id");
 
@@ -430,15 +430,18 @@ namespace SamsungApiAws.Migrations
                 {
                     b.HasOne("SamsungApiAws.DataSource.Models.City", "City")
                         .WithMany()
-                        .HasForeignKey("CityId");
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("samsung.api.DataSource.Models.AppUser", "Identity")
                         .WithMany()
-                        .HasForeignKey("IdentityId");
+                        .HasForeignKey("IdentityId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("samsung.api.DataSource.Models.TeachingAgeGroup", "TeachingAgeGroup")
                         .WithMany("GeneralUsers")
-                        .HasForeignKey("TeachingAgeGroupId");
+                        .HasForeignKey("TeachingAgeGroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserInterest", b =>

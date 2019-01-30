@@ -16,7 +16,9 @@ namespace samsung.api.DataSource.Models
 
         [Required]
         public virtual City City { get; set; }
-        public virtual AppUser Identity { get; set; }  
+        [Required]
+        public virtual AppUser Identity { get; set; }
+        [Required]
         public virtual TeachingAgeGroup TeachingAgeGroup { get; set; }
 
         public ICollection<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; } = new HashSet<GeneralUserTeachingSubject>();

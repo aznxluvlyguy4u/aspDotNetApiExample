@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SamsungApiAws.Migrations
 {
-    public partial class initialmigration : Migration
+    public partial class AddInitialDatabaseWithSeeds : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -247,9 +247,9 @@ namespace SamsungApiAws.Migrations
                     Location = table.Column<string>(nullable: true),
                     Locale = table.Column<string>(nullable: true),
                     Gender = table.Column<string>(nullable: true),
-                    CityId = table.Column<int>(nullable: true),
-                    IdentityId = table.Column<Guid>(nullable: true),
-                    TeachingAgeGroupId = table.Column<int>(nullable: true)
+                    CityId = table.Column<int>(nullable: false),
+                    IdentityId = table.Column<Guid>(nullable: false),
+                    TeachingAgeGroupId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -259,19 +259,19 @@ namespace SamsungApiAws.Migrations
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GeneralUsers_AspNetUsers_IdentityId",
                         column: x => x.IdentityId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GeneralUsers_TeachingAgeGroups_TeachingAgeGroupId",
                         column: x => x.TeachingAgeGroupId,
                         principalTable: "TeachingAgeGroups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

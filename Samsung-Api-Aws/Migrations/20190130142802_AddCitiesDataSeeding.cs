@@ -2,11 +2,10 @@
 
 namespace SamsungApiAws.Migrations
 {
-    public partial class Citiesdataseeding : Migration
+    public partial class AddCitiesDataSeeding : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             migrationBuilder.InsertData(table: "Cities", columns: new[] { "CountryCode", "CityName", "CityAccentName" }, values: new object[,]{{"nl","1e exloermond","1e Exloërmond"},
 {"nl","2e exloermond","2e Exloërmond"},
 {"nl","2e valthermond","2e Valthermond"},

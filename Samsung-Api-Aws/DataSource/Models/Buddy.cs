@@ -1,5 +1,6 @@
 using samsung.api.DataSource.Models;
 using samsung.api.Enumerations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace samsung_api.DataSource.Models
 {
@@ -9,9 +10,7 @@ namespace samsung_api.DataSource.Models
         public int ReceivingGeneralUserId { get; set; }
 
         public BuddyRequestState RequestState { get; set; }
-
         public GeneralUser ReceivingGeneralUser { get; set; }
-
         public GeneralUser RequestingGeneralUser { get; set; }
     }
 }

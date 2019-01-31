@@ -3,6 +3,7 @@ using SamsungApiAws.DataSource.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace samsung.api.DataSource.Models
 {
@@ -23,7 +24,10 @@ namespace samsung.api.DataSource.Models
         public ICollection<GeneralUserTeachingSubject> GeneralUserTeachingSubjects { get; set; } = new HashSet<GeneralUserTeachingSubject>();
         public ICollection<GeneralUserTeachingLevel> GeneralUserTeachingLevels { get; set; } = new HashSet<GeneralUserTeachingLevel>();
         public ICollection<GeneralUserInterest> GeneralUserInterests { get; set; } = new HashSet<GeneralUserInterest>();
+
+        [InverseProperty("RequestingGeneralUser")]
         public ICollection<Buddy> RequestingBuddy { get; set; } = new HashSet<Buddy>();
+        [InverseProperty("ReceivingGeneralUser")]
         public ICollection<Buddy> ReceivingBuddy { get; set; } = new HashSet<Buddy>();
     }
 }

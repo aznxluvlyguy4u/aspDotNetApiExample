@@ -37,7 +37,7 @@ namespace samsung.api.Controllers
         {
             try
             {
-                await _buddiesService.SendBuddyRequestAsync(base.User, buddyRequest.UserId);
+                await _buddiesService.SendBuddyRequestAsync(base.User, buddyRequest.GeneralUserId);
                 return new JsonResponse(null, HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -48,21 +48,21 @@ namespace samsung.api.Controllers
             }
         }
 
-        [HttpPut("{requestingBuddy}/{hasAccepted}")]
-        public async Task<JsonResponse> RegisterBuddyResponseAsync(int requestingBuddy, bool hasAccepted)
-        {
-            try
-            {
-                await _buddiesService.RegisterBuddyResponseAsync(base.User, requestingBuddy, hasAccepted);
-                return new JsonResponse(null, HttpStatusCode.Created);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
-                // TODO: When creating a release, don't send ex.Message in response
-                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
-            }
-        }
+        //[HttpPut("{requestingBuddy}/{hasAccepted}")]
+        //public async Task<JsonResponse> RegisterBuddyResponseAsync(int requestingBuddy, bool hasAccepted)
+        //{
+        //    try
+        //    {
+        //        await _buddiesService.RegisterBuddyResponseAsync(base.User, requestingBuddy, hasAccepted);
+        //        return new JsonResponse(null, HttpStatusCode.Created);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
+        //        // TODO: When creating a release, don't send ex.Message in response
+        //        return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
+        //    }
+        //}
 
         /// <summary>
         /// Get MY Buddies

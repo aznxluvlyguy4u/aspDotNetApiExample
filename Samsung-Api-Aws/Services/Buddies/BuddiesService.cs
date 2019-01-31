@@ -2,7 +2,9 @@
 using samsung.api.DataSource.Models;
 using samsung.api.Enumerations;
 using samsung.api.Repositories.Buddies;
+using samsung.api.Services.GeneralUsers;
 using samsung_api.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -13,12 +15,14 @@ namespace samsung.api.Services.Buddies
     public class BuddiesService : IBuddiesService
     {
         private readonly IBuddiesRepository _buddiesRepository;
-        private readonly UserManager<GeneralUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IGeneralUsersService _generalUsersService;
 
-        public BuddiesService(IBuddiesRepository buddiesRepository, UserManager<GeneralUser> userManager)
+        public BuddiesService(IBuddiesRepository buddiesRepository, UserManager<AppUser> userManager, IGeneralUsersService generalUsersService)
         {
             _buddiesRepository = buddiesRepository;
             _userManager = userManager;
+            _generalUsersService = generalUsersService;
         }
 
         public async Task<IEnumerable<IBuddy>> GetBuddiesAsync(ClaimsPrincipal user, BuddyRequestState state)
@@ -31,18 +35,17 @@ namespace samsung.api.Services.Buddies
             return buddies.Where(x => x.contactRequestState == state);
         }
 
-        public async Task RegisterBuddyResponseAsync(ClaimsPrincipal user, int requestingBuddy, bool hasAccepted)
-        {
-            var receivingUserIdString = _userManager.GetUserId(user);
-            var receivingUserId = int.Parse(receivingUserIdString);
-            await _buddiesRepository.RegisterBuddyResponseAsync(receivingUserId, requestingBuddy, hasAccepted);
-        }
+        //public async Task RegisterBuddyResponseAsync(ClaimsPrincipal user, int requestingBuddy, bool hasAccepted)
+        //{
+        //    var receivingUserIdString = _userManager.GetUserId(user);
+        //    var receivingUserId = int.Parse(receivingUserIdString);
+        //    await _buddiesRepository.RegisterBuddyResponseAsync(receivingUserId, requestingBuddy, hasAccepted);
+        //}
 
-        public async Task SendBuddyRequestAsync(ClaimsPrincipal user, int receivingUserId)
+        public async Task SendBuddyRequestAsync(ClaimsPrincipal user, int receivingGeneralUserId)
         {
-            var requestingUserIdString = _userManager.GetUserId(user);
-            var requestingUserId = int.Parse(requestingUserIdString);
-            await _buddiesRepository.CreateBuddyRequestAsync(requestingUserId, receivingUserId);
+            IGeneralUser requestingGeneralUser = await _generalUsersService.FindByIdentityAsync(user);
+            await _buddiesRepository.CreateBuddyRequestAsync(requestingGeneralUser.Id, receivingGeneralUserId);
         }
     }
 }

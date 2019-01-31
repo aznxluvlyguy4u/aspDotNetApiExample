@@ -12,6 +12,6 @@ namespace samsung.api.Services.Buddies
 
         Task SendBuddyRequestAsync(ClaimsPrincipal user, int receivingUserId);
 
-        Task RegisterBuddyResponseAsync(ClaimsPrincipal user, int requestingBuddy, bool hasAccepted);
+        //Task RegisterBuddyResponseAsync(ClaimsPrincipal user, int requestingBuddy, bool hasAccepted);
     }
 }

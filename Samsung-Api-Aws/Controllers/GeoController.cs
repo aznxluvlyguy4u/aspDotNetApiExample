@@ -27,7 +27,7 @@ namespace SamsungApiAws.Controllers
             _geoService = geoService;
         }
 
-        [HttpGet("/{cityId}")]
+        [HttpGet("{cityId}")]
         public async Task<JsonResponse> GetCityAsync(int cityId)
         {
             try
@@ -43,7 +43,7 @@ namespace SamsungApiAws.Controllers
             }
         }
 
-        [HttpGet("/{countryCode}/{searchText}")]
+        [HttpGet("{countryCode}/{searchText}")]
         [AllowAnonymous]
         public async Task<JsonResponse> GetCitiesAsync(string countryCode, string searchText)
         {

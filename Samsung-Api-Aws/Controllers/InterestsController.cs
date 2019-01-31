@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using samsung.api.Models;
 using samsung.api.Models.Response;
@@ -33,6 +34,7 @@ namespace samsung.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<JsonResponse> GetInterests()
         {
             try

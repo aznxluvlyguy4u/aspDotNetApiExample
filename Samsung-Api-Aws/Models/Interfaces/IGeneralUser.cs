@@ -1,9 +1,12 @@
-﻿using samsung.api.DataSource.Models;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using samsung.api.DataSource.Models;
 using SamsungApiAws.DataSource.Models;
 using System.Collections.Generic;
 
 namespace samsung_api.Models.Interfaces
 {
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public interface IGeneralUser
     {
         int Id { get; set; }

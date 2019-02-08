@@ -358,7 +358,7 @@ namespace SamsungApiAws.Migrations
 
             modelBuilder.Entity("samsung_api.DataSource.Models.Buddy", b =>
                 {
-                    b.Property<int>("ReceivingGeneralUserId");
+                    b.Property<int?>("ReceivingGeneralUserId");
 
                     b.Property<int>("RequestingGeneralUserId");
 
@@ -436,7 +436,7 @@ namespace SamsungApiAws.Migrations
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUser", b =>
                 {
                     b.HasOne("SamsungApiAws.DataSource.Models.City", "City")
-                        .WithMany()
+                        .WithMany("GeneralUsers")
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -501,12 +501,14 @@ namespace SamsungApiAws.Migrations
             modelBuilder.Entity("samsung_api.DataSource.Models.Buddy", b =>
                 {
                     b.HasOne("samsung.api.DataSource.Models.GeneralUser", "ReceivingGeneralUser")
-                        .WithMany("ReceivingBuddy")
-                        .HasForeignKey("ReceivingGeneralUserId");
+                        .WithMany("ReceivingBuddies")
+                        .HasForeignKey("ReceivingGeneralUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("samsung.api.DataSource.Models.GeneralUser", "RequestingGeneralUser")
-                        .WithMany("RequestingBuddy")
-                        .HasForeignKey("RequestingGeneralUserId");
+                        .WithMany("RequestingBuddies")
+                        .HasForeignKey("RequestingGeneralUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

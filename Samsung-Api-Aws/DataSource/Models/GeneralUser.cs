@@ -26,8 +26,8 @@ namespace samsung.api.DataSource.Models
         public ICollection<GeneralUserInterest> GeneralUserInterests { get; set; } = new HashSet<GeneralUserInterest>();
 
         [InverseProperty("RequestingGeneralUser")]
-        public ICollection<Buddy> RequestingBuddy { get; set; } = new HashSet<Buddy>();
+        public ICollection<Buddy> RequestingBuddies { get; set; } = new HashSet<Buddy>();
         [InverseProperty("ReceivingGeneralUser")]
-        public ICollection<Buddy> ReceivingBuddy { get; set; } = new HashSet<Buddy>();
+        public ICollection<Buddy> ReceivingBuddies { get; set; } = new HashSet<Buddy>();
     }
 }

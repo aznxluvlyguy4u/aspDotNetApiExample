@@ -76,17 +76,16 @@ namespace samsung.api.DataSource
             {
                 entity
                     .HasKey(key => new { key.ReceivingGeneralUserId, key.RequestingGeneralUserId });
-
-                //    entity
-                //        .HasOne(source => source.ReceivingGeneralUser)
-                //        .WithMany(prop => prop.ReceivingBuddy)
-                //        .HasForeignKey(b => b.ReceivingGeneralUserId)
-                //        .OnDelete(DeleteBehavior.ClientSetNull);
-                //    entity
-                //        .HasOne(source => source.RequestingGeneralUser)
-                //        .WithMany(prop => prop.RequestingBuddy)
-                //        .HasForeignKey(b => b.RequestingGeneralUserId)
-                //        .OnDelete(DeleteBehavior.ClientSetNull);
+                entity
+                    .HasOne(source => source.ReceivingGeneralUser)
+                    .WithMany(prop => prop.ReceivingBuddies)
+                    .HasForeignKey(b => b.ReceivingGeneralUserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity
+                    .HasOne(source => source.RequestingGeneralUser)
+                    .WithMany(prop => prop.RequestingBuddies)
+                    .HasForeignKey(b => b.RequestingGeneralUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // TeachingSubject data seeds

@@ -153,7 +153,7 @@ namespace Samsung_Api_Aws
                 .AddScoped<UserManager<AppUser>>()
                 .AddSingleton(_configuration)
                 .AddSingleton(CreateMapper())
-                .AddSingleton<DatabaseContext>()
+                .AddDbContext<DatabaseContext>()
                 .AddSingleton<ILogger, ConsoleLogger>()
                 // Services
                 .AddTransient<IGeneralUsersService, GeneralUsersService>()

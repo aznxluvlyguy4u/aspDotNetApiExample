@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SamsungApiAws.Migrations
 {
-    public partial class InitialDatabaseSeeding : Migration
+    public partial class AddInitialDatabaseSeeding : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -283,7 +283,7 @@ namespace SamsungApiAws.Migrations
                         column: x => x.ReceivingGeneralUserId,
                         principalTable: "GeneralUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Buddies_GeneralUsers_RequestingGeneralUserId",
                         column: x => x.RequestingGeneralUserId,

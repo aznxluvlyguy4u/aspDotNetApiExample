@@ -29,6 +29,7 @@ using samsung.api.Services.Interests;
 using samsung.api.Services.TeachingAgeGroups;
 using samsung.api.Services.TeachingLevels;
 using samsung.api.Services.TeachingSubjects;
+using samsung_api.DataSource.Models;
 using samsung_api.Models.Interfaces;
 using SamsungApiAws.Extensions;
 using SamsungApiAws.Repositories.Geo;
@@ -278,6 +279,11 @@ namespace Samsung_Api_Aws
                     .ForMember(d => d.TeachingSubjects, opt => opt.MapFrom(src => src.GeneralUserTeachingSubjects.Select(x => x)))
                     .ForMember(d => d.TeachingLevels, opt => opt.MapFrom(src => src.GeneralUserTeachingLevels.Select(x => x)))
                     .ForMember(d => d.Interests, opt => opt.MapFrom(src => src.GeneralUserInterests.Select(x => x)))
+                    .ReverseMap();
+
+                cfg.CreateMap<Buddy, IBuddy>()
+                    //.ForMember(d => d.ReceivingGeneralUser, opt => opt.MapFrom(src => src.ReceivingGeneralUser))
+                    //.ForMember(d => d.RequestingGeneralUser, opt => opt.MapFrom(src => src.RequestingGeneralUser))
                     .ReverseMap();
 
                 // Requests

@@ -5,10 +5,9 @@ using samsung.api.Enumerations;
 namespace samsung_api.Models.Interfaces
 {
     [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-    public interface IBuddy
+    public interface IBuddu
     {
         BuddyRequestState RequestState { get; set; }
-        IGeneralUser ReceivingGeneralUser { get; set; }
-        IGeneralUser RequestingGeneralUser { get; set; }
+        IGeneralUser GeneralUser { get; set; }
     }
 }

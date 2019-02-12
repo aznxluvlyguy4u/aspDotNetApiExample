@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung.api.Enumerations;
@@ -42,29 +43,58 @@ namespace samsung.api.Repositories.Buddies
             });
 
             await _databaseContext.SaveChangesAsync();
-
-
-
-
         }
 
-        public async Task<IEnumerable<IBuddy>> GetBuddiesAysnc(int userId)
+        public async Task<IEnumerable<IGeneralUser>> GetBuddiesByStateAysnc(int userId, BuddyRequestState state)
         {
-            return _databaseContext.Buddies.Where(buddy =>
+            state = state == BuddyRequestState.None ? BuddyRequestState.Matched : state;
+
+            IEnumerable<GeneralUser> buddies = _databaseContext.Buddies
+            .Where(buddy =>
                 (buddy.ReceivingGeneralUserId == userId || buddy.RequestingGeneralUserId == userId)
-                && buddy.RequestState == BuddyRequestState.Matched)
+                && buddy.RequestState == state
+            )
+            .Select(x => (userId == x.RequestingGeneralUserId) ? x.ReceivingGeneralUser : x.RequestingGeneralUser)
+            // Include all related data of ReceivingGeneralUser
+            .ToList();
+
+            IEnumerable<IGeneralUser> generalUsers = _databaseContext.GeneralUsers
+                .Where(g => buddies.Contains(g))
+                // Include all related data of RequestingGeneralUser
+                .Include(g => g.Identity)
+                .Include(g => g.City)
+                .Include(g => g.GeneralUserTeachingAgeGroups)
+                    .ThenInclude(t => t.TeachingAgeGroup)
+                .Include(g => g.GeneralUserTeachingSubjects)
+                    .ThenInclude(t => t.TeachingSubject)
+                .Include(g => g.GeneralUserTeachingLevels)
+                    .ThenInclude(t => t.TeachingLevel)
+                .Include(g => g.GeneralUserInterests)
+                    .ThenInclude(t => t.Interest)
+                .Select(g => _mapper.Map<IGeneralUser>(g))
+                .ToList();
+
+            return await Task.FromResult(generalUsers);
+        }
+
+        public async Task<IEnumerable<IBuddy>> GetPendingBuddyRequestsAsync(int userId)
+        {
+            IEnumerable<GeneralUser> buddies = _databaseContext.Buddies
+            .Where(buddy =>
+                (buddy.ReceivingGeneralUserId == userId)
+                && buddy.RequestState == BuddyRequestState.Pending
+            )
+            .Select(x => (userId == x.RequestingGeneralUserId) ? x.ReceivingGeneralUser : x.RequestingGeneralUser)
+            // Include all related data of ReceivingGeneralUser
+            .ToList();
+
+
+            return _databaseContext.Buddies.Where(buddy =>
+                (buddy.ReceivingGeneralUserId == userId)
+                && buddy.RequestState == BuddyRequestState.Pending)
             .Select(x => _mapper.Map<IBuddy>(x))
             .AsEnumerable();
         }
-
-        //public async Task<IEnumerable<IBuddy>> GetPendingBuddyRequestsAsync(int userId)
-        //{
-        //    return _databaseContext.Buddies.Where(buddy =>
-        //        (buddy.ReceivingGeneralUserId == userId || buddy.RequestingGeneralUserId == userId)
-        //        && buddy.RequestState == BuddyRequestState.Pending)
-        //    .Select(x => _mapper.Map<IBuddy>(x))
-        //    .AsEnumerable();
-        //}
 
         //public async Task RegisterBuddyResponseAsync(int receivingUserId, int requestingBuddy, bool hasAccepted)
         //{

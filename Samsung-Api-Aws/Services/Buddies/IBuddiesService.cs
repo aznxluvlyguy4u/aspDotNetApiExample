@@ -8,7 +8,9 @@ namespace samsung.api.Services.Buddies
 {
     public interface IBuddiesService
     {
-        Task<IEnumerable<IBuddy>> GetBuddiesAsync(ClaimsPrincipal user, BuddyRequestState state);
+        Task<IEnumerable<IGeneralUser>> GetMyBuddiesAsync(ClaimsPrincipal user);
+
+        Task<IEnumerable<IGeneralUser>> GetMyBuddyRequestsAsync(ClaimsPrincipal user);
 
         Task SendBuddyRequestAsync(ClaimsPrincipal user, int receivingUserId);
 

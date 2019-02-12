@@ -8,6 +8,7 @@ using samsung.api.Services.Buddies;
 using samsung_api.Models.Interfaces;
 using samsung_api.Models.Requests;
 using samsung_api.Services.Logger;
+using SamsungApiAws.Models.QueryParameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,6 @@ namespace samsung.api.Controllers
     [ApiController]
     public class BuddiesController : ControllerBase
     {
-        private const string StateParameter = "state";
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly IBuddiesService _buddiesService;
@@ -71,15 +71,37 @@ namespace samsung.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<JsonResponse> GetBuddies()
+        public async Task<JsonResponse> GetMatchedBuddies()
         {
             try
             {
-                base.HttpContext.TryGetEnumQueryValue(StateParameter, out BuddyRequestState state);
-                IEnumerable<IBuddy> buddies = await _buddiesService.GetBuddiesAsync(base.User, state);
+                IEnumerable<IGeneralUser> buddies = await _buddiesService.GetMyBuddiesAsync(base.User);
 
-                var response = buddies.Select(x => _mapper.Map<GetBuddiesResponse>(x));
+                var response = buddies.Select(x => _mapper.Map<GetGeneralUserResponse>(x));
+                return new JsonResponse(response, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
+                // TODO: When creating a release, don't send ex.Message in response
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
+            }
+        }
 
+        /// <summary>
+        /// Get MY Buddies
+        /// Get MY Pending requests
+        /// Get THEIR Pending requests to me.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/api/v1/BuddyRequests")]
+        public async Task<JsonResponse> GetMyBuddyRequests()
+        {
+            try
+            {
+                IEnumerable<IGeneralUser> buddies = await _buddiesService.GetMyBuddyRequestsAsync(base.User);
+
+                var response = buddies.Select(x => _mapper.Map<GetGeneralUserResponse>(x));
                 return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch (Exception ex)

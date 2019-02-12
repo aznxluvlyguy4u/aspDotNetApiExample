@@ -32,13 +32,39 @@ namespace samsung.api.Controllers
             _buddiesService = buddiesService;
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Create BuddyRequest from currently logged in user to another user
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("/api/v1/BuddyRequests")]
         public async Task<JsonResponse> SendBuddyRequestAsync(BuddyRequest buddyRequest)
         {
             try
             {
                 await _buddiesService.SendBuddyRequestAsync(base.User, buddyRequest.GeneralUserId);
                 return new JsonResponse(null, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
+                // TODO: When creating a release, don't send ex.Message in response
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
+        /// <summary>
+        /// Get pending BuddyRequests to me
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/api/v1/BuddyRequests")]
+        public async Task<JsonResponse> GetMyBuddyRequests()
+        {
+            try
+            {
+                IEnumerable<IGeneralUser> buddies = await _buddiesService.GetMyBuddyRequestsAsync(base.User);
+
+                var response = buddies.Select(x => _mapper.Map<GetGeneralUserResponse>(x));
+                return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -65,9 +91,7 @@ namespace samsung.api.Controllers
         //}
 
         /// <summary>
-        /// Get MY Buddies
-        /// Get MY Pending requests
-        /// Get THEIR Pending requests to me.
+        /// Get MY matched Buddies
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -76,30 +100,6 @@ namespace samsung.api.Controllers
             try
             {
                 IEnumerable<IGeneralUser> buddies = await _buddiesService.GetMyBuddiesAsync(base.User);
-
-                var response = buddies.Select(x => _mapper.Map<GetGeneralUserResponse>(x));
-                return new JsonResponse(response, HttpStatusCode.OK);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
-                // TODO: When creating a release, don't send ex.Message in response
-                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
-            }
-        }
-
-        /// <summary>
-        /// Get MY Buddies
-        /// Get MY Pending requests
-        /// Get THEIR Pending requests to me.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("/api/v1/BuddyRequests")]
-        public async Task<JsonResponse> GetMyBuddyRequests()
-        {
-            try
-            {
-                IEnumerable<IGeneralUser> buddies = await _buddiesService.GetMyBuddyRequestsAsync(base.User);
 
                 var response = buddies.Select(x => _mapper.Map<GetGeneralUserResponse>(x));
                 return new JsonResponse(response, HttpStatusCode.OK);

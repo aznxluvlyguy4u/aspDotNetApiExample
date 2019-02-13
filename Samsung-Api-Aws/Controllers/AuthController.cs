@@ -50,5 +50,25 @@ namespace samsung.api.Controllers
                 return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
             }
         }
+
+        // POST api/v1/auth/checkEmail
+        [HttpPost("checkEmail")]
+        [AllowAnonymous]
+        public async Task<JsonResponse> CheckEmailAsync([FromBody]CheckExistingEmailRequest request)
+        {
+            try
+            {
+                bool isEmailAvailable = await _authService.IsEmailAvailable(request.Email);
+                var response = new CheckExistingEmailResponse(isEmailAvailable);
+
+                return new JsonResponse(response, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
+                // TODO: When creating a release, don't send ex.Message in response
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
+            }
+        }
     }
 }

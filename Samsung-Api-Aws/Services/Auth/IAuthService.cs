@@ -9,5 +9,7 @@ namespace samsung.api.Services.Auth
         Task<JwtToken> GenerateJwtAsync(ClaimsIdentity identity, string userName);
 
         Task<ClaimsIdentity> GetClaimsIdentityAsync(string userName, string password);
+
+        Task<bool> IsEmailAvailable(string email);
     }
 }

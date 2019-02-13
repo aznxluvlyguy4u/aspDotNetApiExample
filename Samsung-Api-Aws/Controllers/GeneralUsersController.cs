@@ -7,11 +7,9 @@ using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
 using samsung.api.Services.Auth;
 using samsung.api.Services.GeneralUsers;
-using samsung_api.Extensions;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -48,7 +46,6 @@ namespace samsung_api.Controllers
             try
             {
                 IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(base.User);
-                var json = privateUser.ToJson();
                 var response = _mapper.Map<IGeneralUser, GetGeneralUserResponse>(generalUser);
 
                 return new JsonResponse(response, System.Net.HttpStatusCode.OK);

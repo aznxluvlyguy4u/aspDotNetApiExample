@@ -1,8 +1,10 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace samsung_api.Models.Requests
 {
-    public class BuddyRequest
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
+    public class CreateBuddyRequest
     {
         [JsonRequired]
         public int GeneralUserId { get; set; }

@@ -282,8 +282,8 @@ namespace Samsung_Api_Aws
                     .ReverseMap();
 
                 cfg.CreateMap<Buddy, IBuddy>()
-                    //.ForMember(d => d.ReceivingGeneralUser, opt => opt.MapFrom(src => src.ReceivingGeneralUser))
-                    //.ForMember(d => d.RequestingGeneralUser, opt => opt.MapFrom(src => src.RequestingGeneralUser))
+                    .ForMember(d => d.ReceivingGeneralUser, opt => opt.MapFrom(src => src.ReceivingGeneralUser))
+                    .ForMember(d => d.RequestingGeneralUser, opt => opt.MapFrom(src => src.RequestingGeneralUser))
                     .ReverseMap();
 
                 // Requests

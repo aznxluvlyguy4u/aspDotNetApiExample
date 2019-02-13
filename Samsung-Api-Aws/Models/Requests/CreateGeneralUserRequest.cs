@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace samsung.api.Models.Requests
 {
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public class CreateGeneralUserRequest
     {
         [JsonRequired]

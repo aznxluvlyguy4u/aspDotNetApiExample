@@ -134,15 +134,15 @@ namespace samsung.api.Repositories.Buddies
             return await Task.FromResult(generalUsers);
         }
 
-        public async Task RegisterBuddyResponseAsync(int receivingUserId, int requestingBuddy, bool hasAccepted)
+        public async Task EditBuddyRequestAsync(int receivingGeneralUserId, int requestingGeneralUserId, BuddyRequestState state)
         {
-            _databaseContext.Buddies.Where(buddy =>
-                buddy.ReceivingGeneralUserId == receivingUserId
-                && buddy.RequestingGeneralUserId == requestingBuddy
-            )
-            .ForEach(x =>
-                x.RequestState = hasAccepted ? BuddyRequestState.Matched : BuddyRequestState.Rejected
-            );
+            Buddy buddyRequest = _databaseContext.Buddies
+                .Where(buddy =>
+                    buddy.ReceivingGeneralUserId == receivingGeneralUserId
+                    && buddy.RequestingGeneralUserId == requestingGeneralUserId)
+                .FirstOrDefault() ?? throw new ArgumentException($"No buddy request from user {requestingGeneralUserId}.");
+
+            buddyRequest.RequestState = state;
             await _databaseContext.SaveChangesAsync();
         }
     }

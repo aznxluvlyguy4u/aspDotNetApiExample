@@ -15,6 +15,6 @@ namespace samsung.api.Repositories.Buddies
 
         Task<IEnumerable<IGeneralUser>> GetMatchedBuddiesAysnc(int userId);
 
-        Task RegisterBuddyResponseAsync(int receivingUserId, int requestingBuddy, bool hasAccepted);
+        Task EditBuddyRequestAsync(int receivingGeneralUserId, int requestingGeneralUserId, BuddyRequestState state);
     }
 }

@@ -37,10 +37,11 @@ namespace samsung.api.Services.Buddies
             return await _buddiesRepository.GetPendingBuddyRequestsAsync(generalUser.Id);
         }
 
-        public async Task RegisterBuddyResponseAsync(ClaimsPrincipal user, int requestingBuddy, bool hasAccepted)
+        public async Task EditBuddyRequestAsync(ClaimsPrincipal user, int requestingGeneralUserId, bool acceptBuddyRequest)
         {
+            BuddyRequestState state = acceptBuddyRequest ? BuddyRequestState.Matched : BuddyRequestState.Rejected;
             IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(user);
-            await _buddiesRepository.RegisterBuddyResponseAsync(generalUser.Id, requestingBuddy, hasAccepted);
+            await _buddiesRepository.EditBuddyRequestAsync(generalUser.Id, requestingGeneralUserId, state);
         }
 
         public async Task SendBuddyRequestAsync(ClaimsPrincipal user, int receivingGeneralUserId)

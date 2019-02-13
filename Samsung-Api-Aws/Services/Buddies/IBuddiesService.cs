@@ -12,8 +12,8 @@ namespace samsung.api.Services.Buddies
 
         Task<IEnumerable<IGeneralUser>> GetMyBuddyRequestsAsync(ClaimsPrincipal user);
 
-        Task SendBuddyRequestAsync(ClaimsPrincipal user, int receivingUserId);
+        Task SendBuddyRequestAsync(ClaimsPrincipal user, int receivingGeneralUserId);
 
-        Task RegisterBuddyResponseAsync(ClaimsPrincipal user, int requestingBuddy, bool hasAccepted);
+        Task EditBuddyRequestAsync(ClaimsPrincipal user, int requestingGeneralUserId, bool acceptBuddyRequest);
     }
 }

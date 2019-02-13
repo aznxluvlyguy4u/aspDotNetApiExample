@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace samsung_api.Models.Requests
 {
-    public class BuddyRequest
+    public class CreateBuddyRequest
     {
         [JsonRequired]
         public int GeneralUserId { get; set; }

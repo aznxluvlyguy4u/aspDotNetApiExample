@@ -37,12 +37,12 @@ namespace samsung.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("/api/v1/BuddyRequests")]
-        public async Task<JsonResponse> SendBuddyRequestAsync(BuddyRequest buddyRequest)
+        public async Task<JsonResponse> CreateBuddyRequestAsync([FromBody]CreateBuddyRequest buddyRequest)
         {
             try
             {
                 await _buddiesService.SendBuddyRequestAsync(base.User, buddyRequest.GeneralUserId);
-                return new JsonResponse(null, HttpStatusCode.OK);
+                return new JsonResponse(null, HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
@@ -63,6 +63,8 @@ namespace samsung.api.Controllers
             {
                 IEnumerable<IGeneralUser> buddies = await _buddiesService.GetMyBuddyRequestsAsync(base.User);
 
+                if (buddies.IsNullOrEmpty()) return new JsonResponse(null, HttpStatusCode.NotFound);
+
                 var response = buddies.Select(x => _mapper.Map<GetGeneralUserResponse>(x));
                 return new JsonResponse(response, HttpStatusCode.OK);
             }
@@ -74,13 +76,13 @@ namespace samsung.api.Controllers
             }
         }
 
-        //[HttpPut("{requestingBuddy}/{hasAccepted}")]
-        [HttpPut("/api/v1/BuddyRequests/{requestingBuddy}/{hasAccepted}")]
-        public async Task<JsonResponse> RegisterBuddyRequestResponseAsync(int requestingBuddy, bool hasAccepted)
+        //[HttpPut("/api/v1/BuddyRequests/{requestingBuddy}/{hasAccepted}")]
+        [HttpPut("/api/v1/BuddyRequests")]
+        public async Task<JsonResponse> RegisterBuddyRequestResponseAsync([FromBody]EditBuddyRequest editBuddyRequest)
         {
             try
             {
-                await _buddiesService.RegisterBuddyResponseAsync(base.User, requestingBuddy, hasAccepted);
+                await _buddiesService.EditBuddyRequestAsync(base.User, editBuddyRequest.RequestingGeneralUserId, editBuddyRequest.AcceptBuddyRequest);
                 return new JsonResponse(null, HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -101,6 +103,8 @@ namespace samsung.api.Controllers
             try
             {
                 IEnumerable<IGeneralUser> buddies = await _buddiesService.GetMyBuddiesAsync(base.User);
+
+                if (buddies.IsNullOrEmpty()) return new JsonResponse(null, HttpStatusCode.NotFound);
 
                 var response = buddies.Select(x => _mapper.Map<GetGeneralUserResponse>(x));
                 return new JsonResponse(response, HttpStatusCode.OK);

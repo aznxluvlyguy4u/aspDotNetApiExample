@@ -30,6 +30,8 @@ namespace samsung.api.Controllers
         // POST api/v1/auth/login
         [HttpPost("login")]
         [AllowAnonymous]
+        [ProducesResponse(typeof(SwaggerSuccess<LoginResponse>), HttpStatusCode.OK)]
+        [ProducesResponse(typeof(SwaggerError), HttpStatusCode.BadRequest)]
         public async Task<JsonResponse> LoginAsync([FromBody]LoginRequest credentials)
         {
             var identity = await _authService.GetClaimsIdentityAsync(credentials.Email, credentials.Password);

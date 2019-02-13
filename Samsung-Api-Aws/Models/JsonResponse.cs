@@ -6,6 +6,26 @@ using System.Net;
 
 namespace samsung.api.Models
 {
+    public class SwaggerSuccess
+    {
+        public int code { get; set; }
+        public string status { get; set; }
+    }
+
+    public class SwaggerSuccess<T>
+    {
+        public int code { get; set; }
+        public string status { get; set; }
+        public T data { get; set; }
+    }
+
+    public class SwaggerError
+    {
+        public int code { get; set; }
+        public string status { get; set; }
+        public string error { get; set; }
+    }
+
     public class JsonResponse : JObject
     {
         private const string ServerErrorMessage = "An internal server error has occurred";

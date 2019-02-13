@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using samsung.api.Models;
 using samsung_api.Services.Logger;
@@ -10,6 +11,7 @@ namespace SamsungApiAws.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class LinksController : ControllerBase
     {
         private readonly ILogger _logger;

@@ -195,7 +195,7 @@ namespace Samsung_Api_Aws
                 c.AddSecurityRequirement(security);
             });
 
-            services.Verify();
+            services.Verify(new ConsoleLogger());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

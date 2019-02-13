@@ -5,7 +5,6 @@ using samsung.api.Models;
 using samsung_api.Services.Logger;
 using SamsungApiAws.Services.Geo;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace SamsungApiAws.Controllers
         public async Task<JsonResponse> GetCityAsync(int cityId)
         {
             try
-            { 
+            {
                 var name = await _geoService.GetCityNameById(cityId);
                 return new JsonResponse(name, HttpStatusCode.OK);
             }
@@ -50,7 +49,7 @@ namespace SamsungApiAws.Controllers
             try
             {
                 if (
-                    !string.Equals(countryCode, "NL", StringComparison.InvariantCultureIgnoreCase) 
+                    !string.Equals(countryCode, "NL", StringComparison.InvariantCultureIgnoreCase)
                     && !string.Equals(countryCode, "BE", StringComparison.InvariantCultureIgnoreCase)
                 )
                 {
@@ -64,7 +63,7 @@ namespace SamsungApiAws.Controllers
                 var response = cities.Select(x => new { name = x.Value, id = x.Key });
                 return new JsonResponse(response, HttpStatusCode.OK);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
                 // TODO: When creating a release, don't send ex.Message in response

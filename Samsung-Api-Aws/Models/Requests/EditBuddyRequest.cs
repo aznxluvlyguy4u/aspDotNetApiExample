@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using samsung.api.Enumerations;
 
 namespace samsung_api.Models.Requests
 {

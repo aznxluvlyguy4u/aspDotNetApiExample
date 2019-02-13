@@ -1,6 +1,5 @@
 ﻿using samsung_api.DataSource.Models;
 using SamsungApiAws.DataSource.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,6 +16,7 @@ namespace samsung.api.DataSource.Models
 
         [Required]
         public virtual City City { get; set; }
+
         [Required]
         public virtual AppUser Identity { get; set; }
 
@@ -27,6 +27,7 @@ namespace samsung.api.DataSource.Models
 
         [InverseProperty("RequestingGeneralUser")]
         public ICollection<Buddy> RequestingBuddies { get; set; } = new HashSet<Buddy>();
+
         [InverseProperty("ReceivingGeneralUser")]
         public ICollection<Buddy> ReceivingBuddies { get; set; } = new HashSet<Buddy>();
     }

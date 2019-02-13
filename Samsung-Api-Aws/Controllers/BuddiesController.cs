@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using samsung.api.Enumerations;
 using samsung.api.Extensions;
 using samsung.api.Models;
 using samsung.api.Models.Response;
@@ -8,7 +7,6 @@ using samsung.api.Services.Buddies;
 using samsung_api.Models.Interfaces;
 using samsung_api.Models.Requests;
 using samsung_api.Services.Logger;
-using SamsungApiAws.Models.QueryParameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;

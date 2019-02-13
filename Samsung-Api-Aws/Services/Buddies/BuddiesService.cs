@@ -4,9 +4,7 @@ using samsung.api.Enumerations;
 using samsung.api.Repositories.Buddies;
 using samsung.api.Services.GeneralUsers;
 using samsung_api.Models.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 

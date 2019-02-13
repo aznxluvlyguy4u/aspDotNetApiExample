@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung.api.Enumerations;
-using samsung.api.Extensions;
 using samsung_api.DataSource.Models;
 using samsung_api.Models.Interfaces;
 using System;

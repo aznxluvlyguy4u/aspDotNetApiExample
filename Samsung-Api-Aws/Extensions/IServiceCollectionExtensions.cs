@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using samsung.api.Extensions;
+using samsung_api.Services.Logger;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -14,10 +15,16 @@ namespace SamsungApiAws.Extensions
         /// </summary>
         /// <param name="services">The services.</param>
         /// <exception cref="FunctionInvocationException"></exception>
-        public static void Verify(this IServiceCollection services)
+        public static void Verify(this IServiceCollection services, ILogger logger = null)
         {
             var asm = Assembly.GetCallingAssembly();
-            var loadableTypes = asm.GetLoadableTypes();
+            var loadableTypes = asm.GetLoadableTypes()
+                .Where(x => 
+                    !x.Name.StartsWith('<') // Dynamic types~
+                    && !x.FullName.Contains(".Models") // No need for Models
+                )
+                .ToList()
+            ;
             // Exception to verification
             var count = services.Count;
 
@@ -26,7 +33,8 @@ namespace SamsungApiAws.Extensions
             {
                 var constructors = loadableType.GetConstructors();
                 // Check if there is more than the default .ctor
-                if (constructors.Length > 1) continue;
+                if (constructors.Length > 1)
+                    continue;
 
                 foreach (var constructor in constructors)
                 {
@@ -61,12 +69,35 @@ namespace SamsungApiAws.Extensions
                     // If any interface is left afterwards, attempt to add it, to see if it is already in there.
                     // This does assume, the first interface is the implementation interface.
                     if (!interfaces.IsNullOrEmpty())
-                        services.TryAddScoped(interfaces.FirstOrDefault());
-                    if (services.Count > count)
                     {
-                        throw new Exception(
-                            $"{loadableType.FullName} is not injected, but probably should be injected," +
-                            "Double check that it is injected, and that all it's dependencies are injected.");
+                        var implementationInterface = interfaces.FirstOrDefault();
+                        bool found = false;
+
+                        // Determine implementation type
+                        foreach (var implementationType in loadableTypes)
+                        {
+                            if (implementationType.GetInterfaces().FirstOrDefault(x => x == implementationInterface) == default)
+                                continue;
+
+                            services.TryAddTransient(implementationInterface, implementationType);
+                            if (services.Count > count)
+                            {
+                                count++;
+                                // Successfully added, continue;
+                                if (logger != null)
+                                    logger.LogWarningAsync($"{loadableType.FullName} was automatically injected as transient").GetAwaiter().GetResult();
+                                else if (!found)
+                                {
+                                    throw new Exception(
+                                        $"{loadableType.FullName} is not injected, but probably should be injected," +
+                                        "Double check that it is injected, and that all it's dependencies are injected.");
+                                }
+                                break;
+                            }
+
+                            // Already existed, no need for further iterations.
+                            break;
+                        }
                     }
                 }
             }

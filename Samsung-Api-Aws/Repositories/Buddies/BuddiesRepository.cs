@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung.api.Enumerations;
+using samsung.api.Extensions;
 using samsung_api.DataSource.Models;
 using samsung_api.Models.Interfaces;
 using System;
@@ -133,16 +134,16 @@ namespace samsung.api.Repositories.Buddies
             return await Task.FromResult(generalUsers);
         }
 
-        //public async Task RegisterBuddyResponseAsync(int receivingUserId, int requestingBuddy, bool hasAccepted)
-        //{
-        //    _databaseContext.Buddies.Where(buddy =>
-        //        buddy.ReceivingGeneralUserId == receivingUserId
-        //        && buddy.RequestingGeneralUserId == requestingBuddy
-        //    )
-        //    .ForEach(x =>
-        //        x.RequestState = hasAccepted ? BuddyRequestState.Matched : BuddyRequestState.Rejected
-        //    );
-        //    await _databaseContext.SaveChangesAsync();
-        //}
+        public async Task RegisterBuddyResponseAsync(int receivingUserId, int requestingBuddy, bool hasAccepted)
+        {
+            _databaseContext.Buddies.Where(buddy =>
+                buddy.ReceivingGeneralUserId == receivingUserId
+                && buddy.RequestingGeneralUserId == requestingBuddy
+            )
+            .ForEach(x =>
+                x.RequestState = hasAccepted ? BuddyRequestState.Matched : BuddyRequestState.Rejected
+            );
+            await _databaseContext.SaveChangesAsync();
+        }
     }
 }

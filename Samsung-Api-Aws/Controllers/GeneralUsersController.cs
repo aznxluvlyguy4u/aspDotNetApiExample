@@ -23,21 +23,18 @@ namespace samsung_api.Controllers
     [ApiController]
     public class GeneralUsersController : ControllerBase
     {
-        private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
         private readonly IGeneralUsersService _generalUsersService;
         private readonly IAuthService _authService;
         private readonly ILogger _logger;
 
         public GeneralUsersController(
-            DatabaseContext context,
             IMapper mapper,
             IGeneralUsersService usersService,
             IAuthService authService,
             ILogger logger
         )
         {
-            _databaseContext = context;
             _mapper = mapper;
             _generalUsersService = usersService;
             _authService = authService;
@@ -51,6 +48,7 @@ namespace samsung_api.Controllers
             try
             {
                 IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(base.User);
+                var json = privateUser.ToJson();
                 var response = _mapper.Map<IGeneralUser, GetGeneralUserResponse>(generalUser);
 
                 return new JsonResponse(response, System.Net.HttpStatusCode.OK);

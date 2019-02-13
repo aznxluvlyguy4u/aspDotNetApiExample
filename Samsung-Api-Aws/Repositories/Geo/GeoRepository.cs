@@ -2,7 +2,6 @@
 using samsung.api.DataSource;
 using samsung.api.Extensions;
 using SamsungApiAws.Services.Geo;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace SamsungApiAws.Repositories.Geo
             _mapper = mapper;
         }
 
-        public async Task<Dictionary<int,string>> GetCitiesAsync(string countryCode, string searchText)
+        public async Task<Dictionary<int, string>> GetCitiesAsync(string countryCode, string searchText)
         {
             var cities = _dbContext.Cities
                 .Where(x =>

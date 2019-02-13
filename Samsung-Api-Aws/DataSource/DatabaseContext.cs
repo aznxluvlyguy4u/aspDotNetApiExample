@@ -53,8 +53,6 @@ namespace samsung.api.DataSource
                     options => options.EnableRetryOnFailure());
                 base.OnConfiguring(optionsBuilder);
 #endif
-
-
             }
             else
             {

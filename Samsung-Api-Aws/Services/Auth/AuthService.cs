@@ -22,6 +22,13 @@ namespace samsung.api.Services.Auth
             _userManager = userManager;
         }
 
+        public async Task<bool> IsEmailAvailable(string email)
+        {
+            AppUser result = await _userManager.FindByEmailAsync(email);
+
+            return result == null;
+        }
+
         public async Task<JwtToken> GenerateJwtAsync(ClaimsIdentity identity, string userName)
         {
             var Id = new Guid(identity.Claims.Single(c => c.Type == "id").Value);

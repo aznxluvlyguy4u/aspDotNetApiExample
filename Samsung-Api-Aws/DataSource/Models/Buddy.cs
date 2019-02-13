@@ -1,6 +1,5 @@
 using samsung.api.DataSource.Models;
 using samsung.api.Enumerations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace samsung_api.DataSource.Models
 {

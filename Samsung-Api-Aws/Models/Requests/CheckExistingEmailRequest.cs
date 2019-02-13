@@ -5,13 +5,11 @@ using System.ComponentModel.DataAnnotations;
 namespace samsung.api.Models.Requests
 {
     [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-    public class LoginRequest
+    public class CheckExistingEmailRequest
     {
         [JsonRequired]
         [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Email { get; set; }
-
-        [JsonRequired]
-        public string Password { get; set; }
     }
 }

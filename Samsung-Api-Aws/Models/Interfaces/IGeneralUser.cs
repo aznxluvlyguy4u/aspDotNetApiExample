@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using samsung.api.DataSource.Models;
-using SamsungApiAws.DataSource.Models;
 using System.Collections.Generic;
 
 namespace samsung_api.Models.Interfaces

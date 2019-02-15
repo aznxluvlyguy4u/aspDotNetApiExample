@@ -9,7 +9,7 @@ namespace samsung.api.Services.Buddies
     {
         Task<IEnumerable<IGeneralUser>> GetMyBuddiesAsync(ClaimsPrincipal user);
 
-        Task<IEnumerable<IGeneralUser>> GetMyBuddyRequestsAsync(ClaimsPrincipal user);
+        Task<IEnumerable<ILimitedGeneralUser>> GetMyBuddyRequestsAsync(ClaimsPrincipal user);
 
         Task SendBuddyRequestAsync(ClaimsPrincipal user, int receivingGeneralUserId);
 

@@ -103,7 +103,7 @@ namespace samsung.api.Repositories.Buddies
             return await Task.FromResult(generalUsers);
         }
 
-        public async Task<IEnumerable<IGeneralUser>> GetPendingBuddyRequestsAsync(int userId)
+        public async Task<IEnumerable<ILimitedGeneralUser>> GetPendingBuddyRequestsAsync(int userId)
         {
             IEnumerable<GeneralUser> buddies = _databaseContext.Buddies
                 .Where(buddy =>
@@ -114,7 +114,7 @@ namespace samsung.api.Repositories.Buddies
                 // Include all related data of ReceivingGeneralUser
                 .ToList();
 
-            IEnumerable<IGeneralUser> generalUsers = _databaseContext.GeneralUsers
+            IEnumerable<ILimitedGeneralUser> generalUsers = _databaseContext.GeneralUsers
                 .Where(g => buddies.Contains(g))
                 // Include all related data of RequestingGeneralUser
                 .Include(g => g.Identity)
@@ -127,7 +127,7 @@ namespace samsung.api.Repositories.Buddies
                     .ThenInclude(t => t.TeachingLevel)
                 .Include(g => g.GeneralUserInterests)
                     .ThenInclude(t => t.Interest)
-                .Select(g => _mapper.Map<IGeneralUser>(g))
+                .Select(g => _mapper.Map<ILimitedGeneralUser>(g))
                 .ToList();
 
             return await Task.FromResult(generalUsers);

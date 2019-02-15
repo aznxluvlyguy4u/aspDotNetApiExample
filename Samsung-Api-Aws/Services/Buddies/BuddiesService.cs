@@ -29,7 +29,7 @@ namespace samsung.api.Services.Buddies
             return await _buddiesRepository.GetMatchedBuddiesAysnc(generalUser.Id);
         }
 
-        public async Task<IEnumerable<IGeneralUser>> GetMyBuddyRequestsAsync(ClaimsPrincipal user)
+        public async Task<IEnumerable<ILimitedGeneralUser>> GetMyBuddyRequestsAsync(ClaimsPrincipal user)
         {
             IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(user);
             return await _buddiesRepository.GetPendingBuddyRequestsAsync(generalUser.Id);

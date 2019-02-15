@@ -59,7 +59,7 @@ namespace samsung.api.Controllers
         {
             try
             {
-                IEnumerable<IGeneralUser> buddies = await _buddiesService.GetMyBuddyRequestsAsync(base.User);
+                IEnumerable<ILimitedGeneralUser> buddies = await _buddiesService.GetMyBuddyRequestsAsync(base.User);
 
                 if (buddies.IsNullOrEmpty()) return new JsonResponse(null, HttpStatusCode.NotFound);
 

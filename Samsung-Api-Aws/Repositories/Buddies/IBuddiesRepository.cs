@@ -9,7 +9,7 @@ namespace samsung.api.Repositories.Buddies
     {
         Task CreateBuddyRequestAsync(int requestingUserId, int receivingUserId);
 
-        Task<IEnumerable<IGeneralUser>> GetPendingBuddyRequestsAsync(int userId);
+        Task<IEnumerable<ILimitedGeneralUser>> GetPendingBuddyRequestsAsync(int userId);
 
         Task<IEnumerable<IBuddyRequest>> GetBuddyRequestsByStateAysnc(int userId, BuddyRequestState state);
 

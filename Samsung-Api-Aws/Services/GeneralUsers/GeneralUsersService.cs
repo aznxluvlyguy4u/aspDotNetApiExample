@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using samsung.api.Repositories.Buddies;
 using samsung.api.Repositories.GeneralUsers;
-using samsung.api.Services.Buddies;
 using samsung_api.Models.Interfaces;
 using System.Security.Claims;
 using System.Threading.Tasks;

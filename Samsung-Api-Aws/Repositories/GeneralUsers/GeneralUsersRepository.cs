@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
+using samsung.api.Repositories.Buddies;
+using samsung.api.Services.Buddies;
 using samsung_api.Models.Interfaces;
 using SamsungApiAws.DataSource.Models;
 using System;
@@ -16,6 +18,7 @@ namespace samsung.api.Repositories.GeneralUsers
     public class GeneralUsersRepository : IGeneralUsersRepository
     {
         private readonly DatabaseContext _dbContext;
+        //private readonly IBuddiesRepository _buddiesRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
 
@@ -24,6 +27,7 @@ namespace samsung.api.Repositories.GeneralUsers
             _dbContext = dbContext;
             _mapper = mapper;
             _userManager = userManager;
+            //_buddiesRepository = buddiesRepository;
         }
 
         public async Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser toBeCreatedgeneralUser)
@@ -145,6 +149,33 @@ namespace samsung.api.Repositories.GeneralUsers
             });
 
             return returnValue;
+        }
+
+        public async Task<dynamic> FindByIdAsync(int generalUserId, ClaimsPrincipal user)
+        {
+            var generalUser = _dbContext.GeneralUsers
+                .Include(g => g.Identity)
+                .Include(g => g.City)
+                .Include(g => g.GeneralUserTeachingAgeGroups)
+                    .ThenInclude(t => t.TeachingAgeGroup)
+                .Include(g => g.GeneralUserTeachingSubjects)
+                    .ThenInclude(t => t.TeachingSubject)
+                .Include(g => g.GeneralUserTeachingLevels)
+                    .ThenInclude(t => t.TeachingLevel)
+                .Include(g => g.GeneralUserInterests)
+                    .ThenInclude(t => t.Interest)
+                .FirstOrDefault(g => g.Id == generalUserId);
+
+            //dynamic result;
+            //if (await _buddiesRepository.IsMatchedBuddyAsync(FindByIdentityAsync(user).Id, generalUserId))
+            //{
+            //    result = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
+            //} else
+            //{
+            //    result = await Task.FromResult(_mapper.Map<GeneralUser, ILimitedGeneralUser>(generalUser));
+            //}
+
+            return await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
         }
 
         public async Task<IGeneralUser> FindByIdentityAsync(ClaimsPrincipal user)

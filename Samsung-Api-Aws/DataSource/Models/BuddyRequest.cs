@@ -3,7 +3,7 @@ using samsung.api.Enumerations;
 
 namespace samsung_api.DataSource.Models
 {
-    public class Buddy
+    public class BuddyRequest
     {
         public int RequestingGeneralUserId { get; set; }
         public int? ReceivingGeneralUserId { get; set; }

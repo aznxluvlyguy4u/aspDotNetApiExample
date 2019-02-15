@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using samsung.api.DataSource;
 using samsung.api.Models;
 using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
 using samsung.api.Services.Auth;
+using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
@@ -29,6 +29,7 @@ namespace samsung_api.Controllers
         public GeneralUsersController(
             IMapper mapper,
             IGeneralUsersService usersService,
+            IBuddiesService buddiesService,
             IAuthService authService,
             ILogger logger
         )
@@ -39,7 +40,10 @@ namespace samsung_api.Controllers
             _logger = logger;
         }
 
-        // GET: api/GeneralUsers/me
+        /// <summary>
+        /// GET generalUser profile of current logged in client
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("me", Name = "GetMe")]
         public async Task<JsonResponse> GetMeAsync()
         {
@@ -58,7 +62,34 @@ namespace samsung_api.Controllers
             }
         }
 
-        // POST: api/Users
+        /// <summary>
+        /// GET: api/v1/GeneralUsers/5
+        /// GET a generalUser profile by id
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpGet("{id}")]
+        public async Task<JsonResponse> GetByIdAsync(int id)
+        {
+            try
+            {
+                dynamic generalUser = await _generalUsersService.FindByIdAsync(id, base.User);
+                var response = _mapper.Map<GetGeneralUserResponse>(generalUser);
+
+                return new JsonResponse(response, System.Net.HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex);
+
+                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
+            }
+        }
+
+        /// <summary>
+        /// CREATE a new generalUser profile
+        /// </summary>
+        /// <param name="createGeneralUserRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<JsonResponse> Post([FromBody]CreateGeneralUserRequest createGeneralUserRequest)
@@ -86,6 +117,11 @@ namespace samsung_api.Controllers
         }
 
         // PUT: api/Users/5
+        /// <summary>
+        /// Edit a generalUser profile
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {

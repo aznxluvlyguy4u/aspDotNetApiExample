@@ -20,7 +20,6 @@ namespace samsung.api.Models.Response
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
         public string PhoneNumber { get; set; }
         public int TechLevel { get; set; }
         public int LinkedInId { get; set; }

@@ -47,5 +47,11 @@ namespace samsung.api.Services.Buddies
             IGeneralUser requestingGeneralUser = await _generalUsersService.FindByIdentityAsync(user);
             await _buddiesRepository.CreateBuddyRequestAsync(requestingGeneralUser.Id, receivingGeneralUserId);
         }
+
+        public async Task<bool> IsMatchedBuddyAsync(ClaimsPrincipal user, int generalUserId)
+        {
+            IGeneralUser loggedInGeneralUser = await _generalUsersService.FindByIdentityAsync(user);
+            return await _buddiesRepository.IsMatchedBuddyAsync(loggedInGeneralUser.Id, generalUserId);
+        }
     }
 }

@@ -10,7 +10,7 @@ using samsung.api.DataSource;
 namespace SamsungApiAws.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190208090254_AddInitialDatabaseSeeding")]
+    [Migration("20190218084313_AddInitialDatabaseSeeding")]
     partial class AddInitialDatabaseSeeding
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -297,6 +297,27 @@ namespace SamsungApiAws.Migrations
                     );
                 });
 
+            modelBuilder.Entity("samsung.api.DataSource.Models.Link", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Image");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("Title");
+
+                    b.Property<string>("Url");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Links");
+                });
+
             modelBuilder.Entity("samsung.api.DataSource.Models.TeachingAgeGroup", b =>
                 {
                     b.Property<int>("Id")
@@ -358,7 +379,7 @@ namespace SamsungApiAws.Migrations
                     );
                 });
 
-            modelBuilder.Entity("samsung_api.DataSource.Models.Buddy", b =>
+            modelBuilder.Entity("samsung_api.DataSource.Models.BuddyRequest", b =>
                 {
                     b.Property<int?>("ReceivingGeneralUserId");
 
@@ -370,7 +391,7 @@ namespace SamsungApiAws.Migrations
 
                     b.HasIndex("RequestingGeneralUserId");
 
-                    b.ToTable("Buddies");
+                    b.ToTable("BuddyRequests");
                 });
 
             modelBuilder.Entity("SamsungApiAws.DataSource.Models.City", b =>
@@ -500,7 +521,7 @@ namespace SamsungApiAws.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("samsung_api.DataSource.Models.Buddy", b =>
+            modelBuilder.Entity("samsung_api.DataSource.Models.BuddyRequest", b =>
                 {
                     b.HasOne("samsung.api.DataSource.Models.GeneralUser", "ReceivingGeneralUser")
                         .WithMany("ReceivingBuddies")

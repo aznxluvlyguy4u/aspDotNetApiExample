@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using samsung_api.Models.Interfaces;
 
 namespace SamsungApiAws.Controllers
 {

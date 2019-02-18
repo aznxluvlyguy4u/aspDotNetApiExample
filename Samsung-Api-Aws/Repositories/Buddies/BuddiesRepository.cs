@@ -36,7 +36,7 @@ namespace samsung.api.Repositories.Buddies
             if (CheckExistingBuddyRequestsAysnc(requestingGeneralUserId, receivingGeneralUserId) != default) throw new ArgumentException($"A buddy request already exists for GeneralUser {requestingGeneralUserId} and {receivingGeneralUserId}.");
 
             // Save to db
-            _databaseContext.Buddies.Add(new BuddyRequest()
+            _databaseContext.BuddyRequests.Add(new BuddyRequest()
             {
                 ReceivingGeneralUser = receivingGeneralUser,
                 RequestingGeneralUser = requestingGeneralUser,
@@ -49,7 +49,7 @@ namespace samsung.api.Repositories.Buddies
         private BuddyRequest CheckExistingBuddyRequestsAysnc(int generalUserId1, int generalUserId2)
         {
             // TODO: See if rejected requests can be requested again
-            BuddyRequest existingBuddyRequest = _databaseContext.Buddies
+            BuddyRequest existingBuddyRequest = _databaseContext.BuddyRequests
             .Where(buddy =>
                 (buddy.ReceivingGeneralUserId == generalUserId1 && buddy.RequestingGeneralUserId == generalUserId2)
                 || (buddy.ReceivingGeneralUserId == generalUserId2 && buddy.RequestingGeneralUserId == generalUserId1)
@@ -62,7 +62,7 @@ namespace samsung.api.Repositories.Buddies
 
         public async Task<IEnumerable<IBuddyRequest>> GetBuddyRequestsByStateAysnc(int userId, BuddyRequestState state)
         {
-            IEnumerable<IBuddyRequest> buddies = _databaseContext.Buddies
+            IEnumerable<IBuddyRequest> buddies = _databaseContext.BuddyRequests
             .Where(buddy =>
                 (buddy.ReceivingGeneralUserId == userId || buddy.RequestingGeneralUserId == userId)
                 && buddy.RequestState == state
@@ -75,7 +75,7 @@ namespace samsung.api.Repositories.Buddies
 
         public async Task<IEnumerable<IGeneralUser>> GetMatchedBuddiesAysnc(int userId)
         {
-            IEnumerable<GeneralUser> buddies = _databaseContext.Buddies
+            IEnumerable<GeneralUser> buddies = _databaseContext.BuddyRequests
             .Where(buddy =>
                 (buddy.ReceivingGeneralUserId == userId || buddy.RequestingGeneralUserId == userId)
                 && buddy.RequestState == BuddyRequestState.Matched
@@ -105,7 +105,7 @@ namespace samsung.api.Repositories.Buddies
 
         public async Task<IEnumerable<ILimitedGeneralUser>> GetPendingBuddyRequestsAsync(int userId)
         {
-            IEnumerable<GeneralUser> buddies = _databaseContext.Buddies
+            IEnumerable<GeneralUser> buddies = _databaseContext.BuddyRequests
                 .Where(buddy =>
                     (buddy.ReceivingGeneralUserId == userId)
                     && buddy.RequestState == BuddyRequestState.Pending
@@ -135,7 +135,7 @@ namespace samsung.api.Repositories.Buddies
 
         public async Task EditBuddyRequestAsync(int receivingGeneralUserId, int requestingGeneralUserId, BuddyRequestState state)
         {
-            BuddyRequest buddyRequest = _databaseContext.Buddies
+            BuddyRequest buddyRequest = _databaseContext.BuddyRequests
                 .Where(buddy =>
                     buddy.ReceivingGeneralUserId == receivingGeneralUserId
                     && buddy.RequestingGeneralUserId == requestingGeneralUserId)

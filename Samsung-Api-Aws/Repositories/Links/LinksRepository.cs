@@ -2,13 +2,12 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using samsung.api.DataSource;
-using SamsungApiAws.Controllers;
-using SamsungApiAws.Models;
-using SamsungApiAws.Services.Links;
+using samsung.api.DataSource.Models;
+using samsung_api.Models.Interfaces;
 
-namespace SamsungApiAws.Repositories.Links
+namespace samsung.api.Repositories.Links
 {
-    public class LinksRepository : ILinkRepository
+    public class LinksRepository : ILinksRepository
     {
         private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;

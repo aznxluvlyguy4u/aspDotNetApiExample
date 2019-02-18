@@ -25263,6 +25263,7 @@ namespace SamsungApiAws.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+
         }
     }
 }

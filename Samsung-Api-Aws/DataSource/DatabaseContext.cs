@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using samsung.api.DataSource.Models;
 using samsung_api.DataSource.Models;
 using SamsungApiAws.DataSource.Models;
-using SamsungApiAws.Models;
 using System;
 
 namespace samsung.api.DataSource
@@ -24,7 +23,7 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<GeneralUser> GeneralUsers { get; set; }
 
-        public virtual DbSet<BuddyRequest> Buddies { get; set; }
+        public virtual DbSet<BuddyRequest> BuddyRequests { get; set; }
 
         public virtual DbSet<Image> Images { get; set; }
 

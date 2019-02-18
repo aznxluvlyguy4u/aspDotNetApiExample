@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using samsung.api.Models;
+using samsung.api.Services.Links;
 using samsung_api.Services.Logger;
 using System;
 using System.Net;
@@ -16,13 +17,13 @@ namespace SamsungApiAws.Controllers
     {
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        private readonly ILinkService _linkService;
+        private readonly ILinksService _linksService;
 
-        public LinksController(ILogger logger, IMapper mapper, ILinkService linkService)
+        public LinksController(ILogger logger, IMapper mapper, ILinksService linksService)
         {
             _logger = logger;
             _mapper = mapper;
-            _linkService = linkService;
+            _linksService = linksService;
         }
 
         [HttpGet("")]
@@ -47,7 +48,7 @@ namespace SamsungApiAws.Controllers
         {
             try
             {
-                await _linkService.CreateLinkAsync(createLinkRequest);
+                await _linksService.CreateLinkAsync(createLinkRequest);
                 return new JsonResponse(null, HttpStatusCode.Created);
             }
             catch (Exception ex)

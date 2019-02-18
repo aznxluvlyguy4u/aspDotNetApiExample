@@ -1,4 +1,4 @@
-﻿namespace SamsungApiAws.Controllers
+﻿namespace samsung_api.Models.Interfaces
 {
     public interface ILink : ISoftDeletable
     {

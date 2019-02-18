@@ -1,6 +1,6 @@
-﻿using SamsungApiAws.Controllers;
+﻿using samsung_api.Models.Interfaces;
 
-namespace SamsungApiAws.Models
+namespace samsung.api.DataSource.Models
 {
     public class Link : ILink
     {

@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
 
 namespace SamsungApiAws.Migrations
 {
@@ -91,6 +91,23 @@ namespace SamsungApiAws.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Interests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Links",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Image = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Links", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,7 +285,7 @@ namespace SamsungApiAws.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Buddies",
+                name: "BuddyRequests",
                 columns: table => new
                 {
                     RequestingGeneralUserId = table.Column<int>(nullable: false),
@@ -277,15 +294,15 @@ namespace SamsungApiAws.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Buddies", x => new { x.ReceivingGeneralUserId, x.RequestingGeneralUserId });
+                    table.PrimaryKey("PK_BuddyRequests", x => new { x.ReceivingGeneralUserId, x.RequestingGeneralUserId });
                     table.ForeignKey(
-                        name: "FK_Buddies_GeneralUsers_ReceivingGeneralUserId",
+                        name: "FK_BuddyRequests_GeneralUsers_ReceivingGeneralUserId",
                         column: x => x.ReceivingGeneralUserId,
                         principalTable: "GeneralUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Buddies_GeneralUsers_RequestingGeneralUserId",
+                        name: "FK_BuddyRequests_GeneralUsers_RequestingGeneralUserId",
                         column: x => x.RequestingGeneralUserId,
                         principalTable: "GeneralUsers",
                         principalColumn: "Id",
@@ -471,8 +488,8 @@ namespace SamsungApiAws.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Buddies_RequestingGeneralUserId",
-                table: "Buddies",
+                name: "IX_BuddyRequests_RequestingGeneralUserId",
+                table: "BuddyRequests",
                 column: "RequestingGeneralUserId");
 
             migrationBuilder.CreateIndex(
@@ -524,7 +541,7 @@ namespace SamsungApiAws.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Buddies");
+                name: "BuddyRequests");
 
             migrationBuilder.DropTable(
                 name: "GeneralUserInterest");
@@ -540,6 +557,9 @@ namespace SamsungApiAws.Migrations
 
             migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Links");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

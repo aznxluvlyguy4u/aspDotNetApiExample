@@ -4,8 +4,9 @@ using Newtonsoft.Json.Serialization;
 namespace samsung.api.Models.Requests
 {
     [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-    public class FindImageRequest
+    public class UploadImageRequest
     {
-        public string Url { get; set; }
+        public string FileExtension { get; set; }
+        public string Body { get; set; }
     }
 }

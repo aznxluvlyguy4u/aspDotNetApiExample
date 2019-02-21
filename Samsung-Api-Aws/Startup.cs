@@ -24,6 +24,7 @@ using samsung.api.Repositories.TeachingAgeGroups;
 using samsung.api.Repositories.TeachingLevels;
 using samsung.api.Repositories.TeachingSubjects;
 using samsung.api.Services.Auth;
+using samsung.api.Services.AwsS3;
 using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
 using samsung.api.Services.Interests;
@@ -65,6 +66,7 @@ namespace Samsung_Api_Aws
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Add S3 to the ASP.NET Core dependency injection framework.
+            services.AddDefaultAWSOptions(_configuration.GetAWSOptions());
             services.AddAWSService<Amazon.S3.IAmazonS3>();
 
             // Identity settings
@@ -169,6 +171,7 @@ namespace Samsung_Api_Aws
                 .AddTransient<IJwtFactory, JwtFactory>()
                 .AddTransient<IGeoService, GeoService>()
                 .AddTransient<ILinksService, LinksService>()
+                .AddTransient<IAwsS3Service, AwsS3Service>()
                 // Repositories
                 .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>()
                 .AddTransient<IInterestsRepository, InterestsRepository>()
@@ -304,6 +307,7 @@ namespace Samsung_Api_Aws
 
                 // Requests
                 cfg.CreateMap<CreateGeneralUserRequest, IGeneralUser>(MemberList.None).ReverseMap();
+                cfg.CreateMap<UploadImageRequest, IImage>().ReverseMap();
 
                 // Responses
                 cfg.CreateMap<IGeneralUser, GetGeneralUserResponse>(MemberList.None).ReverseMap();

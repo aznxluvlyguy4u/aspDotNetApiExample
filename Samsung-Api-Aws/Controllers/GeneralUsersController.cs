@@ -5,6 +5,7 @@ using samsung.api.Models;
 using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
 using samsung.api.Services.Auth;
+using samsung.api.Services.AwsS3;
 using samsung.api.Services.Buddies;
 using samsung.api.Services.GeneralUsers;
 using samsung_api.Models.Interfaces;
@@ -24,6 +25,7 @@ namespace samsung_api.Controllers
         private readonly IMapper _mapper;
         private readonly IGeneralUsersService _generalUsersService;
         private readonly IAuthService _authService;
+        private readonly IAwsS3Service _awsS3Service;
         private readonly ILogger _logger;
 
         public GeneralUsersController(
@@ -31,12 +33,14 @@ namespace samsung_api.Controllers
             IGeneralUsersService usersService,
             IBuddiesService buddiesService,
             IAuthService authService,
+            IAwsS3Service awsS3Service,
             ILogger logger
         )
         {
             _mapper = mapper;
             _generalUsersService = usersService;
             _authService = authService;
+            _awsS3Service = awsS3Service;
             _logger = logger;
         }
 
@@ -151,6 +155,26 @@ namespace samsung_api.Controllers
 
                     return new JsonResponse(images, System.Net.HttpStatusCode.OK);
                 }
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex);
+
+                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpPost("uploadImage")]
+        [AllowAnonymous]
+        public async Task<JsonResponse> UploadImage([FromBody]UploadImageRequest uploadImageRequest)
+        {
+            try
+            {
+                // Map to IImage
+                IImage toBeUploadedImage = _mapper.Map<UploadImageRequest, IImage>(uploadImageRequest);
+                var response = await _awsS3Service.UploadImageByUser(toBeUploadedImage, base.User);
+
+                return new JsonResponse(response, System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

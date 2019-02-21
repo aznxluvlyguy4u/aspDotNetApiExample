@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using samsung.api.Models;
+using samsung.api.Models.Requests;
 using samsung.api.Services.Links;
 using samsung_api.Services.Logger;
 using System;

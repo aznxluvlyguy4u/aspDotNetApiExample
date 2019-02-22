@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.S3;
@@ -72,14 +71,13 @@ namespace samsung.api.Services.AwsS3
             return image;
         }
 
-        public async Task<IImage> GetProfileImageByUserAsync(ClaimsPrincipal user)
+        public async Task<IImage> GetProfileImageByUserAsync(string appUserId)
         {
             if (!await AmazonS3Util.DoesS3BucketExistAsync(_client, _s3Bucket))
             {
                 throw new AmazonS3Exception("S3 Bucket does not exist");
             }
 
-            string appUserId = _userManager.GetUserId(user);
             string userIdPrefix = appUserId + "/";
             var prefix = _s3UserFilesPrefix + userIdPrefix +  _s3ProfileImagePrefix + _profilePictureKeyName;
 

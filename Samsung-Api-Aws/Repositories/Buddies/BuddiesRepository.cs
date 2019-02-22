@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung.api.Enumerations;
+using samsung.api.Services.AwsS3;
 using samsung_api.DataSource.Models;
 using samsung_api.Models.Interfaces;
 using System;
@@ -16,11 +17,13 @@ namespace samsung.api.Repositories.Buddies
     {
         private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
+        private readonly IAwsS3Service _awsS3Service;
 
-        public BuddiesRepository(DatabaseContext databaseContext, IMapper mapper)
+        public BuddiesRepository(DatabaseContext databaseContext, IMapper mapper, IAwsS3Service awsS3Service)
         {
             _databaseContext = databaseContext;
             _mapper = mapper;
+            _awsS3Service = awsS3Service;
         }
 
         public async Task CreateBuddyRequestAsync(int requestingGeneralUserId, int receivingGeneralUserId)
@@ -100,6 +103,16 @@ namespace samsung.api.Repositories.Buddies
                 .Select(g => _mapper.Map<IGeneralUser>(g))
                 .ToList();
 
+            // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
+            foreach (IGeneralUser generalUser in generalUsers)
+            {
+                IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(generalUser.IdentityId);
+                if (profileImage != null)
+                {
+                    generalUser.ProfileImage = profileImage;
+                }
+            }
+
             return await Task.FromResult(generalUsers);
         }
 
@@ -129,6 +142,16 @@ namespace samsung.api.Repositories.Buddies
                     .ThenInclude(t => t.Interest)
                 .Select(g => _mapper.Map<ILimitedGeneralUser>(g))
                 .ToList();
+
+            // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
+            foreach (ILimitedGeneralUser generalUser in generalUsers)
+            {
+                IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(generalUser.IdentityId);
+                if (profileImage != null)
+                {
+                    generalUser.ProfileImage = profileImage;
+                }
+            }
 
             return await Task.FromResult(generalUsers);
         }

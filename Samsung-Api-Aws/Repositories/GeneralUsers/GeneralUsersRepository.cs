@@ -159,6 +159,7 @@ namespace samsung.api.Repositories.GeneralUsers
 
         public async Task<IGeneralUser> FindByIdAsync(int generalUserId, ClaimsPrincipal user)
         {
+            var appUserId = _userManager.GetUserId(user);
             var generalUser = _dbContext.GeneralUsers
                 .Include(g => g.Identity)
                 .Include(g => g.City)
@@ -176,7 +177,7 @@ namespace samsung.api.Repositories.GeneralUsers
             IGeneralUser IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
 
             // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
-            IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(user);
+            IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(appUserId);
             if (profileImage != null)
             {
                 IGeneralUser.ProfileImage = profileImage;
@@ -204,7 +205,7 @@ namespace samsung.api.Repositories.GeneralUsers
             IGeneralUser IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
 
             // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
-            IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(user);
+            IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(appUserId);
             if (profileImage != null)
             {
                 IGeneralUser.ProfileImage = profileImage;

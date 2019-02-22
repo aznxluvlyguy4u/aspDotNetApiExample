@@ -29,6 +29,7 @@ namespace samsung.api.Models.Response
         public string Locale { get; set; }
         public string Gender { get; set; }
         public ICity City { get; set; }
+        public ImageResponse ProfileImage { get; set; }  // base64 encoded string
         public List<ITeachingAgeGroup> TeachingAgeGroups { get; set; }
         public List<ITeachingSubject> TeachingSubjects { get; set; }
         public List<ITeachingLevel> TeachingLevels { get; set; }

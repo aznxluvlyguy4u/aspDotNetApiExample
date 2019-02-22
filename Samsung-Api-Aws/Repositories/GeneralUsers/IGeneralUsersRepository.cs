@@ -10,6 +10,6 @@ namespace samsung.api.Repositories.GeneralUsers
 
         Task<IGeneralUser> FindByIdentityAsync(ClaimsPrincipal user);
 
-        Task<dynamic> FindByIdAsync(int generalUserId, ClaimsPrincipal user);
+        Task<IGeneralUser> FindByIdAsync(int generalUserId, ClaimsPrincipal user);
     }
 }

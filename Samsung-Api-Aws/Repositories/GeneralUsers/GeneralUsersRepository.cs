@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
-using samsung.api.Repositories.Buddies;
 using samsung.api.Services.AwsS3;
-using samsung.api.Services.Buddies;
 using samsung_api.Models.Interfaces;
 using SamsungApiAws.DataSource.Models;
 using System;
@@ -143,10 +141,10 @@ namespace samsung.api.Repositories.GeneralUsers
                     await _dbContext.SaveChangesAsync();
                     IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(newGeneralUser));
 
-                    // Upload profile image to S3
+                    // Upload profile image to S3 only after succesfully AppUser creation
                     if (toBeCreatedgeneralUser.ProfileImage != null)
                     {
-                        IImage profileImage = await _awsS3Service.UploadImageByUser(toBeCreatedgeneralUser.ProfileImage, userIdentity.Id.ToString());
+                        IImage profileImage = await _awsS3Service.UploadProfileImageByUserAsync(toBeCreatedgeneralUser.ProfileImage, userIdentity.Id.ToString());
                         IGeneralUser.ProfileImage = profileImage;
                     }
 
@@ -156,13 +154,10 @@ namespace samsung.api.Repositories.GeneralUsers
                 }
             });
 
-            //Task<ClaimsPrincipal> principal = new UserClaimsPrincipalFactory<IdentityUser,IdentityRole>(um, rm, io)
-            //    .CreateAsync(userIdentity);
-
             return IGeneralUser;
         }
 
-        public async Task<dynamic> FindByIdAsync(int generalUserId, ClaimsPrincipal user)
+        public async Task<IGeneralUser> FindByIdAsync(int generalUserId, ClaimsPrincipal user)
         {
             var generalUser = _dbContext.GeneralUsers
                 .Include(g => g.Identity)
@@ -177,16 +172,17 @@ namespace samsung.api.Repositories.GeneralUsers
                     .ThenInclude(t => t.Interest)
                 .FirstOrDefault(g => g.Id == generalUserId);
 
-            //dynamic result;
-            //if (await _buddiesRepository.IsMatchedBuddyAsync(FindByIdentityAsync(user).Id, generalUserId))
-            //{
-            //    result = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
-            //} else
-            //{
-            //    result = await Task.FromResult(_mapper.Map<GeneralUser, ILimitedGeneralUser>(generalUser));
-            //}
 
-            return await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
+            IGeneralUser IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
+
+            // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
+            IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(user);
+            if (profileImage != null)
+            {
+                IGeneralUser.ProfileImage = profileImage;
+            }
+
+            return IGeneralUser;
         }
 
         public async Task<IGeneralUser> FindByIdentityAsync(ClaimsPrincipal user)
@@ -206,6 +202,14 @@ namespace samsung.api.Repositories.GeneralUsers
                 .FirstOrDefault(g => g.Identity.Id == new Guid(appUserId));
 
             IGeneralUser IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
+
+            // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
+            IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(user);
+            if (profileImage != null)
+            {
+                IGeneralUser.ProfileImage = profileImage;
+            }
+
             return IGeneralUser;
         }
     }

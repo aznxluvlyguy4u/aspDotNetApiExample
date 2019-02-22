@@ -169,24 +169,24 @@ namespace samsung_api.Controllers
             }
         }
 
-        [HttpPost("uploadImage")]
-        [AllowAnonymous]
-        public async Task<JsonResponse> UploadImage([FromBody]UploadImageRequest uploadImageRequest)
-        {
-            try
-            {
-                // Map to IImage
-                IImage toBeUploadedImage = _mapper.Map<UploadImageRequest, IImage>(uploadImageRequest);
-                var response = await _awsS3Service.UploadImageByUser(toBeUploadedImage, _userManager.GetUserId(base.User));
+        //[HttpPost("uploadImage")]
+        //[AllowAnonymous]
+        //public async Task<JsonResponse> UploadImage([FromBody]UploadImageRequest uploadImageRequest)
+        //{
+        //    try
+        //    {
+        //        // Map to IImage
+        //        IImage toBeUploadedImage = _mapper.Map<UploadImageRequest, IImage>(uploadImageRequest);
+        //        var response = await _awsS3Service.UploadProfileImageByUserAsync(toBeUploadedImage, _userManager.GetUserId(base.User));
 
-                return new JsonResponse(response, System.Net.HttpStatusCode.OK);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex.Message, ex);
+        //        return new JsonResponse(response, System.Net.HttpStatusCode.OK);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await _logger.LogErrorAsync(ex.Message, ex);
 
-                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
-            }
-        }
+        //        return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
+        //    }
+        //}
     }
 }

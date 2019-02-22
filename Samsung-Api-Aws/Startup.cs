@@ -310,6 +310,7 @@ namespace Samsung_Api_Aws
                 cfg.CreateMap<UploadImageRequest, IImage>().ReverseMap();
 
                 // Responses
+                cfg.CreateMap<IImage, ImageResponse>(MemberList.None).ReverseMap();
                 cfg.CreateMap<IGeneralUser, GetGeneralUserResponse>(MemberList.None).ReverseMap();
                 cfg.CreateMap<ILimitedGeneralUser, GetGeneralUserResponse>()
                     .ForMember(d => d.LastName, opt => opt.Ignore())

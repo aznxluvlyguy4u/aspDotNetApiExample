@@ -26,7 +26,7 @@ namespace SamsungApiAws.Controllers
             _geoService = geoService;
         }
 
-        [HttpGet("{cityId}")]
+        [HttpGet("City/{cityId}")]
         public async Task<JsonResponse> GetCityAsync(int cityId)
         {
             try
@@ -42,9 +42,9 @@ namespace SamsungApiAws.Controllers
             }
         }
 
-        [HttpGet("{countryCode}/{searchText}")]
+        [HttpGet("Country/{countryCode}")]
         [AllowAnonymous]
-        public async Task<JsonResponse> GetCitiesAsync(string countryCode, string searchText)
+        public async Task<JsonResponse> GetCitiesAsync(string countryCode)
         {
             try
             {
@@ -56,8 +56,10 @@ namespace SamsungApiAws.Controllers
                     return new JsonResponse($"Country {countryCode} not supported", HttpStatusCode.BadRequest);
                 }
 
-                if (searchText.Length < 3)
-                    return new JsonResponse($"At least 3 characters required for city search", HttpStatusCode.BadRequest);
+                //if (searchText.Length < 3)
+                //    return new JsonResponse($"At least 3 characters required for city search", HttpStatusCode.BadRequest);
+
+                var searchText = "";
 
                 var cities = await _geoService.GetCountryCitiesAsync(countryCode.ToLowerInvariant(), searchText);
                 var response = cities.Select(x => new { name = x.Value, id = x.Key });

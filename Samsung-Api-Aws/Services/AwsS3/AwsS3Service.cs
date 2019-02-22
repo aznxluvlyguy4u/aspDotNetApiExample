@@ -23,7 +23,7 @@ namespace samsung.api.Services.AwsS3
         private readonly UserManager<AppUser> _userManager;
         private readonly string _s3Bucket;
         private readonly string _s3LambdaBucketPrefix;
-        private readonly string _s3ImageBucketPrefix;
+        private readonly string _s3UserFilesPrefix;
         public const string _profilePictureKeyName = "profileImage";
 
         // Specify your bucket region (an example region is shown).
@@ -37,49 +37,58 @@ namespace samsung.api.Services.AwsS3
             _userManager = userManager;
             _s3Bucket = configuration.GetSection("AWS")["S3-bucket"];
             _s3LambdaBucketPrefix = configuration.GetSection("AWS")["S3-lambda-bucket-prefix"];
-            _s3ImageBucketPrefix = configuration.GetSection("AWS")["S3-image-bucket-prefix"];
+            _s3UserFilesPrefix = configuration.GetSection("AWS")["S3-user-files-prefix"];
         }
 
-        public async Task<IImage> UploadImageByUser(IImage image, ClaimsPrincipal user)
+        public async Task<IImage> UploadImageByUser(IImage image, string appUserId)
         {
-            if (!await AmazonS3Util.DoesS3BucketExistAsync(_client, _s3Bucket))
+            using (_client)
             {
-                throw new AmazonS3Exception("S3 Bucket does not exist");
+                if (!await AmazonS3Util.DoesS3BucketExistAsync(_client, _s3Bucket))
+                {
+                    throw new AmazonS3Exception("S3 Bucket does not exist");
+                }
+
+                string userIdPrefix = appUserId + "/";
+                byte[] bytes = Convert.FromBase64String(image.Body);
+                var key = _s3UserFilesPrefix + userIdPrefix + _profilePictureKeyName + "." + image.FileExtension;
+
+                using (var ms = new MemoryStream(bytes))
+                {
+                    var fileTransferUtilityRequest = new TransferUtilityUploadRequest
+                    {
+                        BucketName = _s3Bucket,
+                        CannedACL = S3CannedACL.PublicRead,
+                        Key = key,
+                        InputStream = ms
+                    };
+
+                    var fileTransferUtility = new TransferUtility(_client);
+                    await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
+                }
+                
+                image.S3Url = GetPreSignedUrl(key);
+
+                return image;
             }
-
-            var userId = _userManager.GetUserId(user);
-            string userFolderPrefix = userId + "/";
-            byte[] bytes = Convert.FromBase64String(image.Body);
-
-            // 1. Put object-specify only key name for the new object.
-            var putRequest = new PutObjectRequest
-            {
-                BucketName = _s3Bucket,
-                CannedACL = S3CannedACL.PublicRead,
-                Key = _s3ImageBucketPrefix + userFolderPrefix + _profilePictureKeyName + "." + image.FileExtension
-            };
-
-            using (var ms = new MemoryStream(bytes))
-            {
-                putRequest.InputStream = ms;
-                PutObjectResponse response = await _client.PutObjectAsync(putRequest);
-
-                //if (response)
-                //{
-                //    _client.  getResourceUrl("your-bucket", "some-path/some-key.jpg");
-                //}
-                //var fileTransferUtility = new TransferUtility(_client);
-                //await fileTransferUtility.UploadAsync(ms, _s3Bucket, _s3ImageBucketPrefix + _profilePictureKeyName + "." + image.);
-            }
-
-
-            var result = new Image();
-            return result;
         }
 
         public Task GetProfilePictureByUserAsync(ClaimsPrincipal user)
         {
             throw new NotImplementedException();
+        }
+
+        private string GetPreSignedUrl(string key)
+        {
+            GetPreSignedUrlRequest preSignedUrlRequest = new GetPreSignedUrlRequest
+            {
+                BucketName = _s3Bucket,
+                Key = key,
+                Protocol = Protocol.HTTPS,
+                Expires = DateTime.Now.AddMonths(1)
+            };
+
+            return _client.GetPreSignedURL(preSignedUrlRequest);
         }
     }
 }

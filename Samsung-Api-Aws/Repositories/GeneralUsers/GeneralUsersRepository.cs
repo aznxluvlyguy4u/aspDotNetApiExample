@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung.api.Repositories.Buddies;
+using samsung.api.Services.AwsS3;
 using samsung.api.Services.Buddies;
 using samsung_api.Models.Interfaces;
 using SamsungApiAws.DataSource.Models;
@@ -18,33 +19,34 @@ namespace samsung.api.Repositories.GeneralUsers
     public class GeneralUsersRepository : IGeneralUsersRepository
     {
         private readonly DatabaseContext _dbContext;
-        //private readonly IBuddiesRepository _buddiesRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IAwsS3Service _awsS3Service;
 
-        public GeneralUsersRepository(DatabaseContext dbContext, IMapper mapper, UserManager<AppUser> userManager)
+        public GeneralUsersRepository(DatabaseContext dbContext, IMapper mapper, UserManager<AppUser> userManager, IAwsS3Service awsS3Service)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _userManager = userManager;
-            //_buddiesRepository = buddiesRepository;
+            _awsS3Service = awsS3Service;
         }
 
         public async Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser toBeCreatedgeneralUser)
         {
             var strategy = _dbContext.Database.CreateExecutionStrategy();
-            IGeneralUser returnValue = default;
+            IGeneralUser IGeneralUser = default;
 
             await strategy.Execute(async () =>
             {
                 using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
+                    // First try to create AppUser
                     var userIdentity = _mapper.Map<IGeneralUser, AppUser>(toBeCreatedgeneralUser);
-                    var result = await _userManager.CreateAsync(userIdentity, toBeCreatedgeneralUser.Password);
+                    var createAppUserResult = await _userManager.CreateAsync(userIdentity, toBeCreatedgeneralUser.Password);
 
-                    if (!result.Succeeded)
+                    if (!createAppUserResult.Succeeded)
                     {
-                        throw new ArgumentException(result.Errors.FirstOrDefault()?.Description);
+                        throw new ArgumentException(createAppUserResult.Errors.FirstOrDefault()?.Description);
                     }
 
                     // Validate related id's
@@ -139,16 +141,25 @@ namespace samsung.api.Repositories.GeneralUsers
 
                     await _dbContext.GeneralUsers.AddAsync(newGeneralUser);
                     await _dbContext.SaveChangesAsync();
+                    IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(newGeneralUser));
+
+                    // Upload profile image to S3
+                    if (toBeCreatedgeneralUser.ProfileImage != null)
+                    {
+                        IImage profileImage = await _awsS3Service.UploadImageByUser(toBeCreatedgeneralUser.ProfileImage, userIdentity.Id.ToString());
+                        IGeneralUser.ProfileImage = profileImage;
+                    }
 
                     // Commit transaction if all commands succeed, transaction will auto-rollback
                     // when disposed if either commands fails
                     transaction.Complete();
-
-                    returnValue = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(newGeneralUser));
                 }
             });
 
-            return returnValue;
+            //Task<ClaimsPrincipal> principal = new UserClaimsPrincipalFactory<IdentityUser,IdentityRole>(um, rm, io)
+            //    .CreateAsync(userIdentity);
+
+            return IGeneralUser;
         }
 
         public async Task<dynamic> FindByIdAsync(int generalUserId, ClaimsPrincipal user)

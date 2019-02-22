@@ -25,7 +25,7 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<BuddyRequest> BuddyRequests { get; set; }
 
-        public virtual DbSet<Image> Images { get; set; }
+        //public virtual DbSet<Image> Images { get; set; }
 
         public virtual DbSet<Link> Links { get; set; }
 

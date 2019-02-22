@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,6 +29,8 @@ namespace samsung.api.Models.Requests
 
         [JsonRequired]
         public int City { get; set; }
+
+        public UploadImageRequest ProfileImage { get; set; }  // base64 encoded string
 
         [JsonRequired]
         public List<int> TeachingAgeGroups { get; set; }

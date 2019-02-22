@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using samsung.api.DataSource.Models;
 using samsung.api.Models;
 using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
@@ -26,6 +28,7 @@ namespace samsung_api.Controllers
         private readonly IGeneralUsersService _generalUsersService;
         private readonly IAuthService _authService;
         private readonly IAwsS3Service _awsS3Service;
+        private readonly UserManager<AppUser> _userManager;
         private readonly ILogger _logger;
 
         public GeneralUsersController(
@@ -34,6 +37,7 @@ namespace samsung_api.Controllers
             IBuddiesService buddiesService,
             IAuthService authService,
             IAwsS3Service awsS3Service,
+            UserManager<AppUser> userManager,
             ILogger logger
         )
         {
@@ -41,6 +45,7 @@ namespace samsung_api.Controllers
             _generalUsersService = usersService;
             _authService = authService;
             _awsS3Service = awsS3Service;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -172,7 +177,7 @@ namespace samsung_api.Controllers
             {
                 // Map to IImage
                 IImage toBeUploadedImage = _mapper.Map<UploadImageRequest, IImage>(uploadImageRequest);
-                var response = await _awsS3Service.UploadImageByUser(toBeUploadedImage, base.User);
+                var response = await _awsS3Service.UploadImageByUser(toBeUploadedImage, _userManager.GetUserId(base.User));
 
                 return new JsonResponse(response, System.Net.HttpStatusCode.OK);
             }

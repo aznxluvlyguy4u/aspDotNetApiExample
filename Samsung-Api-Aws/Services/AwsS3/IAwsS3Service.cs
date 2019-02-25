@@ -8,6 +8,10 @@ namespace samsung.api.Services.AwsS3
     {
         Task<IImage> UploadProfileImageByUserAsync(IImage image, string appUserId);
 
+        Task<IImage> UploadLinkImageAsync(IImage image, int linkId);
+
         Task<IImage> GetProfileImageByUserAsync(string appUserId);
+
+        Task<IImage> GetLinkImageByIdAsync(int linkId);
     }
 }

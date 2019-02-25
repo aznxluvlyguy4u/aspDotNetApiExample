@@ -154,7 +154,7 @@ namespace samsung_api.Controllers
                     if (string.IsNullOrWhiteSpace(result))
                         return new JsonResponse(null, System.Net.HttpStatusCode.NoContent);
 
-                    MatchCollection m1 = Regex.Matches(result, "(?:src|href)=\"(.*\\.(?:jpg|png|jpeg|gif))\"");
+                    MatchCollection m1 = Regex.Matches(result, "(?:src|href)=\"(http[s]{0,1}:\\/\\/[^\\s]{1,100}\\.(?:jpg|png|jpeg|gif))\"");
 
                     var images = m1.Select(m => m.Groups?[1]?.Value ?? null).Where(x => !string.IsNullOrWhiteSpace(x));
 

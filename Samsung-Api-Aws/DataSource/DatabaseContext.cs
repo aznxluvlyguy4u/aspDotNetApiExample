@@ -170,6 +170,20 @@ namespace samsung.api.DataSource
                 .HasOne(g => g.TeachingAgeGroup)
                 .WithMany(t => t.GeneralUserTeachingAgeGroups)
                 .HasForeignKey(g => g.TeachingAgeGroupId);
+
+            // Configure GeneralUserLink
+            mb.Entity<GeneralUserLink>()
+                .HasKey(k => new { k.GeneralUserId, k.LinkId });
+
+            mb.Entity<GeneralUserLink>()
+                .HasOne(g => g.GeneralUser)
+                .WithMany(g => g.GeneralUserLinks)
+                .HasForeignKey(g => g.GeneralUserId);
+
+            mb.Entity<GeneralUserLink>()
+                .HasOne(g => g.Link)
+                .WithMany(t => t.GeneralUserLinks)
+                .HasForeignKey(g => g.LinkId);
         }
     }
 }

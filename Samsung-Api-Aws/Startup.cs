@@ -34,6 +34,7 @@ using samsung.api.Services.TeachingLevels;
 using samsung.api.Services.TeachingSubjects;
 using samsung_api.DataSource.Models;
 using samsung_api.Models.Interfaces;
+using SamsungApiAws.DataSource.Models;
 using SamsungApiAws.Extensions;
 using SamsungApiAws.Repositories.Geo;
 using SamsungApiAws.Services.Geo;
@@ -243,6 +244,11 @@ namespace Samsung_Api_Aws
             return new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.Email));
+                cfg.CreateMap<ICity, City>(MemberList.None).ReverseMap();
+                cfg.CreateMap<ILink, Link>(MemberList.None).ReverseMap();
+                    //.ForMember(dest => dest.GeneralUser, map => map.MapFrom(src => src.GeneralUser))
+                    //.ForMember(dest => dest.GeneralUserId, map => map.MapFrom(src => src.GeneralUser.Id))
+                    //.ReverseMap();
                 cfg.CreateMap<int, ICity>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src));
                 cfg.CreateMap<int, ITeachingAgeGroup>()
@@ -307,6 +313,7 @@ namespace Samsung_Api_Aws
 
                 // Requests
                 cfg.CreateMap<CreateGeneralUserRequest, IGeneralUser>(MemberList.None).ReverseMap();
+                cfg.CreateMap<CreateLinkRequest, ILink>().ReverseMap();
                 cfg.CreateMap<UploadImageRequest, IImage>().ReverseMap();
 
                 // Responses
@@ -318,6 +325,7 @@ namespace Samsung_Api_Aws
                     .ForMember(d => d.PhoneNumber, opt => opt.Ignore())
                     .ForMember(d => d.TechLevel, opt => opt.Ignore())
                     .ReverseMap();
+                cfg.CreateMap<ILink, GetLinkResponse>(MemberList.None).ReverseMap();
             }).CreateMapper();
         }
     }

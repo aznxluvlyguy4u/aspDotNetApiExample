@@ -2,9 +2,12 @@
 {
     public interface ILink : ISoftDeletable
     {
-        string Image { get; set; } // link of base64
+        int Id { get; set; }
         string Title { get; set; } 
         string Description { get; set; }
         string Url { get; set; }
+        IImage Image { get; set; } // link of base64
+
+        IGeneralUser GeneralUser { get; set; }
     }
 }

@@ -1,16 +1,26 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using samsung_api.Models.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace samsung.api.Models.Requests
 {
     [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-    public class CreateLinkRequest : ILink
+    public class CreateLinkRequest : ISoftDeletable
     {
+        [JsonRequired]
+        [RegularExpression(@"^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$",
+         ErrorMessage = "Invalid url.")]
         public string Url { get; set; }
+
+        [JsonRequired]
         public string Title { get; set; }
-        public string Image { get; set; }
+
+        public UploadImageRequest Image { get; set; }
+
+        [JsonRequired]
         public string Description { get; set; }
+
         bool ISoftDeletable.IsDeleted { get; set; }
     }
 }

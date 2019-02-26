@@ -33,7 +33,13 @@ namespace samsung.api.Services.Links
         public async Task<IEnumerable<ILink>> GetMyLinksAsync(ClaimsPrincipal user)
         {
             IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(user);
-            return await _linkRepository.GetLinksByUserAysnc(generalUser);
+            return await _linkRepository.GetLinksByUserAsync(generalUser);
+        }
+
+        public async Task<IEnumerable<ILink>> GetMyFavoriteLinksAsync(ClaimsPrincipal user)
+        {
+            IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(user);
+            return await _linkRepository.GetFavoriteLinksByUserAsync(generalUser);
         }
     }
 }

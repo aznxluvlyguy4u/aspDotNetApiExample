@@ -78,7 +78,7 @@ namespace samsung.api.Repositories.Links
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ILink>> GetLinksByUserAysnc(IGeneralUser generalUser)
+        public async Task<IEnumerable<ILink>> GetLinksByUserAsync(IGeneralUser generalUser)
         {
             IEnumerable<ILink> links = _dbContext.Links
             .Where(link =>
@@ -88,6 +88,39 @@ namespace samsung.api.Repositories.Links
             .Include(link => link.GeneralUser)
             .Select(link => _mapper.Map<ILink>(link))
             .ToList();
+
+            // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
+            foreach (ILink link in links)
+            {
+                IImage image = await _awsS3Service.GetLinkImageByIdAsync(link.Id);
+                if (image != null)
+                {
+                    link.Image = image;
+                }
+            }
+
+            return await Task.FromResult(links);
+        }
+
+        public async Task<IEnumerable<ILink>> GetFavoriteLinksByUserAsync(IGeneralUser generalUser)
+        {
+            IEnumerable<Link> favoriteLinks = _dbContext.FavoriteLinks
+                .Where(fl =>
+                    fl.GeneralUserId == generalUser.Id
+                )
+                .Select(fl => fl.Link)
+                // Include all related data of ReceivingGeneralUser
+                .ToList();
+
+            IEnumerable<ILink> links = _dbContext.Links
+                .Where(
+                    l => favoriteLinks.Contains(l)
+                    && l.IsDeleted == false
+                )
+                // Include all related data of RequestingGeneralUser
+                .Include(l => l.GeneralUser)
+                .Select(l => _mapper.Map<ILink>(l))
+                .ToList();
 
             // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
             foreach (ILink link in links)

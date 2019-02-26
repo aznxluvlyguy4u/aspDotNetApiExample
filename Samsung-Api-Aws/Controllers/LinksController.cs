@@ -33,11 +33,31 @@ namespace SamsungApiAws.Controllers
         }
 
         [HttpGet("")]
-        public async Task<JsonResponse> GetMyLinkAsync()
+        public async Task<JsonResponse> GetMyLinksAsync()
         {
             try
             {
                 IEnumerable<ILink> links = await _linksService.GetMyLinksAsync(base.User);
+
+                if (links.IsNullOrEmpty()) return new JsonResponse(null, HttpStatusCode.NotFound);
+
+                var response = links.Select(x => _mapper.Map<GetLinkResponse>(x));
+                return new JsonResponse(response, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
+                // TODO: When creating a release, don't send ex.Message in response
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpGet("/api/v1/FavoriteLinks")]
+        public async Task<JsonResponse> GetMyFavoriteLinksAsync()
+        {
+            try
+            {
+                IEnumerable<ILink> links = await _linksService.GetMyFavoriteLinksAsync(base.User);
 
                 if (links.IsNullOrEmpty()) return new JsonResponse(null, HttpStatusCode.NotFound);
 

@@ -11,6 +11,8 @@ namespace samsung.api.Repositories.Links
 
         Task CreateFavoriteLinkForUserAsync(ILink toBeFavoritedLink, IGeneralUser user);
 
-        Task<IEnumerable<ILink>> GetLinksByUserAysnc(IGeneralUser user);
+        Task<IEnumerable<ILink>> GetLinksByUserAsync(IGeneralUser user);
+
+        Task<IEnumerable<ILink>> GetFavoriteLinksByUserAsync(IGeneralUser user);
     }
 }

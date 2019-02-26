@@ -79,13 +79,13 @@ namespace samsung.api.Repositories.Buddies
         public async Task<IEnumerable<IGeneralUser>> GetMatchedBuddiesAysnc(int userId)
         {
             IEnumerable<GeneralUser> buddies = _databaseContext.BuddyRequests
-            .Where(buddy =>
-                (buddy.ReceivingGeneralUserId == userId || buddy.RequestingGeneralUserId == userId)
-                && buddy.RequestState == BuddyRequestState.Matched
-            )
-            .Select(x => (userId == x.RequestingGeneralUserId) ? x.ReceivingGeneralUser : x.RequestingGeneralUser)
-            // Include all related data of ReceivingGeneralUser
-            .ToList();
+                .Where(buddy =>
+                    (buddy.ReceivingGeneralUserId == userId || buddy.RequestingGeneralUserId == userId)
+                    && buddy.RequestState == BuddyRequestState.Matched
+                )
+                .Select(x => (userId == x.RequestingGeneralUserId) ? x.ReceivingGeneralUser : x.RequestingGeneralUser)
+                // Include all related data of ReceivingGeneralUser
+                .ToList();
 
             IEnumerable<IGeneralUser> generalUsers = _databaseContext.GeneralUsers
                 .Where(g => buddies.Contains(g))

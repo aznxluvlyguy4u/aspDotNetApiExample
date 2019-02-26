@@ -142,33 +142,6 @@ namespace samsung_api.Controllers
         {
         }
 
-        [HttpPost("images")]
-        [AllowAnonymous]
-        public async Task<JsonResponse> FindImagesOnUrl(FindImageRequest findImageRequest)
-        {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var result = await client.GetStringAsync(findImageRequest.Url);
-                    if (string.IsNullOrWhiteSpace(result))
-                        return new JsonResponse(null, System.Net.HttpStatusCode.NoContent);
-
-                    MatchCollection m1 = Regex.Matches(result, "(?:src|href)=\"(http[s]{0,1}:\\/\\/[^\\s]{1,100}\\.(?:jpg|png|jpeg|gif))\"");
-
-                    var images = m1.Select(m => m.Groups?[1]?.Value ?? null).Where(x => !string.IsNullOrWhiteSpace(x));
-
-                    return new JsonResponse(images, System.Net.HttpStatusCode.OK);
-                }
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex.Message, ex);
-
-                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
-            }
-        }
-
         //[HttpPost("uploadImage")]
         //[AllowAnonymous]
         //public async Task<JsonResponse> UploadImage([FromBody]UploadImageRequest uploadImageRequest)

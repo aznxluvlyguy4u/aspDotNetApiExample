@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SamsungApiAws.Controllers
@@ -120,6 +122,24 @@ namespace SamsungApiAws.Controllers
                 await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
                 // TODO: When creating a release, don't send ex.Message in response
                 return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpPost("ImageSearches")]
+        [AllowAnonymous]
+        public async Task<JsonResponse> FindImagesOnUrl([FromBody]FindImageRequest findImageRequest)
+        {
+            try
+            {
+                IEnumerable<GetLinkImageSearchResponse> images = await _linksService.FindImagesByUrl(findImageRequest);
+
+                return new JsonResponse(images, System.Net.HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex);
+
+                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
             }
         }
 

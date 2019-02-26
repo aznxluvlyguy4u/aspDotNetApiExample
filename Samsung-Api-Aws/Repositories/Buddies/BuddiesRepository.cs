@@ -100,6 +100,7 @@ namespace samsung.api.Repositories.Buddies
                     .ThenInclude(t => t.TeachingLevel)
                 .Include(g => g.GeneralUserInterests)
                     .ThenInclude(t => t.Interest)
+                .Include(g => g.Links)
                 .Select(g => _mapper.Map<IGeneralUser>(g))
                 .ToList();
 
@@ -140,6 +141,7 @@ namespace samsung.api.Repositories.Buddies
                     .ThenInclude(t => t.TeachingLevel)
                 .Include(g => g.GeneralUserInterests)
                     .ThenInclude(t => t.Interest)
+                .Include(g => g.Links)
                 .Select(g => _mapper.Map<ILimitedGeneralUser>(g))
                 .ToList();
 

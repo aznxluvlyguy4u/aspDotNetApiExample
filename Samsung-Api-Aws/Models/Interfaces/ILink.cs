@@ -1,4 +1,6 @@
-﻿namespace samsung_api.Models.Interfaces
+﻿using Newtonsoft.Json;
+
+namespace samsung_api.Models.Interfaces
 {
     public interface ILink : ISoftDeletable
     {
@@ -8,6 +10,7 @@
         string Url { get; set; }
         IImage Image { get; set; } // link of base64
 
+        [JsonIgnore]
         IGeneralUser GeneralUser { get; set; }
     }
 }

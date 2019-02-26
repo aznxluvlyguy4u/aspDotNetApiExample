@@ -119,6 +119,16 @@ namespace samsung.api.Repositories.Links
                 )
                 // Include all related data of RequestingGeneralUser
                 .Include(l => l.GeneralUser)
+                    .ThenInclude(g => g.Identity)
+                .Include(l => l.GeneralUser.City)
+                .Include(l => l.GeneralUser.GeneralUserTeachingAgeGroups)
+                    .ThenInclude(g => g.TeachingAgeGroup)
+                .Include(l => l.GeneralUser.GeneralUserTeachingSubjects)
+                    .ThenInclude(g => g.TeachingSubject)
+                .Include(l => l.GeneralUser.GeneralUserTeachingLevels)
+                    .ThenInclude(g => g.TeachingLevel)
+                .Include(l => l.GeneralUser.GeneralUserInterests)
+                    .ThenInclude(g => g.Interest)
                 .Select(l => _mapper.Map<ILink>(l))
                 .ToList();
 

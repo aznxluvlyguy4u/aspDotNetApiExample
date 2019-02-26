@@ -21,5 +21,6 @@ namespace samsung_api.Models.Interfaces
         List<ITeachingSubject> TeachingSubjects { get; set; }
         List<ITeachingLevel> TeachingLevels { get; set; }
         List<IInterest> Interests { get; set; }
+        List<ILink> Links { get; set; }
     }
 }

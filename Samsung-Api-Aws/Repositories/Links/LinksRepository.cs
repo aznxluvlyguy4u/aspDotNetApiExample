@@ -25,7 +25,7 @@ namespace samsung.api.Repositories.Links
             _awsS3Service = awsS3Service;
         }
 
-        public async Task<ILink> CreateLinkAsync(ILink toBeCreatedLink, IGeneralUser user)
+        public async Task<ILink> CreateLinkForUserAsync(ILink toBeCreatedLink, IGeneralUser user)
         {
             var strategy = _dbContext.Database.CreateExecutionStrategy();
             ILink ILink = default;
@@ -56,11 +56,33 @@ namespace samsung.api.Repositories.Links
             return ILink;
         }
 
-        public async Task<IEnumerable<ILink>> GetLinksByUserAysnc(int generalUserId)
+        public async Task CreateFavoriteLinkForUserAsync(ILink link, IGeneralUser user)
+        {
+            // Validate Link
+            Link toBeCreatedFavoriteLink = _dbContext.Links.SingleOrDefault(l => l.Id == link.Id) ?? throw new ArgumentException($"Link ID: {link.Id} could not be found.");
+            GeneralUser generalUser = _dbContext.GeneralUsers.SingleOrDefault(g => g.Id == user.Id) ?? throw new ArgumentException($"GeneralUser ID: {user.Id} could not be found.");
+            if (toBeCreatedFavoriteLink.GeneralUserId == generalUser.Id)
+            {
+                throw new ArgumentException("Link belong to the logged in user.");
+            }
+            if (CheckExistingFavoriteLinkAysnc(toBeCreatedFavoriteLink.Id, generalUser.Id) != default) throw new ArgumentException($"Favorite link already exists.");
+
+            // Save to db
+            FavoriteLink newFavoriteLink = new FavoriteLink
+            {
+                Link = toBeCreatedFavoriteLink,
+                GeneralUser = generalUser
+            };
+            generalUser.FavoriteLinks.Add(newFavoriteLink);
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<ILink>> GetLinksByUserAysnc(IGeneralUser generalUser)
         {
             IEnumerable<ILink> links = _dbContext.Links
             .Where(link =>
-                link.GeneralUserId == generalUserId
+                link.GeneralUserId == generalUser.Id
                 && link.IsDeleted == false
             )
             .Include(link => link.GeneralUser)
@@ -78,6 +100,18 @@ namespace samsung.api.Repositories.Links
             }
 
             return await Task.FromResult(links);
+        }
+
+        private FavoriteLink CheckExistingFavoriteLinkAysnc(int linkId, int generalUserId)
+        {
+            // TODO: See if rejected requests can be requested again
+            FavoriteLink existingFavoriteLink = _dbContext.FavoriteLinks
+            .Where(gl =>
+                gl.LinkId == linkId && gl.GeneralUserId == generalUserId
+            )
+            .FirstOrDefault();
+
+            return existingFavoriteLink;
         }
     }
 }

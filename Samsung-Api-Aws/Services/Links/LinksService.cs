@@ -21,13 +21,19 @@ namespace samsung.api.Services.Links
         public async Task<ILink> CreateLinkAsync(ILink link, ClaimsPrincipal user)
         {
             IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(user);
-            return await _linkRepository.CreateLinkAsync(link, generalUser);
+            return await _linkRepository.CreateLinkForUserAsync(link, generalUser);
+        }
+
+        public async Task CreateFavoriteLinkAsync(ILink link, ClaimsPrincipal user)
+        {
+            IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(user);
+            await _linkRepository.CreateFavoriteLinkForUserAsync(link, generalUser);
         }
 
         public async Task<IEnumerable<ILink>> GetMyLinksAsync(ClaimsPrincipal user)
         {
             IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(user);
-            return await _linkRepository.GetLinksByUserAysnc(generalUser.Id);
+            return await _linkRepository.GetLinksByUserAysnc(generalUser);
         }
     }
 }

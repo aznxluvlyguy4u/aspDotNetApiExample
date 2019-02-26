@@ -7,6 +7,7 @@ using samsung.api.Models.Requests;
 using samsung.api.Models.Response;
 using samsung.api.Services.Links;
 using samsung_api.Models.Interfaces;
+using samsung_api.Models.Requests;
 using samsung_api.Services.Logger;
 using System;
 using System.Collections.Generic;
@@ -51,13 +52,30 @@ namespace SamsungApiAws.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<JsonResponse> CreateLinkAsync(CreateLinkRequest createLinkRequest)
+        [HttpPost()]
+        public async Task<JsonResponse> CreateLinkAsync([FromBody]CreateLinkRequest createLinkRequest)
         {
             try
             {
                 var toBeCreatedLink = _mapper.Map<CreateLinkRequest, ILink>(createLinkRequest);
                 await _linksService.CreateLinkAsync(toBeCreatedLink, base.User);
+                return new JsonResponse(null, HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
+                // TODO: When creating a release, don't send ex.Message in response
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpPost("/api/v1/FavoriteLinks")]
+        public async Task<JsonResponse> CreateFavoriteLinkAsync([FromBody]CreateFavoriteLinkRequest createFavoriteLinkRequest)
+        {
+            try
+            {
+                var toBeCreatedFavoriteLink = _mapper.Map<CreateFavoriteLinkRequest, ILink>(createFavoriteLinkRequest);
+                await _linksService.CreateFavoriteLinkAsync(toBeCreatedFavoriteLink, base.User);
                 return new JsonResponse(null, HttpStatusCode.Created);
             }
             catch (Exception ex)

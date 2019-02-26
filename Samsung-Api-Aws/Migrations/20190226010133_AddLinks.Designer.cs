@@ -10,7 +10,7 @@ using samsung.api.DataSource;
 namespace SamsungApiAws.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190225143154_AddLinks")]
+    [Migration("20190226010133_AddLinks")]
     partial class AddLinks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,6 +191,19 @@ namespace SamsungApiAws.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("samsung.api.DataSource.Models.FavoriteLink", b =>
+                {
+                    b.Property<int>("GeneralUserId");
+
+                    b.Property<int>("LinkId");
+
+                    b.HasKey("GeneralUserId", "LinkId");
+
+                    b.HasIndex("LinkId");
+
+                    b.ToTable("FavoriteLinks");
+                });
+
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUser", b =>
                 {
                     b.Property<int>("Id")
@@ -227,19 +240,6 @@ namespace SamsungApiAws.Migrations
                     b.HasIndex("InterestId");
 
                     b.ToTable("GeneralUserInterest");
-                });
-
-            modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserLink", b =>
-                {
-                    b.Property<int>("GeneralUserId");
-
-                    b.Property<int>("LinkId");
-
-                    b.HasKey("GeneralUserId", "LinkId");
-
-                    b.HasIndex("LinkId");
-
-                    b.ToTable("GeneralUserLink");
                 });
 
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserTeachingAgeGroup", b =>
@@ -463,6 +463,19 @@ namespace SamsungApiAws.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("samsung.api.DataSource.Models.FavoriteLink", b =>
+                {
+                    b.HasOne("samsung.api.DataSource.Models.GeneralUser", "GeneralUser")
+                        .WithMany("FavoriteLinks")
+                        .HasForeignKey("GeneralUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("samsung.api.DataSource.Models.Link", "Link")
+                        .WithMany("FavoriteLinks")
+                        .HasForeignKey("LinkId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUser", b =>
                 {
                     b.HasOne("SamsungApiAws.DataSource.Models.City", "City")
@@ -486,19 +499,6 @@ namespace SamsungApiAws.Migrations
                     b.HasOne("samsung.api.DataSource.Models.Interest", "Interest")
                         .WithMany("GeneralUserInterests")
                         .HasForeignKey("InterestId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("samsung.api.DataSource.Models.GeneralUserLink", b =>
-                {
-                    b.HasOne("samsung.api.DataSource.Models.GeneralUser", "GeneralUser")
-                        .WithMany("GeneralUserLinks")
-                        .HasForeignKey("GeneralUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("samsung.api.DataSource.Models.Link", "Link")
-                        .WithMany("GeneralUserLinks")
-                        .HasForeignKey("LinkId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

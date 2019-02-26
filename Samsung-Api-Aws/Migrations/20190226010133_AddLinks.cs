@@ -37,7 +37,7 @@ namespace SamsungApiAws.Migrations
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "GeneralUserLink",
+                name: "FavoriteLinks",
                 columns: table => new
                 {
                     GeneralUserId = table.Column<int>(nullable: false),
@@ -45,15 +45,15 @@ namespace SamsungApiAws.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GeneralUserLink", x => new { x.GeneralUserId, x.LinkId });
+                    table.PrimaryKey("PK_FavoriteLinks", x => new { x.GeneralUserId, x.LinkId });
                     table.ForeignKey(
-                        name: "FK_GeneralUserLink_GeneralUsers_GeneralUserId",
+                        name: "FK_FavoriteLinks_GeneralUsers_GeneralUserId",
                         column: x => x.GeneralUserId,
                         principalTable: "GeneralUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GeneralUserLink_Links_LinkId",
+                        name: "FK_FavoriteLinks_Links_LinkId",
                         column: x => x.LinkId,
                         principalTable: "Links",
                         principalColumn: "Id",
@@ -66,8 +66,8 @@ namespace SamsungApiAws.Migrations
                 column: "GeneralUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GeneralUserLink_LinkId",
-                table: "GeneralUserLink",
+                name: "IX_FavoriteLinks_LinkId",
+                table: "FavoriteLinks",
                 column: "LinkId");
 
             migrationBuilder.AddForeignKey(
@@ -86,7 +86,7 @@ namespace SamsungApiAws.Migrations
                 table: "Links");
 
             migrationBuilder.DropTable(
-                name: "GeneralUserLink");
+                name: "FavoriteLinks");
 
             migrationBuilder.DropIndex(
                 name: "IX_Links_GeneralUserId",

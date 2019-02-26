@@ -34,6 +34,7 @@ using samsung.api.Services.TeachingLevels;
 using samsung.api.Services.TeachingSubjects;
 using samsung_api.DataSource.Models;
 using samsung_api.Models.Interfaces;
+using samsung_api.Models.Requests;
 using SamsungApiAws.DataSource.Models;
 using SamsungApiAws.Extensions;
 using SamsungApiAws.Repositories.Geo;
@@ -314,6 +315,9 @@ namespace Samsung_Api_Aws
                 // Requests
                 cfg.CreateMap<CreateGeneralUserRequest, IGeneralUser>(MemberList.None).ReverseMap();
                 cfg.CreateMap<CreateLinkRequest, ILink>().ReverseMap();
+                cfg.CreateMap<CreateFavoriteLinkRequest, ILink>()
+                    .ForMember(d => d.Id, opt => opt.MapFrom(src => src.LinkId))
+                    .ReverseMap();
                 cfg.CreateMap<UploadImageRequest, IImage>().ReverseMap();
 
                 // Responses

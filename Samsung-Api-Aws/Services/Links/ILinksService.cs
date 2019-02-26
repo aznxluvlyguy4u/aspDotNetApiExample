@@ -9,6 +9,8 @@ namespace samsung.api.Services.Links
     {
         Task<ILink> CreateLinkAsync(ILink link, ClaimsPrincipal user);
 
+        Task CreateFavoriteLinkAsync(ILink link, ClaimsPrincipal user);
+
         Task<IEnumerable<ILink>> GetMyLinksAsync(ClaimsPrincipal user);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace samsung.api.DataSource.Models
 {
-    public class GeneralUserLink
+    public class FavoriteLink
     {
         public int GeneralUserId { get; set; }
         public GeneralUser GeneralUser { get; set; }

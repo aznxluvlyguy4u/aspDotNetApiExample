@@ -25,9 +25,9 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<BuddyRequest> BuddyRequests { get; set; }
 
-        //public virtual DbSet<Image> Images { get; set; }
-
         public virtual DbSet<Link> Links { get; set; }
+
+        public virtual DbSet<FavoriteLink> FavoriteLinks { get; set; }
 
         public virtual DbSet<TeachingSubject> TeachingSubjects { get; set; }
 
@@ -171,18 +171,18 @@ namespace samsung.api.DataSource
                 .WithMany(t => t.GeneralUserTeachingAgeGroups)
                 .HasForeignKey(g => g.TeachingAgeGroupId);
 
-            // Configure GeneralUserLink
-            mb.Entity<GeneralUserLink>()
+            // Configure FavoriteLink
+            mb.Entity<FavoriteLink>()
                 .HasKey(k => new { k.GeneralUserId, k.LinkId });
 
-            mb.Entity<GeneralUserLink>()
+            mb.Entity<FavoriteLink>()
                 .HasOne(g => g.GeneralUser)
-                .WithMany(g => g.GeneralUserLinks)
+                .WithMany(g => g.FavoriteLinks)
                 .HasForeignKey(g => g.GeneralUserId);
 
-            mb.Entity<GeneralUserLink>()
+            mb.Entity<FavoriteLink>()
                 .HasOne(g => g.Link)
-                .WithMany(t => t.GeneralUserLinks)
+                .WithMany(g => g.FavoriteLinks)
                 .HasForeignKey(g => g.LinkId);
         }
     }

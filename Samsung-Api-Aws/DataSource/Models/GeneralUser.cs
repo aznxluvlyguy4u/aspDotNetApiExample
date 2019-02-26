@@ -25,7 +25,9 @@ namespace samsung.api.DataSource.Models
         public ICollection<GeneralUserTeachingLevel> GeneralUserTeachingLevels { get; set; } = new HashSet<GeneralUserTeachingLevel>();
         public ICollection<GeneralUserInterest> GeneralUserInterests { get; set; } = new HashSet<GeneralUserInterest>();
         public ICollection<Link> Links { get; set; } = new HashSet<Link>();
-        public ICollection<GeneralUserLink> GeneralUserLinks { get; set; } = new HashSet<GeneralUserLink>();
+
+
+        public ICollection<FavoriteLink> FavoriteLinks { get; set; } = new HashSet<FavoriteLink>();
 
         [InverseProperty("RequestingGeneralUser")]
         public ICollection<BuddyRequest> RequestingBuddies { get; set; } = new HashSet<BuddyRequest>();

@@ -7,8 +7,10 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
+using samsung.api.Enumerations;
 using samsung.api.Services.AwsS3;
 using samsung_api.Models.Interfaces;
+using SamsungApiAws.DataSource.Models;
 
 namespace samsung.api.Repositories.Links
 {
@@ -36,12 +38,19 @@ namespace samsung.api.Repositories.Links
                     Link dbLink = _mapper.Map<ILink, Link>(toBeCreatedLink);
                     if (dbLink == default)
                         throw new ArgumentNullException(nameof(dbLink));
+
+                    // Empty accidentally entered ImageWebUrl if uploadImageType is base64
+                    if (dbLink.ImageType == UploadImageType.Base64 && dbLink.ImageWebUrl != null)
+                        dbLink.ImageWebUrl = null;
+
                     dbLink.GeneralUserId = user.Id;
+
                     _dbContext.Links.Add(dbLink);
                     await _dbContext.SaveChangesAsync();
                     ILink = _mapper.Map<Link, ILink>(dbLink);
+
                     // save Image to AWS S3
-                    if (toBeCreatedLink.Image != null)
+                    if (toBeCreatedLink.ImageType == UploadImageType.Base64 && toBeCreatedLink.Image != null)
                     {
                         IImage linkImage = await _awsS3Service.UploadLinkImageAsync(toBeCreatedLink.Image, dbLink.Id);
                         ILink.Image = linkImage;
@@ -92,15 +101,12 @@ namespace samsung.api.Repositories.Links
             // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
             foreach (ILink link in links)
             {
-                IImage image = await _awsS3Service.GetLinkImageByIdAsync(link.Id);
-                if (image != null)
-                {
-                    link.Image = image;
-                }
+                link.Image = await LoadLinkImage(link);
             }
 
             return await Task.FromResult(links);
         }
+
 
         public async Task<IEnumerable<ILink>> GetFavoriteLinksByUserAsync(IGeneralUser generalUser)
         {
@@ -135,11 +141,7 @@ namespace samsung.api.Repositories.Links
             // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
             foreach (ILink link in links)
             {
-                IImage image = await _awsS3Service.GetLinkImageByIdAsync(link.Id);
-                if (image != null)
-                {
-                    link.Image = image;
-                }
+                link.Image = await LoadLinkImage(link);
             }
 
             return await Task.FromResult(links);
@@ -155,6 +157,25 @@ namespace samsung.api.Repositories.Links
             .FirstOrDefault();
 
             return existingFavoriteLink;
+        }
+
+        private async Task<IImage> LoadLinkImage(ILink link)
+        {
+            IImage image = default;
+            if (link.ImageType == UploadImageType.Base64)
+            {
+                image = await _awsS3Service.GetLinkImageByIdAsync(link.Id);
+            }
+            else
+            {
+                if (link.ImageWebUrl != null)
+                {
+                    image = new Image();
+                    image.Url = link.ImageWebUrl;
+                }
+            }
+
+            return image;
         }
     }
 }

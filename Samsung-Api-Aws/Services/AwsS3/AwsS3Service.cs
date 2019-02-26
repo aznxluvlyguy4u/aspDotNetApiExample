@@ -81,7 +81,7 @@ namespace samsung.api.Services.AwsS3
                 await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
             }
                 
-            image.S3Url = GetPreSignedUrl(key);
+            image.Url = GetPreSignedUrl(key);
 
             return image;
         }
@@ -111,7 +111,7 @@ namespace samsung.api.Services.AwsS3
             if (response.S3Objects.Count > 0)
             {
                 IImage image = new Image();
-                image.S3Url = GetPreSignedUrl(response.S3Objects[0].Key);
+                image.Url = GetPreSignedUrl(response.S3Objects[0].Key);
                 return image;
             }
 
@@ -147,7 +147,7 @@ namespace samsung.api.Services.AwsS3
                 await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
             }
 
-            image.S3Url = GetPreSignedUrl(key);
+            image.Url = GetPreSignedUrl(key);
 
             return image;
         }
@@ -176,7 +176,7 @@ namespace samsung.api.Services.AwsS3
             if (response.S3Objects.Count > 0)
             {
                 IImage image = new Image();
-                image.S3Url = GetPreSignedUrl(response.S3Objects[0].Key);
+                image.Url = GetPreSignedUrl(response.S3Objects[0].Key);
                 return image;
             }
 

@@ -318,11 +318,19 @@ namespace Samsung_Api_Aws
 
                 // Requests
                 cfg.CreateMap<CreateGeneralUserRequest, IGeneralUser>(MemberList.None).ReverseMap();
-                cfg.CreateMap<CreateLinkRequest, ILink>().ReverseMap();
+                cfg.CreateMap<CreateLinkRequest, ILink>()
+                    .ForMember(d => d.ImageType, opt => opt.MapFrom(src => src.LinkImage.ImageType))
+                    .ForMember(d => d.ImageWebUrl, opt => opt.MapFrom(src => src.LinkImage.ImageWebUrl))
+                    .ForMember(d => d.Image, opt => opt.MapFrom(src => src.LinkImage.Base64Image))
+                    .ReverseMap();
                 cfg.CreateMap<CreateFavoriteLinkRequest, ILink>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src.LinkId))
                     .ReverseMap();
                 cfg.CreateMap<UploadImageRequest, IImage>().ReverseMap();
+                cfg.CreateMap<UploadLinkImageRequest, IImage>()
+                    .ForMember(d => d.FileExtension, opt => opt.MapFrom(src => src.Base64Image.FileExtension))
+                    .ForMember(d => d.Body, opt => opt.MapFrom(src => src.Base64Image.Body))
+                    .ReverseMap();
 
                 // Responses
                 cfg.CreateMap<IImage, ImageResponse>(MemberList.None).ReverseMap();

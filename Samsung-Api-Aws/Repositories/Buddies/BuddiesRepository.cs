@@ -6,6 +6,7 @@ using samsung.api.Enumerations;
 using samsung.api.Services.AwsS3;
 using samsung_api.DataSource.Models;
 using samsung_api.Models.Interfaces;
+using SamsungApiAws.DataSource.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,20 +48,6 @@ namespace samsung.api.Repositories.Buddies
             });
 
             await _databaseContext.SaveChangesAsync();
-        }
-
-        private BuddyRequest CheckExistingBuddyRequestsAysnc(int generalUserId1, int generalUserId2)
-        {
-            // TODO: See if rejected requests can be requested again
-            BuddyRequest existingBuddyRequest = _databaseContext.BuddyRequests
-            .Where(buddy =>
-                (buddy.ReceivingGeneralUserId == generalUserId1 && buddy.RequestingGeneralUserId == generalUserId2)
-                || (buddy.ReceivingGeneralUserId == generalUserId2 && buddy.RequestingGeneralUserId == generalUserId1)
-                && (buddy.RequestState != BuddyRequestState.Rejected)
-            )
-            .FirstOrDefault();
-
-            return existingBuddyRequest;
         }
 
         public async Task<IEnumerable<IBuddyRequest>> GetBuddyRequestsByStateAysnc(int userId, BuddyRequestState state)
@@ -112,6 +99,11 @@ namespace samsung.api.Repositories.Buddies
                 {
                     generalUser.ProfileImage = profileImage;
                 }
+
+                foreach (ILink link in generalUser.Links)
+                {
+                    link.Image = await LoadLinkImage(link);
+                }
             }
 
             return await Task.FromResult(generalUsers);
@@ -153,6 +145,11 @@ namespace samsung.api.Repositories.Buddies
                 {
                     generalUser.ProfileImage = profileImage;
                 }
+
+                foreach (ILink link in generalUser.Links)
+                {
+                    link.Image = await LoadLinkImage(link);
+                }
             }
 
             return await Task.FromResult(generalUsers);
@@ -174,6 +171,39 @@ namespace samsung.api.Repositories.Buddies
         {
             IEnumerable<IGeneralUser> buddies = await GetMatchedBuddiesAysnc(generalUserId1);
             return buddies.Select(b => b.Id).Contains(generalUserId2);
+        }
+
+        private async Task<IImage> LoadLinkImage(ILink link)
+        {
+            IImage image = default;
+            if (link.ImageType == UploadImageType.Base64)
+            {
+                image = await _awsS3Service.GetLinkImageByIdAsync(link.Id);
+            }
+            else
+            {
+                if (link.ImageWebUrl != null)
+                {
+                    image = new Image();
+                    image.Url = link.ImageWebUrl;
+                }
+            }
+
+            return image;
+        }
+
+        private BuddyRequest CheckExistingBuddyRequestsAysnc(int generalUserId1, int generalUserId2)
+        {
+            // TODO: See if rejected requests can be requested again
+            BuddyRequest existingBuddyRequest = _databaseContext.BuddyRequests
+            .Where(buddy =>
+                (buddy.ReceivingGeneralUserId == generalUserId1 && buddy.RequestingGeneralUserId == generalUserId2)
+                || (buddy.ReceivingGeneralUserId == generalUserId2 && buddy.RequestingGeneralUserId == generalUserId1)
+                && (buddy.RequestState != BuddyRequestState.Rejected)
+            )
+            .FirstOrDefault();
+
+            return existingBuddyRequest;
         }
     }
 }

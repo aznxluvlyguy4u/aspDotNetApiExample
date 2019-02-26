@@ -34,6 +34,6 @@ namespace samsung.api.Models.Response
         public List<ITeachingSubject> TeachingSubjects { get; set; }
         public List<ITeachingLevel> TeachingLevels { get; set; }
         public List<IInterest> Interests { get; set; }
-        public List<ILink> Links { get; set; }
+        public List<GetLinkResponse> Links { get; set; }
     }
 }

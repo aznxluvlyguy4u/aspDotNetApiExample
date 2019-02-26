@@ -16,7 +16,7 @@ namespace samsung.api.Models.Requests
         [JsonRequired]
         public string Title { get; set; }
 
-        public UploadImageRequest Image { get; set; }
+        public UploadLinkImageRequest LinkImage { get; set; }
 
         [JsonRequired]
         public string Description { get; set; }

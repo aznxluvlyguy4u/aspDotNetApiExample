@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using samsung.api.Enumerations;
 using System.ComponentModel.DataAnnotations;
 
 namespace samsung.api.Models.Requests
@@ -8,16 +9,12 @@ namespace samsung.api.Models.Requests
     public class UploadLinkImageRequest
     {
         [JsonRequired]
-        [RegularExpression(@"^base64|url$",
-         ErrorMessage = "Upload type not supported.")]
-        public string UploadType { get; set; }
+        public UploadImageType ImageType { get; set; }
 
-        [JsonRequired]
-        [RegularExpression(@"^jpg|png|jpeg$",
-         ErrorMessage = "Extension not supported.")]
-        public string FileExtension { get; set; }
+        [RegularExpression(@"^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$",
+         ErrorMessage = "Invalid url.")]
+        public string ImageWebUrl { get; set; }
 
-        [JsonRequired]
-        public string Body { get; set; }
+        public UploadImageRequest Base64Image { get; set; }
     }
 }

@@ -13,8 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SamsungApiAws.Controllers
@@ -133,15 +131,14 @@ namespace SamsungApiAws.Controllers
             {
                 IEnumerable<GetLinkImageSearchResponse> images = await _linksService.FindImagesByUrl(findImageRequest);
 
-                return new JsonResponse(images, System.Net.HttpStatusCode.OK);
+                return new JsonResponse(images, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 await _logger.LogErrorAsync(ex.Message, ex);
 
-                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
             }
         }
-
     }
 }

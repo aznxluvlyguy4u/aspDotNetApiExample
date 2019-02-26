@@ -1,4 +1,5 @@
-﻿using samsung_api.Models.Interfaces;
+﻿using samsung.api.Enumerations;
+using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,6 +14,9 @@ namespace samsung.api.DataSource.Models
         public string Description { get; set; }
         [Required]
         public string Url { get; set; }
+        [Required]
+        public UploadImageType ImageType { get; set; }
+        public string ImageWebUrl { get; set; }
         public bool IsDeleted { get; set; }
 
         public int? GeneralUserId { get; set; }

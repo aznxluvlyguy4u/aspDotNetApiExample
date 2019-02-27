@@ -38,6 +38,7 @@ using samsung_api.Models.Requests;
 using SamsungApiAws.DataSource.Models;
 using SamsungApiAws.Extensions;
 using SamsungApiAws.Repositories.Geo;
+using SamsungApiAws.Services.Feeds;
 using SamsungApiAws.Services.Geo;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -177,6 +178,7 @@ namespace Samsung_Api_Aws
                 .AddTransient<IJwtFactory, JwtFactory>()
                 .AddTransient<IGeoService, GeoService>()
                 .AddTransient<ILinksService, LinksService>()
+                .AddTransient<IFeedsService, FeedsService>()
                 .AddTransient<IAwsS3Service, AwsS3Service>()
                 // Repositories
                 .AddTransient<IGeneralUsersRepository, GeneralUsersRepository>()

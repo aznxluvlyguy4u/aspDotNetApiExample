@@ -21,5 +21,6 @@ namespace samsung.api.Models.Response
         public string Description { get; set; }
         public string Url { get; set; }
         public ImageResponse Image { get; set; } // link of base64
+        public List<IInterest> Interests { get; set; }
     }
 }

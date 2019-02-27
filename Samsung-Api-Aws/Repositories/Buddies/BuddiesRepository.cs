@@ -88,6 +88,8 @@ namespace samsung.api.Repositories.Buddies
                 .Include(g => g.GeneralUserInterests)
                     .ThenInclude(t => t.Interest)
                 .Include(g => g.Links)
+                    .ThenInclude(l => l.LinkInterests)
+                        .ThenInclude(l => l.Interest)
                 .Select(g => _mapper.Map<IGeneralUser>(g))
                 .ToList();
 
@@ -134,6 +136,8 @@ namespace samsung.api.Repositories.Buddies
                 .Include(g => g.GeneralUserInterests)
                     .ThenInclude(t => t.Interest)
                 .Include(g => g.Links)
+                    .ThenInclude(l => l.LinkInterests)
+                        .ThenInclude(l => l.Interest)
                 .Select(g => _mapper.Map<ILimitedGeneralUser>(g))
                 .ToList();
 

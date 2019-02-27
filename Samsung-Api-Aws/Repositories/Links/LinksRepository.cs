@@ -39,12 +39,31 @@ namespace samsung.api.Repositories.Links
                     if (dbLink == default)
                         throw new ArgumentNullException(nameof(dbLink));
 
+                    // Validate and save Interests
+                    if (toBeCreatedLink.Interests != null)
+                    {
+                        foreach (IInterest iInterest in toBeCreatedLink.Interests)
+                        {
+                            Interest interest = _dbContext.Interests.SingleOrDefault(t => t.Id == iInterest.Id);
+                            if (interest == default)
+                                throw new ArgumentException($"Interest ID: {iInterest.Id} could not be found.");
+
+                            LinkInterest newLinkInterest = new LinkInterest
+                            {
+                                InterestId = iInterest.Id
+                            };
+                            dbLink.LinkInterests.Add(newLinkInterest);
+                        }
+                    }
+
                     // Empty accidentally entered ImageWebUrl if uploadImageType is base64
                     if (dbLink.ImageType == UploadImageType.Base64 && dbLink.ImageWebUrl != null)
                         dbLink.ImageWebUrl = null;
 
+                    // Set User
                     dbLink.GeneralUserId = user.Id;
 
+                    // Save
                     _dbContext.Links.Add(dbLink);
                     await _dbContext.SaveChangesAsync();
                     ILink = _mapper.Map<Link, ILink>(dbLink);
@@ -95,6 +114,8 @@ namespace samsung.api.Repositories.Links
                 && link.IsDeleted == false
             )
             .Include(link => link.GeneralUser)
+            .Include(l => l.LinkInterests)
+                    .ThenInclude(l => l.Interest)
             .Select(link => _mapper.Map<ILink>(link))
             .ToList();
 
@@ -135,6 +156,8 @@ namespace samsung.api.Repositories.Links
                     .ThenInclude(g => g.TeachingLevel)
                 .Include(l => l.GeneralUser.GeneralUserInterests)
                     .ThenInclude(g => g.Interest)
+                .Include(l => l.LinkInterests)
+                    .ThenInclude(l => l.Interest)
                 .Select(l => _mapper.Map<ILink>(l))
                 .ToList();
 

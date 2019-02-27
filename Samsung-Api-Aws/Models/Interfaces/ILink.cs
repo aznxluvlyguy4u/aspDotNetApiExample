@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using samsung.api.Enumerations;
+using System.Collections.Generic;
 
 namespace samsung_api.Models.Interfaces
 {
@@ -15,5 +16,7 @@ namespace samsung_api.Models.Interfaces
 
         [JsonIgnore]
         IGeneralUser GeneralUser { get; set; }
+
+        List<IInterest> Interests { get; set; }
     }
 }

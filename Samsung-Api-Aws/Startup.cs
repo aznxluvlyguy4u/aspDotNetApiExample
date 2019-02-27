@@ -250,10 +250,7 @@ namespace Samsung_Api_Aws
             {
                 cfg.CreateMap<IGeneralUser, AppUser>().ForMember(dest => dest.UserName, map => map.MapFrom(src => src.Email));
                 cfg.CreateMap<ICity, City>(MemberList.None).ReverseMap();
-                cfg.CreateMap<ILink, Link>(MemberList.None).ReverseMap();
-                    //.ForMember(dest => dest.GeneralUser, map => map.MapFrom(src => src.GeneralUser))
-                    //.ForMember(dest => dest.GeneralUserId, map => map.MapFrom(src => src.GeneralUser.Id))
-                    //.ReverseMap();
+
                 cfg.CreateMap<int, ICity>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src));
                 cfg.CreateMap<int, ITeachingAgeGroup>()
@@ -265,6 +262,7 @@ namespace Samsung_Api_Aws
                 cfg.CreateMap<int, IInterest>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src));
 
+                // GeneralUser Related
                 cfg.CreateMap<GeneralUserTeachingAgeGroup, ITeachingAgeGroup>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src.TeachingAgeGroup.Id))
                     .ForMember(d => d.Name, opt => opt.MapFrom(src => src.TeachingAgeGroup.Name))
@@ -310,6 +308,16 @@ namespace Samsung_Api_Aws
                     .ReverseMap();
 
                 cfg.CreateMap<IGeneralUser, ILimitedGeneralUser>().ReverseMap();
+
+                //Link Related
+                cfg.CreateMap<ILink, Link>(MemberList.None);
+                cfg.CreateMap<Link, ILink>()
+                    .ForMember(d => d.Interests, opt => opt.MapFrom(src => src.LinkInterests.Select(x => x)));
+
+                cfg.CreateMap<LinkInterest, IInterest>()
+                    .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Interest.Id))
+                    .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Interest.Name))
+                    .ReverseMap();
 
                 cfg.CreateMap<BuddyRequest, IBuddyRequest>()
                     .ForMember(d => d.ReceivingGeneralUser, opt => opt.MapFrom(src => src.ReceivingGeneralUser))

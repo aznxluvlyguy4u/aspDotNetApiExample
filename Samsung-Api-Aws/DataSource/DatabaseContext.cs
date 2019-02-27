@@ -134,7 +134,9 @@ namespace samsung.api.DataSource
             // Interest data seeds
             mb.Entity<Interest>().HasData(
                 new Interest { Id = 1, Name = "Interest 1" },
-                new Interest { Id = 2, Name = "Interest 2" }
+                new Interest { Id = 2, Name = "Interest 2" },
+                new Interest { Id = 3, Name = "Interest 3" },
+                new Interest { Id = 4, Name = "Interest 4" }
             );
 
             mb.Entity<GeneralUserInterest>()
@@ -183,6 +185,20 @@ namespace samsung.api.DataSource
             mb.Entity<FavoriteLink>()
                 .HasOne(g => g.Link)
                 .WithMany(g => g.FavoriteLinks)
+                .HasForeignKey(g => g.LinkId);
+
+            // Configure LinkInterest
+            mb.Entity<LinkInterest>()
+                .HasKey(k => new { k.InterestId, k.LinkId });
+
+            mb.Entity<LinkInterest>()
+                .HasOne(g => g.Interest)
+                .WithMany(g => g.LinkInterests)
+                .HasForeignKey(g => g.InterestId);
+
+            mb.Entity<LinkInterest>()
+                .HasOne(g => g.Link)
+                .WithMany(g => g.LinkInterests)
                 .HasForeignKey(g => g.LinkId);
         }
     }

@@ -52,7 +52,7 @@ namespace samsung.api.Repositories.Links
                     // save Image to AWS S3
                     if (toBeCreatedLink.ImageType == UploadImageType.Base64 && toBeCreatedLink.Image != null)
                     {
-                        IImage linkImage = await _awsS3Service.UploadLinkImageAsync(toBeCreatedLink.Image, dbLink.Id);
+                        IImage linkImage = await _awsS3Service.UploadLinkImageAsync(toBeCreatedLink.Image, ILink);
                         ILink.Image = linkImage;
                     }
 
@@ -164,7 +164,7 @@ namespace samsung.api.Repositories.Links
             IImage image = default;
             if (link.ImageType == UploadImageType.Base64)
             {
-                image = await _awsS3Service.GetLinkImageByIdAsync(link.Id);
+                image = await _awsS3Service.GetLinkImageByIdAsync(link);
             }
             else
             {

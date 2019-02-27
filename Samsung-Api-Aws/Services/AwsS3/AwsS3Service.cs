@@ -1,11 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Amazon.S3.Util;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using samsung.api.DataSource.Models;
@@ -21,6 +24,7 @@ namespace samsung.api.Services.AwsS3
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IHostingEnvironment _env;
         private readonly string _s3Bucket;
         private readonly string _s3LambdaBucketPrefix;
         private readonly string _s3UserFilesPrefix;
@@ -38,12 +42,13 @@ namespace samsung.api.Services.AwsS3
         /// <param name="logger"></param>
         /// <param name="configuration"></param>
         /// <param name="userManager"></param>
-        public AwsS3Service(IAmazonS3 client, ILogger logger, IConfiguration configuration, UserManager<AppUser> userManager)
+        public AwsS3Service(IAmazonS3 client, ILogger logger, IConfiguration configuration, UserManager<AppUser> userManager, IHostingEnvironment env)
         {
             _client = client;
             _logger = logger;
             _configuration = configuration;
             _userManager = userManager;
+            _env = env;
             _s3Bucket = configuration.GetSection("AWS")["S3-bucket"];
             _s3LambdaBucketPrefix = configuration.GetSection("AWS")["S3-lambda-bucket-prefix"];
             _s3UserFilesPrefix = configuration.GetSection("AWS")["S3-user-files-prefix"];
@@ -123,7 +128,7 @@ namespace samsung.api.Services.AwsS3
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        public async Task<IImage> UploadLinkImageAsync(IImage image, int linkId)
+        public async Task<IImage> UploadLinkImageAsync(IImage image, ILink link)
         {
             if (!await AmazonS3Util.DoesS3BucketExistAsync(_client, _s3Bucket))
             {
@@ -131,7 +136,7 @@ namespace samsung.api.Services.AwsS3
             }
 
             byte[] bytes = Convert.FromBase64String(image.Body);
-            var key = GenerateLinkImageKey(image, linkId);
+            var key = GenerateLinkImageKey(image, link);
 
             using (var ms = new MemoryStream(bytes))
             {
@@ -157,14 +162,14 @@ namespace samsung.api.Services.AwsS3
         /// </summary>
         /// <param name="linkId"></param>
         /// <returns></returns>
-        public async Task<IImage> GetLinkImageByIdAsync(int linkId)
+        public async Task<IImage> GetLinkImageByIdAsync(ILink link)
         {
             if (!await AmazonS3Util.DoesS3BucketExistAsync(_client, _s3Bucket))
             {
                 throw new AmazonS3Exception("S3 Bucket does not exist");
             }
 
-            var prefix = _s3LinksImagesPrefix + linkId;
+            var prefix = GetLinkImageKey(link);
 
             var listObjectsRequest = new ListObjectsV2Request
             {
@@ -204,11 +209,22 @@ namespace samsung.api.Services.AwsS3
             return key;
         }
 
-        private string GenerateLinkImageKey(IImage image, int linkId)
+        private string GenerateLinkImageKey(IImage image, ILink link)
         {
-            var key = _s3LinksImagesPrefix + linkId + "." + image.FileExtension;
+            var envPrefix = _env.EnvironmentName + "/";
+            string hashInput = link.Id + link.Url;
+            string fileNameHash = CreateMD5(hashInput);
+            var key = _s3LinksImagesPrefix + envPrefix + fileNameHash + "." + image.FileExtension;
 
             return key;
+        }
+
+        private string GetLinkImageKey(ILink link)
+        {
+            var envPrefix = _env.EnvironmentName + "/";
+            string hashInput = link.Id + link.Url;
+            string fileNameHash = CreateMD5(hashInput);
+            return _s3LinksImagesPrefix + envPrefix + fileNameHash;
         }
 
         private string GetProfileImageFolderPath(string appUserId)
@@ -217,6 +233,24 @@ namespace samsung.api.Services.AwsS3
             var prefix = _s3UserFilesPrefix + userIdPrefix + _s3ProfileImagePrefix;
 
             return prefix;
+        }
+
+        private string CreateMD5(string input)
+        {
+            // Use input string to calculate MD5 hash
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] inputBytes = Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // Convert the byte array to hexadecimal string
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
         }
     }
 }

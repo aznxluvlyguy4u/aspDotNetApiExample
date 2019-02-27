@@ -178,7 +178,7 @@ namespace samsung.api.Repositories.Buddies
             IImage image = default;
             if (link.ImageType == UploadImageType.Base64)
             {
-                image = await _awsS3Service.GetLinkImageByIdAsync(link.Id);
+                image = await _awsS3Service.GetLinkImageByIdAsync(link);
             }
             else
             {

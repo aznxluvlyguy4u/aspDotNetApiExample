@@ -30,6 +30,7 @@ namespace samsung.api.Services.AwsS3
         private readonly string _s3UserFilesPrefix;
         private readonly string _s3LinksImagesPrefix;
         private readonly string _s3ProfileImagePrefix;
+        private readonly string _envPrefix;
         private const string _profilePictureKeyName = "profileImage";
 
         // Specify your bucket region (an example region is shown).
@@ -54,6 +55,7 @@ namespace samsung.api.Services.AwsS3
             _s3UserFilesPrefix = configuration.GetSection("AWS")["S3-user-files-prefix"];
             _s3LinksImagesPrefix = configuration.GetSection("AWS")["S3-links-images-prefix"];
             _s3ProfileImagePrefix = configuration.GetSection("AWS")["S3-profile-image-prefix"];
+            _envPrefix = env.EnvironmentName + "/";
         }
 
         /// <summary>
@@ -103,8 +105,7 @@ namespace samsung.api.Services.AwsS3
                 throw new AmazonS3Exception("S3 Bucket does not exist");
             }
 
-            string userIdPrefix = appUserId + "/";
-            var prefix = _s3UserFilesPrefix + userIdPrefix +  _s3ProfileImagePrefix + _profilePictureKeyName;
+            var prefix = GetProfileImageKey(appUserId);
 
             var listObjectsRequest = new ListObjectsV2Request
             {
@@ -204,35 +205,31 @@ namespace samsung.api.Services.AwsS3
         private string GenerateProfileImageKey(IImage image, string appUserId)
         {
             string userIdPrefix = appUserId + "/";
-            var key = _s3UserFilesPrefix + userIdPrefix + _s3ProfileImagePrefix + _profilePictureKeyName + "." + image.FileExtension;
+            var key = _s3UserFilesPrefix + _envPrefix + userIdPrefix + _s3ProfileImagePrefix + _profilePictureKeyName + "." + image.FileExtension;
 
             return key;
         }
 
+        private string GetProfileImageKey(string appUserId)
+        {
+            string userIdPrefix = appUserId + "/";
+            return _s3UserFilesPrefix + _envPrefix + userIdPrefix + _s3ProfileImagePrefix + _profilePictureKeyName;
+        }
+
         private string GenerateLinkImageKey(IImage image, ILink link)
         {
-            var envPrefix = _env.EnvironmentName + "/";
             string hashInput = link.Id + link.Url;
             string fileNameHash = CreateMD5(hashInput);
-            var key = _s3LinksImagesPrefix + envPrefix + fileNameHash + "." + image.FileExtension;
+            var key = _s3LinksImagesPrefix + _envPrefix + fileNameHash + "." + image.FileExtension;
 
             return key;
         }
 
         private string GetLinkImageKey(ILink link)
         {
-            var envPrefix = _env.EnvironmentName + "/";
             string hashInput = link.Id + link.Url;
             string fileNameHash = CreateMD5(hashInput);
-            return _s3LinksImagesPrefix + envPrefix + fileNameHash;
-        }
-
-        private string GetProfileImageFolderPath(string appUserId)
-        {
-            string userIdPrefix = appUserId + "/";
-            var prefix = _s3UserFilesPrefix + userIdPrefix + _s3ProfileImagePrefix;
-
-            return prefix;
+            return _s3LinksImagesPrefix + _envPrefix + fileNameHash;
         }
 
         private string CreateMD5(string input)

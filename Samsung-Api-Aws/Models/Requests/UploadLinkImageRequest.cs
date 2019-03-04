@@ -11,8 +11,8 @@ namespace samsung.api.Models.Requests
         [JsonRequired]
         public UploadImageType ImageType { get; set; }
 
-        [RegularExpression(@"^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$",
-         ErrorMessage = "Invalid url.")]
+        [RegularExpression(@"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$",
+         ErrorMessage = "Invalid image url.")]
         public string ImageWebUrl { get; set; }
 
         public UploadImageRequest Base64Image { get; set; }

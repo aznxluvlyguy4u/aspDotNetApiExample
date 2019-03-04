@@ -7,12 +7,16 @@ namespace samsung.api.Repositories.Links
 {
     public interface ILinksRepository
     {
-        Task<ILink> CreateLinkForUserAsync(ILink link, IGeneralUser user);
+        Task<ILink> CreateLinkForUserAsync(ILink link, IGeneralUser generalUser);
 
-        Task CreateFavoriteLinkForUserAsync(ILink toBeFavoritedLink, IGeneralUser user);
+        Task CreateFavoriteLinkForUserAsync(ILink toBeFavoritedLink, IGeneralUser generalUser);
 
-        Task<IEnumerable<ILink>> GetLinksByUserAsync(IGeneralUser user);
+        Task<IEnumerable<ILink>> GetLinksByUserAsync(IGeneralUser generalUser);
 
-        Task<IEnumerable<ILink>> GetFavoriteLinksByUserAsync(IGeneralUser user);
+        Task<IEnumerable<ILink>> GetFavoriteLinksByUserAsync(IGeneralUser generalUser);
+
+        Task DeleteLinkForUserByIdAsync(int linkId, IGeneralUser generalUser);
+
+        Task DeleteFavoriteLinkForUserByIdAsync(int linkId, IGeneralUser generalUser);
     }
 }

@@ -76,5 +76,17 @@ namespace samsung.api.Services.Links
                 return images;
             }
         }
+
+        public async Task DeleteMyLinkByIdAsync(int linkId, ClaimsPrincipal user)
+        {
+            IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(user);
+            await _linkRepository.DeleteLinkForUserByIdAsync(linkId, generalUser);
+        }
+
+        public async Task DeleteMyFavoriteLinkByIdAsync(int linkId, ClaimsPrincipal user)
+        {
+            IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(user);
+            await _linkRepository.DeleteFavoriteLinkForUserByIdAsync(linkId, generalUser);
+        }
     }
 }

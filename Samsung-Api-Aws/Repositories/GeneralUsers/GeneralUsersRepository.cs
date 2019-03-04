@@ -264,6 +264,7 @@ namespace samsung.api.Repositories.GeneralUsers
             MatchingConversion.Add(5, new int[] { 4, 3, (2), (1) });
 
             int[] corresponding = MatchingConversion[loggedInUser.TechLevel];
+            //var test = corresponding.IndexOf(d.TechLevel);
 
             IEnumerable<IGeneralUser> users = _dbContext.GeneralUsers
                 .Where(x => corresponding.Contains(x.TechLevel))
@@ -271,13 +272,13 @@ namespace samsung.api.Repositories.GeneralUsers
                 .Include(x => x.City)
                 .Include(x => x.GeneralUserTeachingAgeGroups)
                     .ThenInclude(t => t.TeachingAgeGroup)
-                .Include(g => g.GeneralUserTeachingSubjects)
+                .Include(x => x.GeneralUserTeachingSubjects)
                     .ThenInclude(t => t.TeachingSubject)
-                .Include(g => g.GeneralUserTeachingLevels)
+                .Include(x => x.GeneralUserTeachingLevels)
                     .ThenInclude(t => t.TeachingLevel)
-                .Include(g => g.GeneralUserInterests)
+                .Include(x => x.GeneralUserInterests)
                     .ThenInclude(t => t.Interest)
-                //.OrderBy(x => { return Array.IndexOf(corresponding, x.TechLevel); })
+                .OrderBy(d => corresponding.IndexOf(d.TechLevel))
                 .Select(x => _mapper.Map<IGeneralUser>(x))
                 .ToList();
 

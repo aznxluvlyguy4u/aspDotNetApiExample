@@ -107,12 +107,27 @@ namespace SamsungApiAws.Controllers
         }
 
         [HttpDelete("{linkId}")]
-        public async Task<JsonResponse> DeleteLinkAsync(int linkId)
+        public async Task<JsonResponse> DeleteMyLinkAsync(int linkId)
         {
-            throw new NotImplementedException();
             try
             {
-                //var name = await _linkService.GetCityNameById(cityId);
+                await _linksService.DeleteMyLinkByIdAsync(linkId, base.User);
+                return new JsonResponse(null, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex.Message, ex).ConfigureAwait(false);
+                // TODO: When creating a release, don't send ex.Message in response
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpDelete("/api/v1/FavoriteLinks/{linkId}")]
+        public async Task<JsonResponse> DeleteFavoriteLinkAsync(int linkId)
+        {
+            try
+            {
+                await _linksService.DeleteMyFavoriteLinkByIdAsync(linkId, base.User);
                 return new JsonResponse(null, HttpStatusCode.OK);
             }
             catch (Exception ex)

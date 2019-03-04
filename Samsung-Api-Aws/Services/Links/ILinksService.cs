@@ -17,6 +17,10 @@ namespace samsung.api.Services.Links
 
         Task<IEnumerable<ILink>> GetMyFavoriteLinksAsync(ClaimsPrincipal user);
 
+        Task DeleteMyLinkByIdAsync(int linkId, ClaimsPrincipal user);
+
+        Task DeleteMyFavoriteLinkByIdAsync(int linkId, ClaimsPrincipal user);
+
         Task<IEnumerable<GetLinkImageSearchResponse>> FindImagesByUrl(FindImageRequest findImageRequest);
     }
 }

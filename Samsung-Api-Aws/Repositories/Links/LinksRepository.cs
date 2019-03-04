@@ -87,7 +87,10 @@ namespace samsung.api.Repositories.Links
         public async Task CreateFavoriteLinkForUserAsync(ILink link, IGeneralUser user)
         {
             // Validate Link
-            Link toBeCreatedFavoriteLink = _dbContext.Links.SingleOrDefault(l => l.Id == link.Id) ?? throw new ArgumentException($"Link ID: {link.Id} could not be found.");
+            Link toBeCreatedFavoriteLink = _dbContext.Links.SingleOrDefault(l =>
+                l.Id == link.Id
+                && l.IsDeleted == false
+            ) ?? throw new ArgumentException($"Link ID: {link.Id} could not be found.");
             GeneralUser generalUser = _dbContext.GeneralUsers.SingleOrDefault(g => g.Id == user.Id) ?? throw new ArgumentException($"GeneralUser ID: {user.Id} could not be found.");
             if (toBeCreatedFavoriteLink.GeneralUserId == generalUser.Id)
             {
@@ -165,6 +168,13 @@ namespace samsung.api.Repositories.Links
             foreach (ILink link in links)
             {
                 link.Image = await LoadLinkImage(link);
+
+                // Make call to AWS S3 to see if any profile image is linked to the GeneralUser of this link
+                IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(link.GeneralUser.IdentityId);
+                if (profileImage != null)
+                {
+                    link.GeneralUser.ProfileImage = profileImage;
+                }
             }
 
             return await Task.FromResult(links);
@@ -199,6 +209,37 @@ namespace samsung.api.Repositories.Links
             }
 
             return image;
+        }
+
+        public async Task DeleteLinkForUserByIdAsync(int linkId, IGeneralUser generalUser)
+        {
+            Link link = _dbContext.Links
+            .SingleOrDefault(l =>
+                l.GeneralUserId == generalUser.Id
+                && l.IsDeleted == false
+                && l.Id == linkId
+            );
+
+            if (link == default)
+                throw new ArgumentException($"Link ID: {linkId} could not be found.");
+
+            link.IsDeleted = true;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteFavoriteLinkForUserByIdAsync(int linkId, IGeneralUser generalUser)
+        {
+            FavoriteLink favoriteLink = _dbContext.FavoriteLinks
+            .SingleOrDefault(l =>
+                l.GeneralUserId == generalUser.Id
+                && l.LinkId == linkId
+            );
+
+            if (favoriteLink == default)
+                throw new ArgumentException($"Favorite Link ID: {linkId} could not be found.");
+
+            _dbContext.FavoriteLinks.Remove(favoriteLink);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

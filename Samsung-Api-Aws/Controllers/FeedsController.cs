@@ -34,7 +34,7 @@ namespace SamsungApiAws.Controllers
         {
             try
             {
-                IEnumerable<ILink> links = await _feedsService.GetFeedsAsync();
+                IEnumerable<IFeed> links = await _feedsService.GetFeedsAsync(base.User);
 
                 if (links.IsNullOrEmpty()) return new JsonResponse(null, HttpStatusCode.NotFound);
 

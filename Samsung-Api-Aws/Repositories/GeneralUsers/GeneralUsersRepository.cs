@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
 using samsung.api.Services.AwsS3;
 using samsung_api.Models.Interfaces;
 using SamsungApiAws.DataSource.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -29,6 +31,11 @@ namespace samsung.api.Repositories.GeneralUsers
             _awsS3Service = awsS3Service;
         }
 
+        /// <summary>
+        /// CreateGeneralUserAsync
+        /// </summary>
+        /// <param name="toBeCreatedgeneralUser"></param>
+        /// <returns></returns>
         public async Task<IGeneralUser> CreateGeneralUserAsync(IGeneralUser toBeCreatedgeneralUser)
         {
             var strategy = _dbContext.Database.CreateExecutionStrategy();
@@ -51,6 +58,7 @@ namespace samsung.api.Repositories.GeneralUsers
                     var newGeneralUser = new GeneralUser
                     {
                         Identity = userIdentity,
+                        TechLevel = toBeCreatedgeneralUser.TechLevel,
                         Location = toBeCreatedgeneralUser.Location,
                         Locale = toBeCreatedgeneralUser.Locale,
                         Gender = toBeCreatedgeneralUser.Gender
@@ -157,6 +165,12 @@ namespace samsung.api.Repositories.GeneralUsers
             return IGeneralUser;
         }
 
+        /// <summary>
+        /// FindByIdAsync
+        /// </summary>
+        /// <param name="generalUserId"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<IGeneralUser> FindByIdAsync(int generalUserId, ClaimsPrincipal user)
         {
             var appUserId = _userManager.GetUserId(user);
@@ -186,6 +200,11 @@ namespace samsung.api.Repositories.GeneralUsers
             return IGeneralUser;
         }
 
+        /// <summary>
+        /// FindByIdentityAsync
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<IGeneralUser> FindByIdentityAsync(ClaimsPrincipal user)
         {
             var appUserId = _userManager.GetUserId(user);
@@ -212,6 +231,57 @@ namespace samsung.api.Repositories.GeneralUsers
             }
 
             return IGeneralUser;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<IGeneralUser>> FindWithSimilarPreferenceAsync(ClaimsPrincipal user)
+        {
+            IGeneralUser loggedInUser = await FindByIdentityAsync(user);
+            List<IInterest> interests = loggedInUser.Interests;
+
+            //int[][] conversionTable =
+            //{
+            //    new int[] {3, 4, (5), (2) },
+            //    new int[] {3, (4), (5), (1) },
+            //    new int[] {4, 5, (1), (2) },
+            //    new int[] {5, (3), (2), (1) },
+            //    new int[] {4, 3, (2), (1) }
+            //};
+
+
+
+            //var corresponding = conversionTable[loggedInUser.TechLevel];
+
+            Dictionary<int, int[]> MatchingConversion = new Dictionary<int, int[]>();
+            MatchingConversion.Add(1, new int[] { 3, 4, (5), (2) });
+            MatchingConversion.Add(2, new int[] { 3, (4), (5), (1) });
+            MatchingConversion.Add(3, new int[] { 4, 5, (1), (2) });
+            MatchingConversion.Add(4, new int[] { 5, (3), (2), (1) });
+            MatchingConversion.Add(5, new int[] { 4, 3, (2), (1) });
+
+            int[] corresponding = MatchingConversion[loggedInUser.TechLevel];
+
+            IEnumerable<IGeneralUser> users = _dbContext.GeneralUsers
+                .Where(x => corresponding.Contains(x.TechLevel))
+                .Include(x => x.Identity)
+                .Include(x => x.City)
+                .Include(x => x.GeneralUserTeachingAgeGroups)
+                    .ThenInclude(t => t.TeachingAgeGroup)
+                .Include(g => g.GeneralUserTeachingSubjects)
+                    .ThenInclude(t => t.TeachingSubject)
+                .Include(g => g.GeneralUserTeachingLevels)
+                    .ThenInclude(t => t.TeachingLevel)
+                .Include(g => g.GeneralUserInterests)
+                    .ThenInclude(t => t.Interest)
+                //.OrderBy(x => { return Array.IndexOf(corresponding, x.TechLevel); })
+                .Select(x => _mapper.Map<IGeneralUser>(x))
+                .ToList();
+
+            return users;
         }
     }
 }

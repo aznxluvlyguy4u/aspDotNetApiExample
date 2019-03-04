@@ -10,6 +10,9 @@ namespace samsung.api.DataSource.Models
     {
         public int Id { get; set; }
 
+        [Required]
+        [Range(1, 5)]
+        public int TechLevel { get; set; }
         public string Location { get; set; }
         public string Locale { get; set; }
         public string Gender { get; set; }

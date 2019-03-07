@@ -200,6 +200,36 @@ namespace samsung.api.DataSource
                 .HasOne(g => g.Link)
                 .WithMany(g => g.LinkInterests)
                 .HasForeignKey(g => g.LinkId);
+
+            // Configure seen generaluser
+            mb.Entity<GeneralUserSeenGeneralUser>()
+                .HasKey(k => new { k.LoggedInGeneralUserId, k.HasSeenGeneralUserId });
+
+            mb.Entity<GeneralUserSeenGeneralUser>()
+                .HasOne(g => g.LoggedInGeneralUser)
+                .WithMany(g => g.LoggedInGeneralUsers)
+                .HasForeignKey(g => g.LoggedInGeneralUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            mb.Entity<GeneralUserSeenGeneralUser>()
+                .HasOne(g => g.HasSeenGeneralUser)
+                .WithMany(t => t.HasSeenGeneralUsers)
+                .HasForeignKey(g => g.HasSeenGeneralUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configure seen link
+            mb.Entity<GeneralUserSeenLink>()
+               .HasKey(k => new { k.GeneralUserId, k.LinkId });
+
+            mb.Entity<GeneralUserSeenLink>()
+                .HasOne(g => g.GeneralUser)
+                .WithMany(g => g.GeneralUserSeenLinks)
+                .HasForeignKey(g => g.GeneralUserId);
+
+            mb.Entity<GeneralUserSeenLink>()
+                .HasOne(g => g.Link)
+                .WithMany(g => g.GeneralUserSeenLinks)
+                .HasForeignKey(g => g.LinkId);
         }
     }
 }

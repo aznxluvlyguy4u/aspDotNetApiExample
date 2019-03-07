@@ -37,5 +37,13 @@ namespace samsung.api.DataSource.Models
 
         [InverseProperty("ReceivingGeneralUser")]
         public ICollection<BuddyRequest> ReceivingBuddies { get; set; } = new HashSet<BuddyRequest>();
+
+        [InverseProperty("LoggedInGeneralUser")]
+        public ICollection<GeneralUserSeenGeneralUser> LoggedInGeneralUsers { get; set; } = new HashSet<GeneralUserSeenGeneralUser>();
+
+        [InverseProperty("HasSeenGeneralUser")]
+        public ICollection<GeneralUserSeenGeneralUser> HasSeenGeneralUsers { get; set; } = new HashSet<GeneralUserSeenGeneralUser>();
+
+        public ICollection<GeneralUserSeenLink> GeneralUserSeenLinks { get; set; } = new HashSet<GeneralUserSeenLink>();
     }
 }

@@ -37,7 +37,7 @@ namespace samsung.api.Repositories.Buddies
 
             GeneralUser requestingGeneralUser = _databaseContext.GeneralUsers.SingleOrDefault(g => g.Id == requestingGeneralUserId) ?? throw new ArgumentException($"GeneralUser ID: {requestingGeneralUserId} could not be found.");
             GeneralUser receivingGeneralUser = _databaseContext.GeneralUsers.SingleOrDefault(g => g.Id == receivingGeneralUserId) ?? throw new ArgumentException($"GeneralUser ID: {receivingGeneralUserId} could not be found.");
-            if (CheckExistingBuddyRequestsAysnc(requestingGeneralUserId, receivingGeneralUserId) != default) throw new ArgumentException($"A buddy request already exists for GeneralUser {requestingGeneralUserId} and {receivingGeneralUserId}.");
+            if (IsExistingBuddyRequest(requestingGeneralUserId, receivingGeneralUserId)) throw new ArgumentException($"A buddy request already exists for GeneralUser {requestingGeneralUserId} and {receivingGeneralUserId}.");
 
             // Save to db
             _databaseContext.BuddyRequests.Add(new BuddyRequest()
@@ -50,20 +50,25 @@ namespace samsung.api.Repositories.Buddies
             await _databaseContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<IBuddyRequest>> GetBuddyRequestsByStateAysnc(int userId, BuddyRequestState state)
+        public async Task<IEnumerable<IGeneralUser>> GetBuddyRequestedUsersByStateAsync(int userId, BuddyRequestState state = default)
         {
-            IEnumerable<IBuddyRequest> buddies = _databaseContext.BuddyRequests
+            IQueryable<BuddyRequest> buddies = _databaseContext.BuddyRequests
             .Where(buddy =>
-                (buddy.ReceivingGeneralUserId == userId || buddy.RequestingGeneralUserId == userId)
-                && buddy.RequestState == state
-            )
-            .Select(x => _mapper.Map<IBuddyRequest>(x))
-            .ToList();
+                buddy.ReceivingGeneralUserId == userId || buddy.RequestingGeneralUserId == userId
+            );
 
-            return await Task.FromResult(buddies);
+            if (state != default)
+                buddies.Where(buddy => buddy.RequestState == state);
+
+            IEnumerable<IGeneralUser> otherGeneralUsers = buddies
+                .Select(x => (userId == x.RequestingGeneralUserId) ? x.ReceivingGeneralUser : x.RequestingGeneralUser)
+                .Select(g => _mapper.Map<IGeneralUser>(g))
+                .ToList();
+
+            return await Task.FromResult(otherGeneralUsers);
         }
 
-        public async Task<IEnumerable<IGeneralUser>> GetMatchedBuddiesAysnc(int userId)
+        public async Task<IEnumerable<IGeneralUser>> GetMatchedBuddiesAsync(int userId)
         {
             IEnumerable<GeneralUser> buddies = _databaseContext.BuddyRequests
                 .Where(buddy =>
@@ -173,7 +178,7 @@ namespace samsung.api.Repositories.Buddies
 
         public async Task<bool> IsMatchedBuddyAsync(int generalUserId1, int generalUserId2)
         {
-            IEnumerable<IGeneralUser> buddies = await GetMatchedBuddiesAysnc(generalUserId1);
+            IEnumerable<IGeneralUser> buddies = await GetMatchedBuddiesAsync(generalUserId1);
             return buddies.Select(b => b.Id).Contains(generalUserId2);
         }
 
@@ -196,7 +201,7 @@ namespace samsung.api.Repositories.Buddies
             return image;
         }
 
-        private BuddyRequest CheckExistingBuddyRequestsAysnc(int generalUserId1, int generalUserId2)
+        public bool IsExistingBuddyRequest(int generalUserId1, int generalUserId2)
         {
             // TODO: See if rejected requests can be requested again
             BuddyRequest existingBuddyRequest = _databaseContext.BuddyRequests
@@ -207,7 +212,7 @@ namespace samsung.api.Repositories.Buddies
             )
             .FirstOrDefault();
 
-            return existingBuddyRequest;
+            return existingBuddyRequest != default;
         }
     }
 }

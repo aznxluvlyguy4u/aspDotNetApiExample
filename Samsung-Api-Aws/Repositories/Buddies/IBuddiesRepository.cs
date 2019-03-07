@@ -11,12 +11,14 @@ namespace samsung.api.Repositories.Buddies
 
         Task<IEnumerable<ILimitedGeneralUser>> GetPendingBuddyRequestsAsync(int userId);
 
-        Task<IEnumerable<IBuddyRequest>> GetBuddyRequestsByStateAysnc(int userId, BuddyRequestState state);
+        Task<IEnumerable<IGeneralUser>> GetBuddyRequestedUsersByStateAsync(int userId, BuddyRequestState state = default);
 
-        Task<IEnumerable<IGeneralUser>> GetMatchedBuddiesAysnc(int userId);
+        Task<IEnumerable<IGeneralUser>> GetMatchedBuddiesAsync(int userId);
 
         Task EditBuddyRequestAsync(int receivingGeneralUserId, int requestingGeneralUserId, BuddyRequestState state);
 
         Task<bool> IsMatchedBuddyAsync(int generalUserId1, int generalUserId2);
+
+        bool IsExistingBuddyRequest(int generalUserId1, int generalUserId2);
     }
 }

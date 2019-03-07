@@ -25,5 +25,7 @@ namespace samsung.api.DataSource.Models
         public ICollection<FavoriteLink> FavoriteLinks { get; set; } = new HashSet<FavoriteLink>();
 
         public ICollection<LinkInterest> LinkInterests { get; set; } = new HashSet<LinkInterest>();
+
+        public ICollection<GeneralUserSeenLink> GeneralUserSeenLinks { get; set; } = new HashSet<GeneralUserSeenLink>();
     }
 }

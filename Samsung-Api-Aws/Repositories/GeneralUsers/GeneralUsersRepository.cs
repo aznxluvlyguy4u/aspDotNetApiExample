@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
+using samsung.api.Repositories.Buddies;
 using samsung.api.Services.AwsS3;
 using samsung_api.Models.Interfaces;
 using SamsungApiAws.DataSource.Models;
@@ -22,13 +23,15 @@ namespace samsung.api.Repositories.GeneralUsers
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly IAwsS3Service _awsS3Service;
+        private readonly IBuddiesRepository _buddiesRepository;
 
-        public GeneralUsersRepository(DatabaseContext dbContext, IMapper mapper, UserManager<AppUser> userManager, IAwsS3Service awsS3Service)
+        public GeneralUsersRepository(DatabaseContext dbContext, IMapper mapper, UserManager<AppUser> userManager, IAwsS3Service awsS3Service, IBuddiesRepository buddiesRepository)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _userManager = userManager;
             _awsS3Service = awsS3Service;
+            _buddiesRepository = buddiesRepository;
         }
 
         /// <summary>
@@ -241,33 +244,23 @@ namespace samsung.api.Repositories.GeneralUsers
         public async Task<IEnumerable<IGeneralUser>> FindWithSimilarPreferenceAsync(ClaimsPrincipal user)
         {
             IGeneralUser loggedInUser = await FindByIdentityAsync(user);
-            List<IInterest> interests = loggedInUser.Interests;
+            IEnumerable<IGeneralUser> existingUserRequestsUsers = await _buddiesRepository.GetBuddyRequestedUsersByStateAsync(loggedInUser.Id);
+            IEnumerable<int> existingUserRequestsUsersIds = existingUserRequestsUsers.Select(x => x.Id);
 
-            //int[][] conversionTable =
-            //{
-            //    new int[] {3, 4, (5), (2) },
-            //    new int[] {3, (4), (5), (1) },
-            //    new int[] {4, 5, (1), (2) },
-            //    new int[] {5, (3), (2), (1) },
-            //    new int[] {4, 3, (2), (1) }
-            //};
+            Dictionary<int, int[]> techLevelMatchingTable = new Dictionary<int, int[]>();
+            techLevelMatchingTable.Add(1, new int[] { 3, 4, (5), (2) });
+            techLevelMatchingTable.Add(2, new int[] { 3, (4), (5), (1) });
+            techLevelMatchingTable.Add(3, new int[] { 4, 5, (1), (2) });
+            techLevelMatchingTable.Add(4, new int[] { 5, (3), (2), (1) });
+            techLevelMatchingTable.Add(5, new int[] { 4, 3, (2), (1) });
 
-
-
-            //var corresponding = conversionTable[loggedInUser.TechLevel];
-
-            Dictionary<int, int[]> MatchingConversion = new Dictionary<int, int[]>();
-            MatchingConversion.Add(1, new int[] { 3, 4, (5), (2) });
-            MatchingConversion.Add(2, new int[] { 3, (4), (5), (1) });
-            MatchingConversion.Add(3, new int[] { 4, 5, (1), (2) });
-            MatchingConversion.Add(4, new int[] { 5, (3), (2), (1) });
-            MatchingConversion.Add(5, new int[] { 4, 3, (2), (1) });
-
-            int[] corresponding = MatchingConversion[loggedInUser.TechLevel];
-            //var test = corresponding.IndexOf(d.TechLevel);
+            int[] techLevelMatchingSequence = techLevelMatchingTable[loggedInUser.TechLevel];
 
             IEnumerable<IGeneralUser> users = _dbContext.GeneralUsers
-                .Where(x => corresponding.Contains(x.TechLevel))
+                .Where(x =>
+                    techLevelMatchingSequence.Contains(x.TechLevel)
+                    && !existingUserRequestsUsersIds.Contains(x.Id)
+                )
                 .Include(x => x.Identity)
                 .Include(x => x.City)
                 .Include(x => x.GeneralUserTeachingAgeGroups)
@@ -278,8 +271,15 @@ namespace samsung.api.Repositories.GeneralUsers
                     .ThenInclude(t => t.TeachingLevel)
                 .Include(x => x.GeneralUserInterests)
                     .ThenInclude(t => t.Interest)
-                .OrderBy(d => corresponding.IndexOf(d.TechLevel))
                 .Select(x => _mapper.Map<IGeneralUser>(x))
+                .ToList();
+
+            users = users
+                .OrderBy(d => techLevelMatchingSequence.IndexOf(d.TechLevel))
+                .ThenByDescending(d => d.Interests.Where(i => loggedInUser.Interests.Select(x => x.Id).Contains(i.Id)).Count())
+                .ThenByDescending(d => d.City.Id == loggedInUser.City.Id)
+                .ThenByDescending(d => d.TeachingAgeGroups.Where(i => loggedInUser.TeachingAgeGroups.Select(x => x.Id).Contains(i.Id)).Count())
+                .ThenByDescending(d => d.TeachingLevels.Where(i => loggedInUser.TeachingLevels.Select(x => x.Id).Contains(i.Id)).Count())
                 .ToList();
 
             return users;

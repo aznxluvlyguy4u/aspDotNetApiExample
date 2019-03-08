@@ -353,6 +353,7 @@ namespace Samsung_Api_Aws
                 cfg.CreateMap<ILink, GetLinkResponse>(MemberList.None).ReverseMap();
                 cfg.CreateMap<string, GetLinkImageSearchResponse>()
                     .ForMember(d => d.Url, opt => opt.MapFrom(src => src));
+                cfg.CreateMap<IFeed, GetFeedResponse>(MemberList.None).ReverseMap();
             }).CreateMapper();
         }
     }

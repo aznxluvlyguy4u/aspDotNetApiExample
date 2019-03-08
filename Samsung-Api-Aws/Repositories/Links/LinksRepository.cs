@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
 using AutoMapper;
@@ -182,7 +183,6 @@ namespace samsung.api.Repositories.Links
 
         private FavoriteLink CheckExistingFavoriteLinkAysnc(int linkId, int generalUserId)
         {
-            // TODO: See if rejected requests can be requested again
             FavoriteLink existingFavoriteLink = _dbContext.FavoriteLinks
             .Where(gl =>
                 gl.LinkId == linkId && gl.GeneralUserId == generalUserId
@@ -240,6 +240,42 @@ namespace samsung.api.Repositories.Links
 
             _dbContext.FavoriteLinks.Remove(favoriteLink);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<ILink>> FindWithSimilarPreferenceAsync(IGeneralUser loggedInUser, int limit)
+        {
+            IEnumerable<ILink> links = _dbContext.Links
+                .Where(x =>
+                    // Not links posted by user self
+                    x.GeneralUserId != loggedInUser.Id
+                    // Not deleted
+                    && x.IsDeleted == false
+                    // Not already saved as favorite link
+                    && !x.FavoriteLinks.Select(f => f.GeneralUserId).Contains(loggedInUser.Id)
+                    // Not those already seen
+                    && !x.GeneralUserSeenLinks.Select(g => g.GeneralUserId).Contains(loggedInUser.Id)
+                )
+                .Include(link => link.GeneralUser)
+                .Include(l => l.LinkInterests)
+                    .ThenInclude(l => l.Interest)
+                .AsEnumerable()
+                // ordering
+                .OrderByDescending(d => d.LinkInterests.Select(l => l.Interest).Where(i => loggedInUser.Interests.Select(x => x.Id).Contains(i.Id)).Count())
+                .Take(limit)
+                .Select(x => _mapper.Map<ILink>(x))
+                .ToList();
+
+            // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
+            foreach (ILink ILink in links)
+            {
+                ILink.Image = await LoadLinkImage(ILink);
+
+                // flag as seen
+                _dbContext.GeneralUserSeenLink.Add(new GeneralUserSeenLink { GeneralUserId = loggedInUser.Id, LinkId = ILink.Id });
+                _dbContext.SaveChanges();
+            }
+
+            return await Task.FromResult(links);
         }
     }
 }

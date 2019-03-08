@@ -1,4 +1,5 @@
-﻿using samsung_api.Models.Interfaces;
+﻿using samsung.api.DataSource.Models;
+using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,6 +14,6 @@ namespace samsung.api.Repositories.GeneralUsers
 
         Task<IGeneralUser> FindByIdAsync(int generalUserId, ClaimsPrincipal user);
 
-        Task<IEnumerable<IGeneralUser>> FindWithSimilarPreferenceAsync(ClaimsPrincipal user);
+        Task<IEnumerable<IGeneralUser>> FindWithSimilarPreferenceAsync(IGeneralUser loggedInUser, int limit);
     }
 }

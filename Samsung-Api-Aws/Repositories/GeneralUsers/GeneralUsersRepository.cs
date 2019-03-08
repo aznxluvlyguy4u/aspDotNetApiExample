@@ -194,7 +194,7 @@ namespace samsung.api.Repositories.GeneralUsers
             IGeneralUser IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
 
             // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
-            IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(appUserId);
+            IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(IGeneralUser.IdentityId);
             if (profileImage != null)
             {
                 IGeneralUser.ProfileImage = profileImage;
@@ -241,9 +241,8 @@ namespace samsung.api.Repositories.GeneralUsers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<IGeneralUser>> FindWithSimilarPreferenceAsync(ClaimsPrincipal user)
+        public async Task<IEnumerable<IGeneralUser>> FindWithSimilarPreferenceAsync(IGeneralUser loggedInUser, int limit)
         {
-            IGeneralUser loggedInUser = await FindByIdentityAsync(user);
             IEnumerable<IGeneralUser> existingUserRequestsUsers = await _buddiesRepository.GetBuddyRequestedUsersByStateAsync(loggedInUser.Id);
             IEnumerable<int> existingUserRequestsUsersIds = existingUserRequestsUsers.Select(x => x.Id);
 
@@ -256,10 +255,14 @@ namespace samsung.api.Repositories.GeneralUsers
 
             int[] techLevelMatchingSequence = techLevelMatchingTable[loggedInUser.TechLevel];
 
-            IEnumerable<IGeneralUser> users = _dbContext.GeneralUsers
+            IEnumerable<IGeneralUser> matchedUsers = _dbContext.GeneralUsers
                 .Where(x =>
+                    // Match techlevel pre order
                     techLevelMatchingSequence.Contains(x.TechLevel)
+                    // Not already have a buddy request initiated
                     && !existingUserRequestsUsersIds.Contains(x.Id)
+                    // Not those already seen
+                    && !x.HasSeenGeneralUsers.Select(h => h.LoggedInGeneralUserId).Contains(loggedInUser.Id)
                 )
                 .Include(x => x.Identity)
                 .Include(x => x.City)
@@ -271,18 +274,33 @@ namespace samsung.api.Repositories.GeneralUsers
                     .ThenInclude(t => t.TeachingLevel)
                 .Include(x => x.GeneralUserInterests)
                     .ThenInclude(t => t.Interest)
+                .AsEnumerable()
+                // ordering
+                .OrderBy(d => techLevelMatchingSequence.IndexOf(d.TechLevel))
+                .ThenByDescending(d => d.GeneralUserInterests.Select(g => g.Interest).Where(i => loggedInUser.Interests.Select(x => x.Id).Contains(i.Id)).Count())
+                .ThenByDescending(d => d.City.Id == loggedInUser.City.Id)
+                .ThenByDescending(d => d.GeneralUserTeachingAgeGroups.Select(g => g.TeachingAgeGroup).Where(i => loggedInUser.TeachingAgeGroups.Select(x => x.Id).Contains(i.Id)).Count())
+                .ThenByDescending(d => d.GeneralUserTeachingLevels.Select(g => g.TeachingLevel).Where(i => loggedInUser.TeachingLevels.Select(x => x.Id).Contains(i.Id)).Count())
+                .Take(limit)
                 .Select(x => _mapper.Map<IGeneralUser>(x))
                 .ToList();
 
-            users = users
-                .OrderBy(d => techLevelMatchingSequence.IndexOf(d.TechLevel))
-                .ThenByDescending(d => d.Interests.Where(i => loggedInUser.Interests.Select(x => x.Id).Contains(i.Id)).Count())
-                .ThenByDescending(d => d.City.Id == loggedInUser.City.Id)
-                .ThenByDescending(d => d.TeachingAgeGroups.Where(i => loggedInUser.TeachingAgeGroups.Select(x => x.Id).Contains(i.Id)).Count())
-                .ThenByDescending(d => d.TeachingLevels.Where(i => loggedInUser.TeachingLevels.Select(x => x.Id).Contains(i.Id)).Count())
-                .ToList();
+            // Flag as seen users
+            foreach (IGeneralUser IGeneralUser in matchedUsers)
+            {
+                // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
+                IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(IGeneralUser.IdentityId);
+                if (profileImage != null)
+                {
+                    IGeneralUser.ProfileImage = profileImage;
+                }
 
-            return users;
+                // Flag as seen
+                _dbContext.GeneralUserSeenGeneralUser.Add(new GeneralUserSeenGeneralUser { LoggedInGeneralUserId = loggedInUser.Id, HasSeenGeneralUserId = IGeneralUser.Id });
+                _dbContext.SaveChanges();
+            }
+
+            return matchedUsers;
         }
     }
 }

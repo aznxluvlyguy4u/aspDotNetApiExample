@@ -34,11 +34,11 @@ namespace SamsungApiAws.Controllers
         {
             try
             {
-                IEnumerable<IFeed> links = await _feedsService.GetFeedsAsync(base.User);
+                IFeed feed = await _feedsService.GetFeedsAsync(base.User);
 
-                if (links.IsNullOrEmpty()) return new JsonResponse(null, HttpStatusCode.NotFound);
+                if (feed.MatchedGeneralUser == default && feed.MatchedLinks.Count() == 0) return new JsonResponse(null, HttpStatusCode.NotFound);
 
-                var response = links.Select(x => _mapper.Map<GetLinkResponse>(x));
+                var response = _mapper.Map<GetFeedResponse>(feed);
                 return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch (Exception ex)

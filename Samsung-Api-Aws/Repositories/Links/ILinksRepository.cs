@@ -18,5 +18,7 @@ namespace samsung.api.Repositories.Links
         Task DeleteLinkForUserByIdAsync(int linkId, IGeneralUser generalUser);
 
         Task DeleteFavoriteLinkForUserByIdAsync(int linkId, IGeneralUser generalUser);
+
+        Task<IEnumerable<ILink>> FindWithSimilarPreferenceAsync(IGeneralUser loggedInUser, int limit);
     }
 }

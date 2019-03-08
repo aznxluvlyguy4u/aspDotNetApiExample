@@ -7,6 +7,6 @@ namespace SamsungApiAws.Services.Feeds
 {
     public interface IFeedsService
     {
-        Task<IEnumerable<IFeed>> GetFeedsAsync(ClaimsPrincipal user);
+        Task<IFeed> GetFeedsAsync(ClaimsPrincipal user);
     }
 }

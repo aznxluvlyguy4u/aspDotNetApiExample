@@ -25,6 +25,10 @@ namespace samsung.api.DataSource
 
         public virtual DbSet<BuddyRequest> BuddyRequests { get; set; }
 
+        public virtual DbSet<GeneralUserSeenGeneralUser> GeneralUserSeenGeneralUser { get; set; }
+
+        public virtual DbSet<GeneralUserSeenLink> GeneralUserSeenLink { get; set; }
+
         public virtual DbSet<Link> Links { get; set; }
 
         public virtual DbSet<FavoriteLink> FavoriteLinks { get; set; }

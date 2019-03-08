@@ -7,6 +7,7 @@ using samsung.api.Services.Links;
 using samsung_api.Models.Interfaces;
 using SamsungApiAws.DataSource.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -32,13 +33,14 @@ namespace SamsungApiAws.Services.Feeds
         /// Lampen 5, interesse 3 per, ageGroup 2. schoollevel 2, location 2 filters toepassen
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<IFeed>> GetFeedsAsync(ClaimsPrincipal user)
+        public async Task<IFeed> GetFeedsAsync(ClaimsPrincipal user)
         {
             IGeneralUser loggedInGeneralUser = await _generalUsersService.FindByIdentityAsync(user);
-            await _generalUsersRepository.FindWithSimilarPreferenceAsync(user);
+            IEnumerable<IGeneralUser> feedUsers = await _generalUsersRepository.FindWithSimilarPreferenceAsync(loggedInGeneralUser, 1);
+            IEnumerable<ILink> feedLinks = await _linksRepository.FindWithSimilarPreferenceAsync(loggedInGeneralUser, 4);
 
-            return new List<IFeed>();
-            throw new System.NotImplementedException();
+            IFeed feed = new Feed { MatchedGeneralUser = feedUsers.FirstOrDefault(), MatchedLinks = feedLinks } as IFeed;
+            return feed;
         }
     }
 }

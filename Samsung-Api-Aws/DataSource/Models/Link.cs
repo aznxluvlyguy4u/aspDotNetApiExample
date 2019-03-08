@@ -8,14 +8,19 @@ namespace samsung.api.DataSource.Models
     public class Link : ISoftDeletable
     {
         public int Id { get; set; }
+
         [Required]
         public string Title { get; set; }
+
         [Required]
         public string Description { get; set; }
+
         [Required]
         public string Url { get; set; }
+
         [Required]
         public UploadImageType ImageType { get; set; }
+
         public string ImageWebUrl { get; set; }
         public bool IsDeleted { get; set; }
 

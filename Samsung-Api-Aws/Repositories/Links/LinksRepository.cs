@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Transactions;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using samsung.api.DataSource;
 using samsung.api.DataSource.Models;
@@ -12,6 +6,11 @@ using samsung.api.Enumerations;
 using samsung.api.Services.AwsS3;
 using samsung_api.Models.Interfaces;
 using SamsungApiAws.DataSource.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Transactions;
 
 namespace samsung.api.Repositories.Links
 {
@@ -131,7 +130,6 @@ namespace samsung.api.Repositories.Links
 
             return await Task.FromResult(links);
         }
-
 
         public async Task<IEnumerable<ILink>> GetFavoriteLinksByUserAsync(IGeneralUser generalUser)
         {

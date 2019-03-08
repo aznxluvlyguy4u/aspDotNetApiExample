@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using samsung_api.Models.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using samsung_api.Models.Interfaces;
 
 namespace samsung.api.Repositories.Links
 {

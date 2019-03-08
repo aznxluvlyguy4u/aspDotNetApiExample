@@ -190,7 +190,6 @@ namespace samsung.api.Repositories.GeneralUsers
                     .ThenInclude(t => t.Interest)
                 .FirstOrDefault(g => g.Id == generalUserId);
 
-
             IGeneralUser IGeneralUser = await Task.FromResult(_mapper.Map<GeneralUser, IGeneralUser>(generalUser));
 
             // Make call to AWS S3 to see if any profile image is linked to this GeneralUser
@@ -237,7 +236,7 @@ namespace samsung.api.Repositories.GeneralUsers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>

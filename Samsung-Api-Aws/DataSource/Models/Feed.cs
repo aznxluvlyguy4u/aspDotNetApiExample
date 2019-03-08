@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using samsung_api.Models.Interfaces;
+﻿using samsung_api.Models.Interfaces;
+using System.Collections.Generic;
 
 namespace SamsungApiAws.DataSource.Models
 {

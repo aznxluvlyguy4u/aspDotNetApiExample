@@ -24,11 +24,11 @@ namespace SamsungApiAws.Repositories.Geo
             var cities = _dbContext.Cities
                 .Where(x =>
                     x.CountryCode == countryCode
-                    //&&
-                    //(
-                    //    x.CityName.StartsWith(searchText.ToLowerInvariant())
-                    //    || x.CityAccentName.StartsWith(searchText)
-                    //)
+                //&&
+                //(
+                //    x.CityName.StartsWith(searchText.ToLowerInvariant())
+                //    || x.CityAccentName.StartsWith(searchText)
+                //)
                 )
                 .Select(x => new { x.CityAccentName, x.Id });
             var dict = new Dictionary<int, string>();

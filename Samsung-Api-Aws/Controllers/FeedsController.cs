@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using samsung.api.Extensions;
 using samsung.api.Models;
 using samsung.api.Models.Response;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using SamsungApiAws.Services.Feeds;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;

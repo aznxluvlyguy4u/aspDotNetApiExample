@@ -19,7 +19,7 @@ namespace SamsungApiAws.Extensions
         {
             var asm = Assembly.GetCallingAssembly();
             var loadableTypes = asm.GetLoadableTypes()
-                .Where(x => 
+                .Where(x =>
                     !x.Name.StartsWith('<') // Dynamic types~
                     && !x.FullName.Contains(".Models") // No need for Models
                 )

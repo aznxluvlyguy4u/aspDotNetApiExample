@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using Amazon;
+﻿using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
@@ -15,6 +10,11 @@ using samsung.api.DataSource.Models;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using SamsungApiAws.DataSource.Models;
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace samsung.api.Services.AwsS3
 {
@@ -87,7 +87,7 @@ namespace samsung.api.Services.AwsS3
                 var fileTransferUtility = new TransferUtility(_client);
                 await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
             }
-                
+
             image.Url = GetPreSignedUrl(key);
 
             return image;

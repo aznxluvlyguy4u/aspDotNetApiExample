@@ -13,6 +13,7 @@ namespace samsung.api.DataSource.Models
         [Required]
         [Range(1, 5)]
         public int TechLevel { get; set; }
+
         public string Location { get; set; }
         public string Locale { get; set; }
         public string Gender { get; set; }
@@ -28,7 +29,6 @@ namespace samsung.api.DataSource.Models
         public ICollection<GeneralUserTeachingLevel> GeneralUserTeachingLevels { get; set; } = new HashSet<GeneralUserTeachingLevel>();
         public ICollection<GeneralUserInterest> GeneralUserInterests { get; set; } = new HashSet<GeneralUserInterest>();
         public ICollection<Link> Links { get; set; } = new HashSet<Link>();
-
 
         public ICollection<FavoriteLink> FavoriteLinks { get; set; } = new HashSet<FavoriteLink>();
 

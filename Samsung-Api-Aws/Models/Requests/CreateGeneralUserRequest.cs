@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

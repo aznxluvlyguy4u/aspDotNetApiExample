@@ -6,13 +6,13 @@
         "dotnet lambda help",
         "All the command line options for the Lambda command can be specified in this file."
     ],
-    "profile"     : "JVT Publish User",
+    "profile"     : "TheHagueTechAws",
     "region"      : "eu-west-1",
     "configuration" : "Release",
     "framework"     : "netcoreapp2.1",
     "s3-prefix"     : "Samsung-Api-Aws/",
     "template"      : "serverless.template",
     "template-parameters" : "\"ShouldCreateBucket\"=\"true\";\"BucketName\"=\"\"",
-    "s3-bucket"           : "samsung-schoollink",
-    "stack-name"          : "samsung-schoollink"
+    "s3-bucket"           : "samsung-schoollink-thehaguetech",
+    "stack-name"          : "samsung-schoollink-thehaguetech"
 }

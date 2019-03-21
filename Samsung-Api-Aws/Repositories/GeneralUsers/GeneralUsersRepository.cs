@@ -295,8 +295,8 @@ namespace samsung.api.Repositories.GeneralUsers
                 }
 
                 // Flag as seen
-                _dbContext.GeneralUserSeenGeneralUser.Add(new GeneralUserSeenGeneralUser { LoggedInGeneralUserId = loggedInUser.Id, HasSeenGeneralUserId = IGeneralUser.Id });
-                _dbContext.SaveChanges();
+                //_dbContext.GeneralUserSeenGeneralUser.Add(new GeneralUserSeenGeneralUser { LoggedInGeneralUserId = loggedInUser.Id, HasSeenGeneralUserId = IGeneralUser.Id });
+                //_dbContext.SaveChanges();
             }
 
             return matchedUsers;

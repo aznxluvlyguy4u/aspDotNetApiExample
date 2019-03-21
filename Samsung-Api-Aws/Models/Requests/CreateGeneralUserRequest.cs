@@ -9,13 +9,16 @@ namespace samsung.api.Models.Requests
     public class CreateGeneralUserRequest
     {
         [JsonRequired]
+        [MaxLength(50, ErrorMessage = "FirstName cannot be longer than 50 characters.")]
         public string FirstName { get; set; }
 
         [JsonRequired]
+        [MaxLength(50, ErrorMessage = "LastName cannot be longer than 50 characters.")]
         public string LastName { get; set; }
 
         [JsonRequired]
         [DataType(DataType.EmailAddress)]
+        [MaxLength(254, ErrorMessage = "Email cannot be longer than 254 characters.")]
         public string Email { get; set; }
 
         [JsonRequired]
@@ -24,6 +27,7 @@ namespace samsung.api.Models.Requests
         [JsonRequired]
         public int TechLevel { get; set; }
 
+        [MaxLength(50, ErrorMessage = "PhoneNumber cannot be longer than 50 characters.")]
         public string PhoneNumber { get; set; }
 
         [JsonRequired]

@@ -95,6 +95,7 @@ namespace samsung.api.Repositories.Buddies
                 .Include(g => g.Links)
                     .ThenInclude(l => l.LinkInterests)
                         .ThenInclude(l => l.Interest)
+                .OrderBy(g => g.Identity.FirstName)
                 .Select(g => _mapper.Map<IGeneralUser>(g))
                 .ToList();
 
@@ -123,6 +124,7 @@ namespace samsung.api.Repositories.Buddies
                     (buddy.ReceivingGeneralUserId == userId)
                     && buddy.RequestState == BuddyRequestState.Pending
                 )
+                .OrderBy(buddy => buddy.CreatedAt)
                 .Select(x => x.RequestingGeneralUser)
                 // Include all related data of ReceivingGeneralUser
                 .ToList();

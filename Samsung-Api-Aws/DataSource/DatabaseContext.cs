@@ -5,6 +5,7 @@ using samsung.api.DataSource.Models;
 using samsung_api.DataSource.Models;
 using SamsungApiAws.DataSource.Models;
 using System;
+using System.Linq;
 
 namespace samsung.api.DataSource
 {
@@ -42,6 +43,27 @@ namespace samsung.api.DataSource
         public virtual DbSet<TeachingAgeGroup> TeachingAgeGroups { get; set; }
 
         public virtual DbSet<City> Cities { get; set; }
+
+        // Lets override the default save changes, so we automaticaly change the UpdatedAt field.
+        public override int SaveChanges()
+        {
+            foreach (var entry in ChangeTracker.Entries().Where(x => x.Entity.GetType().GetProperty("CreatedAt") != null))
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Property("CreatedAt").CurrentValue = DateTime.Now;
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    // Ignore the CreatedTime updates on Modified entities. 
+                    entry.Property("CreatedAt").IsModified = false;
+                }
+                // Always set UpdatedAt. Assuming all entities having CreatedAt property
+                // Also have UpdatedAt
+                entry.Property("UpdatedAt").CurrentValue = DateTime.Now;
+            }
+            return base.SaveChanges();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

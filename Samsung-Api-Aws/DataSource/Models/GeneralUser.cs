@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace samsung.api.DataSource.Models
 {
-    public class GeneralUser
+    public class GeneralUser : BaseEntity
     {
         public int Id { get; set; }
 

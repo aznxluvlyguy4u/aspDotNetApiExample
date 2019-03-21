@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SamsungApiAws.DataSource.Models
 {
-    public class City
+    public class City : BaseEntity
     {
         public int Id { get; set; }
         public string CountryCode { get; set; }

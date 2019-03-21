@@ -269,8 +269,8 @@ namespace samsung.api.Repositories.Links
                 ILink.Image = await LoadLinkImage(ILink);
 
                 // flag as seen
-                _dbContext.GeneralUserSeenLink.Add(new GeneralUserSeenLink { GeneralUserId = loggedInUser.Id, LinkId = ILink.Id });
-                _dbContext.SaveChanges();
+                //_dbContext.GeneralUserSeenLink.Add(new GeneralUserSeenLink { GeneralUserId = loggedInUser.Id, LinkId = ILink.Id });
+                //_dbContext.SaveChanges();
             }
 
             return await Task.FromResult(links);

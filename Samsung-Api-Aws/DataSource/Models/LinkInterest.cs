@@ -1,6 +1,8 @@
-﻿namespace samsung.api.DataSource.Models
+﻿using SamsungApiAws.DataSource.Models;
+
+namespace samsung.api.DataSource.Models
 {
-    public class LinkInterest
+    public class LinkInterest : BaseEntity
     {
         public int LinkId { get; set; }
         public Link Link { get; set; }

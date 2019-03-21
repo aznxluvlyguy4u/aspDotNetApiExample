@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using SamsungApiAws.DataSource.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace samsung.api.DataSource.Models
 {
-    public class GeneralUserSeenGeneralUser
+    public class GeneralUserSeenGeneralUser : BaseEntity
     {
         public int LoggedInGeneralUserId { get; set; }
 

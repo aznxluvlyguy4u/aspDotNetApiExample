@@ -1,6 +1,8 @@
-﻿namespace samsung.api.DataSource.Models
+﻿using SamsungApiAws.DataSource.Models;
+
+namespace samsung.api.DataSource.Models
 {
-    public class GeneralUserTeachingSubject
+    public class GeneralUserTeachingSubject : BaseEntity
     {
         public int GeneralUserId { get; set; }
         public GeneralUser GeneralUser { get; set; }

@@ -193,6 +193,10 @@ namespace SamsungApiAws.Migrations
 
                     b.Property<int>("LinkId");
 
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<DateTime>("UpdatedAt");
+
                     b.HasKey("GeneralUserId", "LinkId");
 
                     b.HasIndex("LinkId");
@@ -322,6 +326,10 @@ namespace SamsungApiAws.Migrations
 
                     b.Property<int>("TeachingSubjectId");
 
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<DateTime>("UpdatedAt");
+
                     b.HasKey("GeneralUserId", "TeachingSubjectId");
 
                     b.HasIndex("TeachingSubjectId");
@@ -346,10 +354,10 @@ namespace SamsungApiAws.Migrations
                     b.ToTable("Interests");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local), Name = "Interest 1", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local) },
-                        new { Id = 2, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local), Name = "Interest 2", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local) },
-                        new { Id = 3, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local), Name = "Interest 3", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local) },
-                        new { Id = 4, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local), Name = "Interest 4", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local) }
+                        new { Id = 1, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local), Name = "Interest 1", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local) },
+                        new { Id = 2, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local), Name = "Interest 2", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local) },
+                        new { Id = 3, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local), Name = "Interest 3", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local) },
+                        new { Id = 4, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local), Name = "Interest 4", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local) }
                     );
                 });
 
@@ -423,10 +431,10 @@ namespace SamsungApiAws.Migrations
                     b.ToTable("TeachingAgeGroups");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local), Name = "10 - 15", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local) },
-                        new { Id = 2, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local), Name = "15 - 20", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local) },
-                        new { Id = 3, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local), Name = "25 - 30", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local) },
-                        new { Id = 4, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local), Name = "30+", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local) }
+                        new { Id = 1, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local), Name = "10 - 15", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local) },
+                        new { Id = 2, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local), Name = "15 - 20", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local) },
+                        new { Id = 3, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local), Name = "25 - 30", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local) },
+                        new { Id = 4, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local), Name = "30+", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local) }
                     );
                 });
 
@@ -447,13 +455,13 @@ namespace SamsungApiAws.Migrations
                     b.ToTable("TeachingLevels");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 989, DateTimeKind.Local), Name = "VMBO", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 989, DateTimeKind.Local) },
-                        new { Id = 2, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), Name = "MAVO", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) },
-                        new { Id = 3, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), Name = "HAVO", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) },
-                        new { Id = 4, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), Name = "VWO", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) },
-                        new { Id = 5, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), Name = "HBO", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) },
-                        new { Id = 6, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), Name = "WO", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) },
-                        new { Id = 7, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), Name = "Anders", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) }
+                        new { Id = 1, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), Name = "VMBO", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) },
+                        new { Id = 2, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), Name = "MAVO", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) },
+                        new { Id = 3, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), Name = "HAVO", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) },
+                        new { Id = 4, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), Name = "VWO", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) },
+                        new { Id = 5, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), Name = "HBO", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) },
+                        new { Id = 6, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), Name = "WO", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) },
+                        new { Id = 7, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), Name = "Anders", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) }
                     );
                 });
 
@@ -474,8 +482,8 @@ namespace SamsungApiAws.Migrations
                     b.ToTable("TeachingSubjects");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 986, DateTimeKind.Local), Name = "Subject 1", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 988, DateTimeKind.Local) },
-                        new { Id = 2, CreatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 988, DateTimeKind.Local), Name = "Subject 2", UpdatedAt = new DateTime(2019, 3, 21, 16, 31, 38, 988, DateTimeKind.Local) }
+                        new { Id = 1, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 165, DateTimeKind.Local), Name = "Subject 1", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 167, DateTimeKind.Local) },
+                        new { Id = 2, CreatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 167, DateTimeKind.Local), Name = "Subject 2", UpdatedAt = new DateTime(2019, 3, 21, 17, 3, 43, 167, DateTimeKind.Local) }
                     );
                 });
 

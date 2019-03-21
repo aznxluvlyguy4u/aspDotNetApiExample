@@ -95,6 +95,18 @@ namespace SamsungApiAws.Migrations
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "CreatedAt",
+                table: "GeneralUserTeachingSubject",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "UpdatedAt",
+                table: "GeneralUserTeachingSubject",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "CreatedAt",
                 table: "GeneralUserTeachingLevel",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
@@ -162,6 +174,18 @@ namespace SamsungApiAws.Migrations
             migrationBuilder.AddColumn<DateTime>(
                 name: "UpdatedAt",
                 table: "GeneralUserInterest",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "CreatedAt",
+                table: "FavoriteLinks",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "UpdatedAt",
+                table: "FavoriteLinks",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
@@ -210,119 +234,119 @@ namespace SamsungApiAws.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "Interests",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "Interests",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "Interests",
                 keyColumn: "Id",
                 keyValue: 4,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 991, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 170, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingAgeGroups",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingAgeGroups",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingAgeGroups",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingAgeGroups",
                 keyColumn: "Id",
                 keyValue: 4,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 992, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 171, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingLevels",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 989, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 989, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingLevels",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingLevels",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingLevels",
                 keyColumn: "Id",
                 keyValue: 4,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingLevels",
                 keyColumn: "Id",
                 keyValue: 5,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingLevels",
                 keyColumn: "Id",
                 keyValue: 6,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingLevels",
                 keyColumn: "Id",
                 keyValue: 7,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 990, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 168, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingSubjects",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 986, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 988, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 165, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 167, DateTimeKind.Local) });
 
             migrationBuilder.UpdateData(
                 table: "TeachingSubjects",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2019, 3, 21, 16, 31, 38, 988, DateTimeKind.Local), new DateTime(2019, 3, 21, 16, 31, 38, 988, DateTimeKind.Local) });
+                values: new object[] { new DateTime(2019, 3, 21, 17, 3, 43, 167, DateTimeKind.Local), new DateTime(2019, 3, 21, 17, 3, 43, 167, DateTimeKind.Local) });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -377,6 +401,14 @@ namespace SamsungApiAws.Migrations
 
             migrationBuilder.DropColumn(
                 name: "CreatedAt",
+                table: "GeneralUserTeachingSubject");
+
+            migrationBuilder.DropColumn(
+                name: "UpdatedAt",
+                table: "GeneralUserTeachingSubject");
+
+            migrationBuilder.DropColumn(
+                name: "CreatedAt",
                 table: "GeneralUserTeachingLevel");
 
             migrationBuilder.DropColumn(
@@ -422,6 +454,14 @@ namespace SamsungApiAws.Migrations
             migrationBuilder.DropColumn(
                 name: "UpdatedAt",
                 table: "GeneralUserInterest");
+
+            migrationBuilder.DropColumn(
+                name: "CreatedAt",
+                table: "FavoriteLinks");
+
+            migrationBuilder.DropColumn(
+                name: "UpdatedAt",
+                table: "FavoriteLinks");
 
             migrationBuilder.DropColumn(
                 name: "CreatedAt",

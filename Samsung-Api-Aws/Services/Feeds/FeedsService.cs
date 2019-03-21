@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using samsung.api.DataSource.Models;
+using samsung.api.Enumerations;
+using samsung.api.Models.Response;
 using samsung.api.Repositories.GeneralUsers;
 using samsung.api.Repositories.Links;
 using samsung.api.Services.GeneralUsers;
@@ -15,14 +18,15 @@ namespace SamsungApiAws.Services.Feeds
 {
     public class FeedsService : IFeedsService
     {
-        private readonly UserManager<AppUser> _userManager;
+        private readonly IMapper _mapper;
         private readonly IGeneralUsersService _generalUsersService;
         private readonly ILinksService _linksService;
         private readonly IGeneralUsersRepository _generalUsersRepository;
         private readonly ILinksRepository _linksRepository;
 
-        public FeedsService(IGeneralUsersService generalUsersService, ILinksService linksService, IGeneralUsersRepository generalUsersRepository, ILinksRepository linksRepository)
+        public FeedsService(IMapper mapper, IGeneralUsersService generalUsersService, ILinksService linksService, IGeneralUsersRepository generalUsersRepository, ILinksRepository linksRepository)
         {
+            _mapper = mapper;
             _generalUsersService = generalUsersService;
             _linksService = linksService;
             _generalUsersRepository = generalUsersRepository;
@@ -33,14 +37,27 @@ namespace SamsungApiAws.Services.Feeds
         /// Lampen 5, interesse 3 per, ageGroup 2. schoollevel 2, location 2 filters toepassen
         /// </summary>
         /// <returns></returns>
-        public async Task<IFeed> GetFeedsAsync(ClaimsPrincipal user)
+        public async Task<IEnumerable<IFeed>> GetFeedsAsync(ClaimsPrincipal user)
         {
             IGeneralUser loggedInGeneralUser = await _generalUsersService.FindByIdentityAsync(user);
             IEnumerable<IGeneralUser> feedUsers = await _generalUsersRepository.FindWithSimilarPreferenceAsync(loggedInGeneralUser, 1);
             IEnumerable<ILink> feedLinks = await _linksRepository.FindWithSimilarPreferenceAsync(loggedInGeneralUser, 4);
 
-            IFeed feed = new Feed { MatchedGeneralUser = feedUsers.FirstOrDefault(), MatchedLinks = feedLinks } as IFeed;
-            return feed;
+            List<IFeed> feeds = new List<IFeed>();
+            var MatchedGeneralUser = feedUsers.FirstOrDefault();
+            if (MatchedGeneralUser != default)
+            {
+                ILimitedGeneralUser MatchedGeneralUserResponse = _mapper.Map<ILimitedGeneralUser>(MatchedGeneralUser);
+                feeds.Add(new Feed { Type = FeedType.GeneralUser, Body = MatchedGeneralUserResponse });
+            }
+                
+            foreach (ILink link in feedLinks)
+            {
+                var linkResponse = _mapper.Map<GetLinkResponse>(link);
+                feeds.Add(new Feed { Type = FeedType.Link, Body = linkResponse });
+            }
+
+            return feeds;
         }
     }
 }

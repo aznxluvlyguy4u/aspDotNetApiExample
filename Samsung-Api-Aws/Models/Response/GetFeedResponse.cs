@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using samsung.api.Enumerations;
 using samsung_api.Models.Interfaces;
 using System.Collections.Generic;
 
@@ -16,7 +17,7 @@ namespace samsung.api.Models.Response
         {
         }
 
-        public IGeneralUser MatchedGeneralUser { get; set; }
-        public IEnumerable<GetLinkResponse> MatchedLinks { get; set; }
+        public FeedType Type { get; set; }
+        public dynamic Body { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using SamsungApiAws.Services.Feeds;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -32,11 +33,11 @@ namespace SamsungApiAws.Controllers
         {
             try
             {
-                IFeed feed = await _feedsService.GetFeedsAsync(base.User);
+                IEnumerable<IFeed> feeds = await _feedsService.GetFeedsAsync(base.User);
 
-                if (feed.MatchedGeneralUser == default && feed.MatchedLinks.Count() == 0) return new JsonResponse(null, HttpStatusCode.NotFound);
+                if (feeds.Count() == 0) return new JsonResponse(null, HttpStatusCode.NotFound);
 
-                var response = _mapper.Map<GetFeedResponse>(feed);
+                var response = feeds.Select(_mapper.Map<GetFeedResponse>);
                 return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch (Exception ex)

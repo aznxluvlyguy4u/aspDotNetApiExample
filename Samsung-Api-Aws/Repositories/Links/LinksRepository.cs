@@ -29,59 +29,62 @@ namespace samsung.api.Repositories.Links
 
         public async Task<ILink> CreateLinkForUserAsync(ILink toBeCreatedLink, IGeneralUser user)
         {
-            var strategy = _dbContext.Database.CreateExecutionStrategy();
-            ILink ILink = default;
-            await strategy.Execute(async () =>
+            using (_dbContext)
             {
-                using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                var strategy = _dbContext.Database.CreateExecutionStrategy();
+                ILink ILink = default;
+                await strategy.Execute(async () =>
                 {
-                    Link dbLink = _mapper.Map<ILink, Link>(toBeCreatedLink);
-                    if (dbLink == default)
-                        throw new ArgumentNullException(nameof(dbLink));
-
-                    // Validate and save Interests
-                    if (toBeCreatedLink.Interests != null)
+                    using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
-                        foreach (IInterest iInterest in toBeCreatedLink.Interests)
+                        Link dbLink = _mapper.Map<ILink, Link>(toBeCreatedLink);
+                        if (dbLink == default)
+                            throw new ArgumentNullException(nameof(dbLink));
+
+                        // Validate and save Interests
+                        if (toBeCreatedLink.Interests != null)
                         {
-                            Interest interest = _dbContext.Interests.SingleOrDefault(t => t.Id == iInterest.Id);
-                            if (interest == default)
-                                throw new ArgumentException($"Interest ID: {iInterest.Id} could not be found.");
-
-                            LinkInterest newLinkInterest = new LinkInterest
+                            foreach (IInterest iInterest in toBeCreatedLink.Interests)
                             {
-                                InterestId = iInterest.Id
-                            };
-                            dbLink.LinkInterests.Add(newLinkInterest);
+                                Interest interest = _dbContext.Interests.SingleOrDefault(t => t.Id == iInterest.Id);
+                                if (interest == default)
+                                    throw new ArgumentException($"Interest ID: {iInterest.Id} could not be found.");
+
+                                LinkInterest newLinkInterest = new LinkInterest
+                                {
+                                    InterestId = iInterest.Id
+                                };
+                                dbLink.LinkInterests.Add(newLinkInterest);
+                            }
                         }
+
+                        // Empty accidentally entered ImageWebUrl if uploadImageType is base64
+                        if (dbLink.ImageType == UploadImageType.Base64 && dbLink.ImageWebUrl != null)
+                            dbLink.ImageWebUrl = null;
+
+                        // Set User
+                        dbLink.GeneralUserId = user.Id;
+
+                        // Save
+                        _dbContext.Links.Add(dbLink);
+                        await _dbContext.SaveChangesAsync();
+                        ILink = _mapper.Map<Link, ILink>(dbLink);
+
+                        // save Image to AWS S3
+                        if (toBeCreatedLink.ImageType == UploadImageType.Base64 && toBeCreatedLink.Image != null)
+                        {
+                            IImage linkImage = await _awsS3Service.UploadLinkImageAsync(toBeCreatedLink.Image, ILink);
+                            ILink.Image = linkImage;
+                        }
+
+                        // Commit transaction if all commands succeed, transaction will auto-rollback
+                        // when disposed if either commands fails
+                        transaction.Complete();
                     }
+                });
 
-                    // Empty accidentally entered ImageWebUrl if uploadImageType is base64
-                    if (dbLink.ImageType == UploadImageType.Base64 && dbLink.ImageWebUrl != null)
-                        dbLink.ImageWebUrl = null;
-
-                    // Set User
-                    dbLink.GeneralUserId = user.Id;
-
-                    // Save
-                    _dbContext.Links.Add(dbLink);
-                    await _dbContext.SaveChangesAsync();
-                    ILink = _mapper.Map<Link, ILink>(dbLink);
-
-                    // save Image to AWS S3
-                    if (toBeCreatedLink.ImageType == UploadImageType.Base64 && toBeCreatedLink.Image != null)
-                    {
-                        IImage linkImage = await _awsS3Service.UploadLinkImageAsync(toBeCreatedLink.Image, ILink);
-                        ILink.Image = linkImage;
-                    }
-
-                    // Commit transaction if all commands succeed, transaction will auto-rollback
-                    // when disposed if either commands fails
-                    transaction.Complete();
-                }
-            });
-
-            return ILink;
+                return ILink;
+            }
         }
 
         public async Task CreateFavoriteLinkForUserAsync(ILink link, IGeneralUser user)
@@ -253,9 +256,9 @@ namespace samsung.api.Repositories.Links
                     // Not those already seen
                     && !x.GeneralUserSeenLinks.Select(g => g.GeneralUserId).Contains(loggedInUser.Id)
                 )
-                .Include(link => link.GeneralUser)
                 .Include(l => l.LinkInterests)
                     .ThenInclude(l => l.Interest)
+                .Include(l => l.GeneralUser)
                 .AsEnumerable()
                 // ordering
                 .OrderByDescending(d => d.LinkInterests.Select(l => l.Interest).Where(i => loggedInUser.Interests.Select(x => x.Id).Contains(i.Id)).Count())
@@ -267,6 +270,13 @@ namespace samsung.api.Repositories.Links
             foreach (ILink ILink in links)
             {
                 ILink.Image = await LoadLinkImage(ILink);
+
+                // Make call to AWS S3 to see if any profile image is linked to the GeneralUser of this link
+                IImage profileImage = await _awsS3Service.GetProfileImageByUserAsync(ILink.GeneralUser.IdentityId);
+                if (profileImage != null)
+                {
+                    ILink.GeneralUser.ProfileImage = profileImage;
+                }
 
                 // flag as seen
                 //_dbContext.GeneralUserSeenLink.Add(new GeneralUserSeenLink { GeneralUserId = loggedInUser.Id, LinkId = ILink.Id });

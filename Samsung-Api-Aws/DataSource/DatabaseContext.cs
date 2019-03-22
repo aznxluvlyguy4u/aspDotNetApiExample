@@ -70,8 +70,11 @@ namespace samsung.api.DataSource
             if (_config != null && !optionsBuilder.IsConfigured)
             {
 #if DEBUG
-                optionsBuilder
-                    .UseSqlServer(_config.GetConnectionString("sqlserver"), options => options.EnableRetryOnFailure());
+                //optionsBuilder
+                //    .UseSqlServer(_config.GetConnectionString("sqlserver"), options => options.EnableRetryOnFailure());
+                //base.OnConfiguring(optionsBuilder);
+                optionsBuilder.UseSqlServer("Data Source=samsung-schoollink-api-db-staging.cqzbijn95jjx.eu-west-1.rds.amazonaws.com;Initial Catalog=SamsungDatabase;User Id=root;Password=MuQSFP4vVkenYnGiGOc7AunEg07LNqyt;Pooling=False;Connect Timeout=30",
+                    options => options.EnableRetryOnFailure());
                 base.OnConfiguring(optionsBuilder);
 #else
                 optionsBuilder.UseSqlServer("Data Source=samsung-schoollink-api-db.cqzbijn95jjx.eu-west-1.rds.amazonaws.com;Initial Catalog=SamsungDatabase;User Id=root;Password=MuQSFP4vVkenYnGiGOc7AunEg07LNqyt;Pooling=False;Connect Timeout=30",
@@ -82,7 +85,10 @@ namespace samsung.api.DataSource
             else
             {
 #if DEBUG
-                optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=SamsungDatabase;Integrated Security=True;Pooling=False;Connect Timeout=30",
+                //optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=SamsungDatabase;Integrated Security=True;Pooling=False;Connect Timeout=30",
+                //    options => options.EnableRetryOnFailure());
+                //base.OnConfiguring(optionsBuilder);
+                optionsBuilder.UseSqlServer("Data Source=samsung-schoollink-api-db-staging.cqzbijn95jjx.eu-west-1.rds.amazonaws.com;Initial Catalog=SamsungDatabase;User Id=root;Password=MuQSFP4vVkenYnGiGOc7AunEg07LNqyt;Pooling=False;Connect Timeout=30",
                     options => options.EnableRetryOnFailure());
                 base.OnConfiguring(optionsBuilder);
 #else

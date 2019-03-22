@@ -259,6 +259,7 @@ namespace samsung.api.Repositories.Links
                 .Include(l => l.LinkInterests)
                     .ThenInclude(l => l.Interest)
                 .Include(l => l.GeneralUser)
+                    .ThenInclude(g => g.Identity)
                 .AsEnumerable()
                 // ordering
                 .OrderByDescending(d => d.LinkInterests.Select(l => l.Interest).Where(i => loggedInUser.Interests.Select(x => x.Id).Contains(i.Id)).Count())

@@ -12,6 +12,7 @@ using samsung.api.Services.GeneralUsers;
 using samsung_api.Models.Interfaces;
 using samsung_api.Services.Logger;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace samsung_api.Controllers
@@ -54,13 +55,13 @@ namespace samsung_api.Controllers
                 IGeneralUser generalUser = await _generalUsersService.FindByIdentityAsync(base.User);
                 var response = _mapper.Map<IGeneralUser, GetGeneralUserResponse>(generalUser);
 
-                return new JsonResponse(response, System.Net.HttpStatusCode.OK);
+                return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 await _logger.LogErrorAsync(ex.Message, ex);
 
-                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
             }
         }
 
@@ -75,15 +76,18 @@ namespace samsung_api.Controllers
             try
             {
                 dynamic generalUser = await _generalUsersService.FindByIdAsync(id, base.User);
+
+                if (generalUser == null) return new JsonResponse(null, HttpStatusCode.NotFound);
+
                 var response = _mapper.Map<GetGeneralUserResponse>(generalUser);
 
-                return new JsonResponse(response, System.Net.HttpStatusCode.OK);
+                return new JsonResponse(response, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 await _logger.LogErrorAsync(ex.Message, ex);
 
-                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
             }
         }
 
@@ -108,13 +112,13 @@ namespace samsung_api.Controllers
                 jwt = await _authService.GenerateJwtAsync(identity, createdUser.Email);
 
                 var response = new CreateGeneralUserResponse(createdUser, jwt);
-                return new JsonResponse(response, System.Net.HttpStatusCode.Created);
+                return new JsonResponse(response, HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
                 await _logger.LogErrorAsync(ex.Message, ex);
 
-                return new JsonResponse(ex.Message, System.Net.HttpStatusCode.BadRequest);
+                return new JsonResponse(ex.Message, HttpStatusCode.BadRequest);
             }
         }
 

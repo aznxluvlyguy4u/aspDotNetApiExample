@@ -21,7 +21,9 @@ namespace samsung.api.Repositories.Interests
 
         public async Task<IEnumerable<IInterest>> GetAllInterestsAysnc()
         {
-            return await _dbContext.Interests.Select(x => _mapper.Map<IInterest>(x)).ToListAsync();
+            return await _dbContext.Interests
+                .OrderBy(x => x.Name)
+                .Select(x => _mapper.Map<IInterest>(x)).ToListAsync();
         }
     }
 }

@@ -65,6 +65,14 @@ namespace samsung.api.Repositories.Links
                         // Set User
                         dbLink.GeneralUserId = user.Id;
 
+                        // Prefix url
+                        string[] httpPrefixes = { "http://", "https://" };
+                        bool prefixMatch = httpPrefixes.Any(prefix => dbLink.Url.StartsWith(prefix));
+                        if (!prefixMatch)
+                        {
+                            dbLink.Url = "https://" + dbLink.Url;
+                        }
+
                         // Save
                         _dbContext.Links.Add(dbLink);
                         await _dbContext.SaveChangesAsync();
